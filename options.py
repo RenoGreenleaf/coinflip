@@ -4,8 +4,8 @@ from option import Option
 options = []
 
 
-def where(events):
-	print("You're in a simple coin flipping game.\n")
+def where(events, cli):
+	cli.print("You're in a simple coin flipping game.\n")
 	events.add('help.where')
 
 options.append(Option(
@@ -17,10 +17,10 @@ options.append(Option(
 def location_known(events):
 	return 'help.where' in events
 
-def how(events):
-	print("When prompted, specify your preferred side (heads or tails).")
-	print("Your current score is available in format <your points>/<opponents points>.")
-	print("It's shown after each flip.\n")
+def how(events, cli):
+	cli.print("When prompted, specify your preferred side (heads or tails).")
+	cli.print("Your current score is available in format <your points>/<opponents points>.")
+	cli.print("It's shown after each flip.\n")
 
 options.append(Option(
 	"How to play it?",
@@ -29,8 +29,8 @@ options.append(Option(
 ))
 
 
-def leave(events):
-	print('You can leave by typing in "exit".\n')
+def leave(events, cli):
+	cli.print('You can leave by typing in "exit".\n')
 
 options.append(Option(
 	"How to leave?",

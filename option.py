@@ -1,5 +1,5 @@
-def default_action(events):
-	print("Wha-a-a-a-at?\n")
+def default_action(events, cli):
+	cli.print("Wha-a-a-a-at?\n")
 
 
 def default_condition(events):

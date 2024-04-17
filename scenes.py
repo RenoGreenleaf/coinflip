@@ -4,8 +4,9 @@ from coin import Coin
 
 class Scene:
 	"""Commonly available commands."""
-	def __init__(self):
+	def __init__(self, world):
 		self.slug = ''
+		self.cli = world['cli']
 
 	def request(self):
 		"""Asks what to do next."""
@@ -26,19 +27,20 @@ class Scene:
 
 	def play(self):
 		self.request()
-		command = input(self.prompt())
+		command = self.cli.input(self.prompt())
 		return self.execute(command)
 
 
 class CoinFlip(Scene):
-	def __init__(self):
+	def __init__(self, world):
+		super().__init__(world)
 		self.slug = 'coin_flip'
 		self.coin = Coin()
 		self.my_score = 0
 		self.opponents_score = 0
 
 	def request(self):
-		print("Choose a side (heads, tails).")
+		self.cli.print("Choose a side (heads, tails).")
 
 	def execute(self, command):
 		if command not in ('heads', 'tails'):
@@ -53,13 +55,14 @@ class CoinFlip(Scene):
 			self.opponents_score += 1
 			colour = '\033[91m'
 
-		print('The coin fell on ' + colour + fell_on + '\033[0m.')
-		print(f'{self.my_score}/{self.opponents_score}\n')
+		self.cli.print('The coin fell on ' + colour + fell_on + '\033[0m.')
+		self.cli.print(f'{self.my_score}/{self.opponents_score}\n')
 		return self.slug
 
 
 class Help(Scene):
 	def __init__(self, world):
+		super().__init__(world)
 		self.slug = 'help'
 		self.events = world['events']
 		self.available_options = []
@@ -73,9 +76,9 @@ class Help(Scene):
 
 		for option in self.available_options:
 			item += 1
-			print(f'{item}. {option.describe()}')
+			self.cli.print(f'{item}. {option.describe()}')
 
-		print(f'{item+1}. Back.')
+		self.cli.print(f'{item+1}. Back.')
 
 	def execute(self, command):
 		if not command.isnumeric():
@@ -85,7 +88,7 @@ class Help(Scene):
 			return 'coin_flip'
 
 		option = self.available_options[int(command) - 1]
-		option.select(self.events)
+		option.select(self.events, self.cli)
 		return self.slug
 
 	def prompt(self):
