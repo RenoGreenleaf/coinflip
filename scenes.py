@@ -4,9 +4,10 @@ from coin import Coin
 
 class Scene:
 	"""Commonly available commands."""
-	def __init__(self, world):
+	def __init__(self, cli, events):
 		self.slug = ''
-		self.cli = world['cli']
+		self.cli = cli
+		self.events = events
 
 	def request(self):
 		"""Asks what to do next."""
@@ -32,8 +33,8 @@ class Scene:
 
 
 class CoinFlip(Scene):
-	def __init__(self, world):
-		super().__init__(world)
+	def __init__(self, cli, events):
+		super().__init__(cli, events)
 		self.slug = 'coin_flip'
 		self.coin = Coin()
 		self.my_score = 0
@@ -61,10 +62,9 @@ class CoinFlip(Scene):
 
 
 class Help(Scene):
-	def __init__(self, world):
-		super().__init__(world)
+	def __init__(self, cli, events):
+		super().__init__(cli, events)
 		self.slug = 'help'
-		self.events = world['events']
 		self.available_options = []
 
 	def request(self):

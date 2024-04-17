@@ -1,13 +1,14 @@
 #!/usr/bin/env python
 import scenes
-from world import World
+from cli import CLI
 
 
-world = World()
+terminal = CLI()
+events = set()
 scenes = {
-	'coin_flip': scenes.CoinFlip(world),
-	'help': scenes.Help(world),
-	'exit': scenes.Ending(world)
+	'coin_flip': scenes.CoinFlip(terminal, events),
+	'help': scenes.Help(terminal, events),
+	'exit': scenes.Ending(terminal, events)
 }
 current = scenes['coin_flip']
 
