@@ -13,3 +13,6 @@ class CLI:
 
 	def print(self, text):
 		print(text)
+
+	def exit(self):
+		exit()

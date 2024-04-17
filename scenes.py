@@ -97,3 +97,9 @@ class Help(Scene):
 	def _add_option(self, option):
 		if option.is_available(self.events):
 			self.available_options.append(option)
+
+
+class Ending(Scene):
+	def play(self):
+		self.cli.print("Bye-bye!")
+		self.cli.exit()
