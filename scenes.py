@@ -59,13 +59,19 @@ class CoinFlip(Scene):
 
 
 class Help(Scene):
-	def __init__(self):
+	def __init__(self, world):
 		self.slug = 'help'
+		self.events = world['events']
+		self.available_options = []
 
 	def request(self):
 		item = 0
+		self.available_options = []
 
 		for option in options:
+			self._add_option(option)
+
+		for option in self.available_options:
 			item += 1
 			print(f'{item}. {option.describe()}')
 
@@ -75,12 +81,16 @@ class Help(Scene):
 		if not command.isnumeric():
 			return super().execute(command)
 
-		if int(command) == len(options) + 1:  # "back" option is chosen.
+		if int(command) == len(self.available_options) + 1:  # "back" option is chosen.
 			return 'coin_flip'
 
-		option = options[int(command) - 1]
-		option.select()
+		option = self.available_options[int(command) - 1]
+		option.select(self.events)
 		return self.slug
 
 	def prompt(self):
-		return f'[1-{len(options)+1}]> '
+		return f'[1-{len(self.available_options)+1}]> '
+
+	def _add_option(self, option):
+		if option.is_available(self.events):
+			self.available_options.append(option)

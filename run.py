@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 import scenes
+from world import World
 
 
+world = World()
 scenes = {
 	'coin_flip': scenes.CoinFlip(),
-	'help': scenes.Help()
+	'help': scenes.Help(world)
 }
 current = scenes['coin_flip']
 
