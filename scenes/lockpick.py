@@ -2,19 +2,21 @@ from scenes import scene
 
 
 class LockPick(scene.Scene):
-	def __init__(self, cli, events, lock):
+	def __init__(self, cli, events, locks):
 		super().__init__(cli, events)
 		self.slug = 'lockpick'
-		self.lock = lock
+		self.locks = locks
 
 	def request(self):
 		self.cli.print("Turn the lock-pick.")
 
 	def execute(self, command):
+		lock = self.locks.pull()
+
 		if command == 'left':
-			success = self.lock.turn(False)
+			success = lock.turn(False)
 		elif command == 'right':
-			success = self.lock.turn(True)
+			success = lock.turn(True)
 		else:
 			return super().execute(command)
 
@@ -23,7 +25,7 @@ class LockPick(scene.Scene):
 		else:
 			self.cli.print("Wrong! Back from the start.\n")
 
-		if self.lock.unlocked():
+		if lock.unlocked():
 			self.cli.print("Yey! It's unlocked.\n")
 			return 'menu'
 

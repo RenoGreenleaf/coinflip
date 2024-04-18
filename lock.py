@@ -1,8 +1,6 @@
 class Lock:
-	def __init__(self):
-		self.position = 0
-
 	def prepare(self):
+		self.position = 0
 		self.pins = [True, True, False, True]
 
 	def turn(self, is_clockwise):
@@ -15,3 +13,17 @@ class Lock:
 
 	def unlocked(self):
 		return self.position == len(self.pins)
+
+
+class Collection:
+	def __init__(self):
+		self.reusable = Lock()
+
+	def prepare(self):
+		self.reusable.prepare()
+
+	def pull(self):
+		if self.reusable.unlocked():
+			self.reusable.prepare()
+
+		return self.reusable
