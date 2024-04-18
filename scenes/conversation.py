@@ -1,18 +1,17 @@
-from options import options
 from scenes import scene
 
 
-class Help(scene.Scene):
-	def __init__(self, cli, events):
+class Conversation(scene.Scene):
+	def __init__(self, cli, events, options):
 		super().__init__(cli, events)
+		self.options = options
 		self.slug = 'help'
-		self.available_options = []
 
 	def request(self):
 		item = 0
 		self.available_options = []
 
-		for option in options:
+		for option in self.options:
 			self._add_option(option)
 
 		for option in self.available_options:

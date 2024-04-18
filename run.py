@@ -1,13 +1,18 @@
 #!/usr/bin/env python
-from scenes import coin_flip, help, ending
+import help
+from scenes import coin_flip, conversation, ending
 from cli import CLI
+from coin import Coin
 
 
 terminal = CLI()
 events = set()
+props = {
+	'coin': Coin()
+}
 scenes = {
-	'coin_flip': coin_flip.CoinFlip(terminal, events),
-	'help': help.Help(terminal, events),
+	'coin_flip': coin_flip.CoinFlip(terminal, events, props),
+	'help': conversation.Conversation(terminal, events, help.options),
 	'exit': ending.Ending(terminal, events)
 }
 current = scenes['coin_flip']

@@ -1,12 +1,11 @@
 from scenes import scene
-from coin import Coin
 
 
 class CoinFlip(scene.Scene):
-	def __init__(self, cli, events):
+	def __init__(self, cli, events, props):
 		super().__init__(cli, events)
 		self.slug = 'coin_flip'
-		self.coin = Coin()
+		self.coin = props['coin']
 		self.my_score = 0
 		self.opponents_score = 0
 
