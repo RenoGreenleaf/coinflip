@@ -2,10 +2,10 @@ from scenes import scene
 
 
 class Conversation(scene.Scene):
-	def __init__(self, cli, events, options):
+	def __init__(self, cli, events, options, slug):
 		super().__init__(cli, events)
 		self.options = options
-		self.slug = 'help'
+		self.slug = slug
 
 	def request(self):
 		item = 0
@@ -25,10 +25,14 @@ class Conversation(scene.Scene):
 			return super().execute(command)
 
 		if int(command) == len(self.available_options) + 1:  # "back" option is chosen.
-			return 'coin_flip'
+			return 'menu'
 
 		option = self.available_options[int(command) - 1]
-		option.select(self.events, self.cli)
+		next_scene_slug = option.select(self.events, self.cli)
+
+		if next_scene_slug:
+			return next_scene_slug
+
 		return self.slug
 
 	def prompt(self):

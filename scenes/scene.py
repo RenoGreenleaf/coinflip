@@ -14,6 +14,8 @@ class Scene:
 			return 'help'
 		elif command == 'exit':
 			return 'exit'
+		elif command == 'menu':
+			return 'menu'
 		else:
 			print("Unclear.\n")
 			return self.slug
