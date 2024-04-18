@@ -1,7 +1,13 @@
+from random import choice
+
+
 class Lock:
 	def prepare(self):
 		self.position = 0
-		self.pins = [True, True, False, True]
+		self.pins = []
+
+		for pin in range(4):
+			self.pins.append(choice([True, False]))
 
 	def turn(self, is_clockwise):
 		if self.pins[self.position] == is_clockwise:
