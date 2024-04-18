@@ -21,9 +21,9 @@ class LockPick(scene.Scene):
 			return super().execute(command)
 
 		if success:
-			self.cli.print("Nice click.\n")
+			self.cli.print("\033[92mNice click.\033[0m\n")
 		else:
-			self.cli.print("Wrong! Back from the start.\n")
+			self.cli.print("\033[91mWrong! Back from the start.\033[0m\n")
 
 		if lock.unlocked():
 			self.cli.print("Yey! It's unlocked.\n")
