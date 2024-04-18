@@ -10,7 +10,7 @@ class CoinFlip(scene.Scene):
 		self.opponents_score = 0
 
 	def request(self):
-		self.cli.print("Choose a side (heads, tails).")
+		self.cli.print("Choose a side.")
 
 	def execute(self, command):
 		if command not in ('heads', 'tails'):
@@ -28,3 +28,6 @@ class CoinFlip(scene.Scene):
 		self.cli.print('The coin fell on ' + colour + fell_on + '\033[0m.')
 		self.cli.print(f'{self.my_score}/{self.opponents_score}\n')
 		return self.slug
+
+	def prompt(self):
+		return '[heads, tails]> '
