@@ -11,7 +11,7 @@ class Coin(Prop):
 		return self.side
 
 	def describe(self, events, cli):
-		cli.print(f"A coin is lying on the floor, {self.side} up.")
+		cli.print(f"A coin is lying on the floor, {self.side} up.\n")
 		return 'room'
 
 	def use(self, events, cli):

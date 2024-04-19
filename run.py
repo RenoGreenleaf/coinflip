@@ -3,6 +3,7 @@ import help, menu
 from scenes import coin_flip, conversation, ending, lockpick, room
 from cli import CLI
 from coin import Coin
+from table import Table
 from lock import Collection
 
 
@@ -10,7 +11,8 @@ terminal = CLI()
 events = set()
 props = {
 	'coin': Coin(),
-	'locks': Collection()
+	'locks': Collection(),
+	'table': Table(),
 }
 props['locks'].prepare()
 scenes = {

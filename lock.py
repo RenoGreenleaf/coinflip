@@ -34,3 +34,11 @@ class Collection(Prop):
 			self.reusable.prepare()
 
 		return self.reusable
+
+	def describe(self, events, cli):
+		cli.print("There're tons of locks.")
+		return 'room'
+
+	def use(self, events, cli):
+		cli.print("Let's unlock some.\n")
+		return 'lockpick'

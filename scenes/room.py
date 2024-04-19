@@ -12,6 +12,7 @@ class Room(scene.Scene):
 		self.cli.print("The room is large.")
 		self.cli.print("There's a pile of locks in a corner")
 		self.cli.print("and a coin is lying on the floor.")
+		self.cli.print("There's also a table.")
 
 	def execute(self, command):
 		words = command.split()
