@@ -1,7 +1,8 @@
+from prop import Prop
 from random import choice
 
 
-class Lock:
+class Lock(Prop):
 	def prepare(self):
 		self.position = 0
 		self.pins = []
@@ -21,7 +22,7 @@ class Lock:
 		return self.position == len(self.pins)
 
 
-class Collection:
+class Collection(Prop):
 	def __init__(self):
 		self.reusable = Lock()
 

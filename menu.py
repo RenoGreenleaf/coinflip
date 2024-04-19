@@ -23,6 +23,15 @@ options.append(Option(
 ))
 
 
+def select_exploration(events, cli):
+	return 'room'
+
+options.append(Option(
+	"Explore",
+	select_exploration
+))
+
+
 def select_help(events, cli):
 	return 'help'
 
