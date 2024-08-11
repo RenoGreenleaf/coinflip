@@ -7,7 +7,7 @@ class Scene:
 
 	def request(self):
 		"""Asks what to do next."""
-		print("Enter a command")
+		self.cli.print("Enter a command")
 
 	def execute(self, command):
 		if command == 'help':
@@ -17,7 +17,7 @@ class Scene:
 		elif command == 'menu':
 			return 'menu'
 		else:
-			print("Unclear.\n")
+			self.cli.print("Unclear.\n")
 			return self.slug
 
 	def prompt(self):
