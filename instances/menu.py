@@ -1,4 +1,4 @@
-from option import Option
+from conversation.option import Option
 
 
 options = []

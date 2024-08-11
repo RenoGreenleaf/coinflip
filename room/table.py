@@ -1,4 +1,4 @@
-from prop import Prop
+from scene.prop import Prop
 
 
 class Table(Prop):

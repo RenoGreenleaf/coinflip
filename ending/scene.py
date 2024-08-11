@@ -1,4 +1,4 @@
-from scenes import scene
+from scene import scene
 
 
 class Ending(scene.Scene):
