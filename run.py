@@ -1,8 +1,10 @@
 #!/usr/bin/env python
-from instances.scenes import scenes
+from state_machine.state_machine import StateMachine
+from instances import events, scenes
 
-current = scenes['menu']
+state_machine = StateMachine(scenes.scenes, events.events)
+state_machine.start_listening()
 
 while True:
-	next_scene_name = current.play()
-	current = scenes[next_scene_name]
+	scene = state_machine.get_current_scene()
+	scene.play()
