@@ -1,41 +1,30 @@
 from conversation.option import Option
+from instances.events import events
 
 
 options = []
 
-
-def select_coin_flip(events, cli):
-	cli.print("Playing coin flip.")
-	return 'coin_flip'
-
+##################
 options.append(Option(
-	"Coin flip",
-	select_coin_flip
+	description="Coin flip",
+	message="Playing coin flip.",
+	triggers=events['menu.coinflip_selected']
 ))
 
-
-def select_lockpick(events, cli):
-	return 'lockpick'
-
+##################
 options.append(Option(
-	"Lock-pick",
-	select_lockpick
+	description="Lock-pick",
+	triggers=events['menu.lockpick_selected']
 ))
 
-
-def select_exploration(events, cli):
-	return 'room'
-
+##################
 options.append(Option(
-	"Explore",
-	select_exploration
+	description="Explore",
+	triggers=events['menu.exploration_selected']
 ))
 
-
-def select_help(events, cli):
-	return 'help'
-
+##################
 options.append(Option(
-	"Help",
-	select_help
+	description="Help",
+	triggers=events['menu.help_selected']
 ))

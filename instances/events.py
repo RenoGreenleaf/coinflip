@@ -10,5 +10,9 @@ events = {
 	'scene.asked_for_menu': Event(),
 	'help.asked_where': Event(),
 	'help.games_known': Event(),
-	'help.asked_what_to_play': Event()
+	'help.asked_what_to_play': Event(),
+	'menu.coinflip_selected': Event(),
+	'menu.lockpick_selected': Event(),
+	'menu.exploration_selected': Event(),
+	'menu.help_selected': Event()
 }
