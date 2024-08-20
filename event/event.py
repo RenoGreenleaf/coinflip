@@ -10,3 +10,13 @@ class Event:
 	def trigger(self):
 		for subscriber in self.subscribers:
 			subscriber.notify(self)
+
+
+class Irrelevant(Event):
+	"""Empty event, it supposed to be triggered by default."""
+	
+	def subscribe(self, subscriber):
+		pass
+
+	def trigger(self):
+		pass
