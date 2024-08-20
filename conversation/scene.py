@@ -29,7 +29,7 @@ class Conversation(scene.Scene):
 			self.back_chosen.trigger()
 
 		option = self.available_options[int(command) - 1]
-		next_scene_slug = option.select(self.events, self.cli)
+		next_scene_slug = option.select(self.cli)
 
 		if next_scene_slug:
 			return next_scene_slug
@@ -40,5 +40,12 @@ class Conversation(scene.Scene):
 		return f'[1-{len(self.available_options)+1}]> '
 
 	def _add_option(self, option):
-		if option.is_available(self.events):
+		if option.is_available():
 			self.available_options.append(option)
+
+	def start_listening(self):
+		for option in self.options:
+			option.start_listening()
+
+	def notify(self, event):
+		pass
