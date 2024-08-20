@@ -8,6 +8,8 @@ class CoinFlip(scene.Scene):
 		self.coin = coin
 		self.my_score = 0
 		self.opponents_score = 0
+		self.i_won = events['coinflip.i_won']
+		self.opponent_won = events['coinflip.opponent_won']
 
 	def request(self):
 		self.cli.print("Choose a side.")
@@ -19,9 +21,11 @@ class CoinFlip(scene.Scene):
 		fell_on = self.coin.flip()
 
 		if command == fell_on:
+			self.i_won.trigger()
 			self.my_score += 1
 			colour = '\033[92m'
 		else:
+			self.opponent_won.trigger()
 			self.opponents_score += 1
 			colour = '\033[91m'
 

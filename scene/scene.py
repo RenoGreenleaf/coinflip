@@ -11,14 +11,14 @@ class Scene:
 
 	def execute(self, command):
 		if command == 'help':
-			return 'help'
+			self.events['scene.asked_for_help'].trigger()
+			self.cli.print("Help was requested.")
 		elif command == 'exit':
-			return 'exit'
+			self.events['scene.decided_to_exit'].trigger()
 		elif command == 'menu':
-			return 'menu'
+			self.events['scene.asked_for_menu'].trigger()
 		else:
 			self.cli.print("Unclear.\n")
-			return self.slug
 
 	def prompt(self):
 		"""Prefixes users input."""
@@ -27,4 +27,10 @@ class Scene:
 	def play(self):
 		self.request()
 		command = self.cli.input(self.prompt())
-		return self.execute(command)
+		self.execute(command)
+
+	def start_listening(self):
+		pass
+
+	def notify(self, event):
+		pass

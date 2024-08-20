@@ -6,6 +6,8 @@ from room.scene import Room
 from conversation.scene import Conversation
 from ending.scene import Ending
 
+from instances.events import events
+
 from cli import CLI
 from coin_flip.coin import Coin
 from room.table import Table
@@ -13,7 +15,6 @@ from lockpick.lock import Collection
 
 
 terminal = CLI()
-events = set()
 props = {
 	'coin': Coin(),
 	'locks': Collection(),

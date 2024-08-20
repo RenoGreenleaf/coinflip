@@ -6,6 +6,7 @@ class Conversation(scene.Scene):
 		super().__init__(cli, events)
 		self.options = options
 		self.slug = slug
+		self.back_chosen = events['scene.asked_for_menu']
 
 	def request(self):
 		item = 0
@@ -25,7 +26,7 @@ class Conversation(scene.Scene):
 			return super().execute(command)
 
 		if int(command) == len(self.available_options) + 1:  # "back" option is chosen.
-			return 'menu'
+			self.back_chosen.trigger()
 
 		option = self.available_options[int(command) - 1]
 		next_scene_slug = option.select(self.events, self.cli)
