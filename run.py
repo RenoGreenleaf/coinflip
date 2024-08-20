@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 from state_machine.state_machine import StateMachine
-from instances import events, scenes
+from instances import events, scenes, state_machine
 
-state_machine = StateMachine(scenes.scenes, events.events)
+state_machine = StateMachine(
+	state_machine.transitions,
+	state_machine.current_scene
+)
 state_machine.start_listening()
 
 for scene in scenes.scenes.values():
