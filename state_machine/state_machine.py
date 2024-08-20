@@ -2,10 +2,14 @@ class StateMachine:
 	"""Switches scenes."""
 
 	def __init__(self, scenes, events):
-		self.transitions = [
+		self.transitions = [# TODO: move that to instances.
 			(events['scene.asked_for_menu'], scenes['menu']),
 			(events['scene.decided_to_exit'], scenes['exit']),
-			(events['scene.asked_for_help'], scenes['help'])
+			(events['scene.asked_for_help'], scenes['help']),
+			(events['menu.coinflip_selected'], scenes['coin_flip']),
+			(events['menu.lockpick_selected'], scenes['lockpick']),
+			(events['menu.exploration_selected'], scenes['room']),
+			(events['menu.help_selected'], scenes['help']),
 		]
 		self.current_scene = scenes['coin_flip']
 
