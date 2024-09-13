@@ -1,18 +1,23 @@
 from event.event import Event, Irrelevant
 
 
-events = {
-	'none': Irrelevant(),
-	'coinflip.i_won': Event(),
-	'coinflip.opponent_won': Event(),
-	'scene.decided_to_exit': Event(),
-	'scene.asked_for_help': Event(),
-	'scene.asked_for_menu': Event(),
-	'help.asked_where': Event(),
-	'help.games_known': Event(),
-	'help.asked_what_to_play': Event(),
-	'menu.coinflip_selected': Event(),
-	'menu.lockpick_selected': Event(),
-	'menu.exploration_selected': Event(),
-	'menu.help_selected': Event()
+events = {'none': Irrelevant()}
+keys = {
+	'coinflip.i_won',
+	'coinflip.opponent_won',
+	'scene.decided_to_exit',
+	'scene.asked_for_help',
+	'scene.asked_for_menu',
+	'help.asked_where',
+	'help.games_known',
+	'help.asked_what_to_play',
+	'menu.coinflip_selected',
+	'menu.lockpick_selected',
+	'menu.exploration_selected',
+	'menu.help_selected',
+	'state_machine.previous_scene_available',
+	'state_machine.previous_requested',
 }
+
+for key in keys:
+	events[key] = Event()

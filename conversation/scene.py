@@ -19,8 +19,6 @@ class Conversation(scene.Scene):
 			item += 1
 			self.cli.print(f'{item}. {option.describe()}')
 
-		self.cli.print(f'{item+1}. Back.')
-
 	def execute(self, command):
 		if not command.isnumeric():
 			return super().execute(command)
@@ -37,7 +35,7 @@ class Conversation(scene.Scene):
 		return self.slug
 
 	def prompt(self):
-		return f'[1-{len(self.available_options)+1}]> '
+		return f'[1-{len(self.available_options)}]> '
 
 	def _add_option(self, option):
 		if option.is_available():

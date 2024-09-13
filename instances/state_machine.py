@@ -11,4 +11,6 @@ transitions = [
 	(events['menu.exploration_selected'], scenes['room']),
 	(events['menu.help_selected'], scenes['help']),
 ]
-current_scene = scenes['coin_flip']
+current_scene = scenes['menu']
+previous_scene_available = events['state_machine.previous_scene_available']
+previous_requested = events['state_machine.previous_requested']
