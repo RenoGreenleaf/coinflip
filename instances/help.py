@@ -46,3 +46,11 @@ options.append(Option(
 	description="How to leave?",
 	message="""You can leave by typing in "exit"."""
 ))
+
+##################
+options.append(Option(
+	description="Back",
+	triggers=events['state_machine.previous_requested'],
+	show_condition=events['state_machine.previous_scene_available'],
+	available=False
+))
