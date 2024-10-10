@@ -1,23 +1,11 @@
+from json import load
 from event.event import Event, Irrelevant
 
 
 events = {'none': Irrelevant()}
-keys = {
-	'coinflip.i_won',
-	'coinflip.opponent_won',
-	'scene.decided_to_exit',
-	'scene.asked_for_help',
-	'scene.asked_for_menu',
-	'help.asked_where',
-	'help.games_known',
-	'help.asked_what_to_play',
-	'menu.coinflip_selected',
-	'menu.lockpick_selected',
-	'menu.exploration_selected',
-	'menu.help_selected',
-	'state_machine.previous_scene_available',
-	'state_machine.previous_requested',
-}
+
+with open('instances/events.json') as events_data:
+	keys = set(load(events_data))
 
 for key in keys:
 	events[key] = Event()
