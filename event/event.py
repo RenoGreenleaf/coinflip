@@ -14,7 +14,6 @@ class Event:
 
 class Irrelevant(Event):
 	"""Empty event, it supposed to be triggered by default."""
-	
 	def subscribe(self, subscriber):
 		pass
 
