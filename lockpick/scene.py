@@ -4,7 +4,6 @@ from scene import scene
 class LockPick(scene.Scene):
 	def __init__(self, cli, events, locks):
 		super().__init__(cli, events)
-		self.slug = 'lockpick'
 		self.locks = locks
 
 	def request(self):
@@ -27,9 +26,6 @@ class LockPick(scene.Scene):
 
 		if lock.unlocked():
 			self.cli.print("Yey! It's unlocked.\n")
-			return 'menu'
-
-		return self.slug
 
 	def prompt(self):
 		return '[left, right]> '

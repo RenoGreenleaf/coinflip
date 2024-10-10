@@ -4,7 +4,6 @@ from scene import scene
 class CoinFlip(scene.Scene):
 	def __init__(self, cli, events, coin):
 		super().__init__(cli, events)
-		self.slug = 'coin_flip'
 		self.coin = coin
 		self.my_score = 0
 		self.opponents_score = 0
@@ -31,7 +30,6 @@ class CoinFlip(scene.Scene):
 
 		self.cli.print('The coin fell on ' + colour + fell_on + '\033[0m.')
 		self.cli.print(f'{self.my_score}/{self.opponents_score}\n')
-		return self.slug
 
 	def prompt(self):
 		return '[heads, tails]> '

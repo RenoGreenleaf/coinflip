@@ -6,7 +6,6 @@ class Room(scene.Scene):
 	def __init__(self, cli, events, props):
 		super().__init__(cli, events)
 		self.props = props
-		self.slug = 'room'
 
 	def request(self):
 		self.cli.print("The room is large.")
@@ -24,7 +23,7 @@ class Room(scene.Scene):
 
 		if item_name not in self.props:
 			self.cli.print(f"There's no {item_name} here.\n")
-			return self.slug
+			return
 
 		if action == 'describe':
 			return self.props[item_name].describe(self.events, self.cli)
@@ -32,5 +31,3 @@ class Room(scene.Scene):
 			return self.props[item_name].use(self.events, self.cli)
 		else:
 			self.cli.print(f"That can't be done with the {item_name}.\n")
-
-		return self.slug

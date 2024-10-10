@@ -25,7 +25,7 @@ scenes = {
 	'coin_flip': CoinFlip(terminal, events, props['coin']),
 	'lockpick': LockPick(terminal, events, props['locks']),
 	'room': Room(terminal, events, props),
-	'menu': Conversation(terminal, events, menu.options, slug='menu'),
-	'help': Conversation(terminal, events, help.options, slug='help'),
+	'menu': Conversation(terminal, events, menu.options),
+	'help': Conversation(terminal, events, help.options),
 	'exit': Ending(terminal, events)
 }
