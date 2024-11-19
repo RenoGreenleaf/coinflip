@@ -7,8 +7,6 @@ class CoinFlip(scene.Scene):
 		self.coin = coin
 		self.my_score = 0
 		self.opponents_score = 0
-		self.i_won = events['coinflip.i_won']
-		self.opponent_won = events['coinflip.opponent_won']
 
 	def request(self):
 		self.cli.print("Choose a side.")
@@ -33,3 +31,7 @@ class CoinFlip(scene.Scene):
 
 	def prompt(self):
 		return '[heads, tails]> '
+
+	def load(self, scene_data, events):
+		self.i_won = events[scene_data['i_won']]
+		self.opponent_won = events[scene_data['opponent_won']]

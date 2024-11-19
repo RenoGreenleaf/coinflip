@@ -1,11 +1,11 @@
 from scene import scene
+from conversation.option import Option
 
 
 class Conversation(scene.Scene):
 	def __init__(self, cli, events, options):
 		super().__init__(cli, events)
-		self.options = options
-		self.back_chosen = events['scene.asked_for_menu']
+		self.options = []
 
 	def request(self):
 		item = 0
@@ -28,13 +28,27 @@ class Conversation(scene.Scene):
 	def prompt(self):
 		return f'[1-{len(self.available_options)}]> '
 
-	def _add_option(self, option):
-		if option.is_available():
-			self.available_options.append(option)
-
 	def start_listening(self):
 		for option in self.options:
 			option.start_listening()
 
 	def notify(self, event):
 		pass
+
+	def load(self, scene_data, events):
+		for option_data in scene_data['options']:
+			self._load_option(option_data, events)
+
+	def _add_option(self, option):
+		if option.is_available():
+			self.available_options.append(option)
+
+	def _load_option(self, option_data, events):
+		self.options.append(Option(
+			description=option_data['description'],
+			triggers=events[option_data.get('triggers', 'none')],
+			hide_condition=events[option_data.get('hide_condition', 'none')],
+			show_condition=events[option_data.get('show_condition', 'none')],
+			available=option_data.get('available', True),
+			message=option_data.get('message', "")
+		))

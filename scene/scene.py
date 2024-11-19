@@ -34,3 +34,6 @@ class Scene:
 
 	def notify(self, event):
 		pass
+
+	def load(self, scene_data, events):
+		pass
