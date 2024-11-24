@@ -16,8 +16,8 @@ from lockpick.lock import Collection
 
 terminal = CLI()
 props = {
-	'coin': Coin(),
-	'locks': Collection(),
+	'coin': Coin(triggers=events['menu.coinflip_selected']),
+	'locks': Collection(triggers=events['menu.lockpick_selected']),
 	'table': Table(),
 }
 props['locks'].prepare()

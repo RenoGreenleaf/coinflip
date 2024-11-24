@@ -3,7 +3,8 @@ from random import choice
 
 
 class Coin(Prop):
-	def __init__(self):
+	def __init__(self, triggers):
+		self.triggers = triggers
 		self.side = 'heads'
 
 	def flip(self):
@@ -12,8 +13,7 @@ class Coin(Prop):
 
 	def describe(self, events, cli):
 		cli.print(f"A coin is lying on the floor, {self.side} up.\n")
-		return 'room'
 
 	def use(self, events, cli):
 		cli.print("Playing coin flip.")
-		return 'coin_flip'
+		self.triggers.trigger()

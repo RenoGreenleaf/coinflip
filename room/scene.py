@@ -3,6 +3,7 @@ from scene import scene
 
 class Room(scene.Scene):
 	"""A location to explore."""
+
 	def __init__(self, cli, events, props):
 		super().__init__(cli, events)
 		self.props = props
@@ -26,8 +27,8 @@ class Room(scene.Scene):
 			return
 
 		if action == 'describe':
-			return self.props[item_name].describe(self.events, self.cli)
+			self.props[item_name].describe(self.events, self.cli)
 		elif action == 'use':
-			return self.props[item_name].use(self.events, self.cli)
+			self.props[item_name].use(self.events, self.cli)
 		else:
 			self.cli.print(f"That can't be done with the {item_name}.\n")
