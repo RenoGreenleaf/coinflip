@@ -1,8 +1,9 @@
 class Event:
 	"""A message sent when something happens.
 	Helps to interact between decoupled parts of an app."""
-	def __init__(self):
+	def __init__(self, name):
 		self.subscribers = []
+		self.name = name
 
 	def subscribe(self, subscriber):
 		self.subscribers.append(subscriber)
@@ -10,6 +11,9 @@ class Event:
 	def trigger(self):
 		for subscriber in self.subscribers:
 			subscriber.notify(self)
+
+	def serialize(self):
+		return self.name
 
 
 class Irrelevant(Event):

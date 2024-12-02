@@ -35,3 +35,16 @@ class CoinFlip(scene.Scene):
 	def load(self, scene_data, events):
 		self.i_won = events[scene_data['i_won']]
 		self.opponent_won = events[scene_data['opponent_won']]
+
+	def serialize(self):
+		return {
+			'type': 'coin_flip',
+			'i_won': self.i_won.serialize(),
+			'opponent_won': self.opponent_won.serialize()
+		}
+
+	def get_structure(self):
+		return {
+			('i_won', "An event for victory"): self.i_won.serialize(),
+			('opponent_won', "An event for loss"): self.opponent_won.serialize()
+		}

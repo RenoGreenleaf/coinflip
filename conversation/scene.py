@@ -39,6 +39,11 @@ class Conversation(scene.Scene):
 		for option_data in scene_data['options']:
 			self._load_option(option_data, events)
 
+	def serialize(self):
+		return {
+			'type': 'conversation'
+		}
+
 	def _add_option(self, option):
 		if option.is_available():
 			self.available_options.append(option)

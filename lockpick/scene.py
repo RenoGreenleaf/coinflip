@@ -29,3 +29,8 @@ class LockPick(scene.Scene):
 
 	def prompt(self):
 		return '[left, right]> '
+
+	def serialize(self):
+		return {
+			'type': 'lockpick'
+		}

@@ -37,3 +37,10 @@ class Scene:
 
 	def load(self, scene_data, events):
 		pass
+
+	def serialize(self):
+		return {}
+
+	def get_structure(self):
+		"""Describes how a scene can be edited."""
+		return {}

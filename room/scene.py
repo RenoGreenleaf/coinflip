@@ -32,3 +32,8 @@ class Room(scene.Scene):
 			self.props[item_name].use(self.events, self.cli)
 		else:
 			self.cli.print(f"That can't be done with the {item_name}.\n")
+
+	def serialize(self):
+		return {
+			'type': 'room'
+		}
