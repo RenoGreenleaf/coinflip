@@ -44,3 +44,6 @@ class Scene:
 	def get_structure(self):
 		"""Describes how a scene can be edited."""
 		return {}
+
+	def __repr__(self):
+		return 'scene'
