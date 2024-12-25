@@ -37,3 +37,6 @@ class Option:
 			self.available = False
 		elif event == self.show_condition:
 			self.available = True
+
+	def __repr__(self):
+		return self.description

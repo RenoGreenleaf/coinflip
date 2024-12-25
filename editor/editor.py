@@ -8,11 +8,17 @@ class Editor:
 	def edit(self):
 		command = input(f'{self.current_editable}> ')
 
+		if command == 'exit':
+			exit()
+		elif command == 'back':
+			self.current_editable = self
+		else:
+			self.current_editable.editable_execute(command)
+
+	def editable_execute(self, command):
 		if command == 'list':
 			self._list()
-		elif command == 'exit':
-			exit()
-		elif command.startswith('select'):
+		elif command.startswith('select '):
 			_, scene_name = command.split(' ')
 			scene = self.scenes[scene_name]
 			self.current_editable = scene

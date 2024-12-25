@@ -25,6 +25,12 @@ class Conversation(scene.Scene):
 		option = self.available_options[int(command) - 1]
 		option.select(self.cli)
 
+	def editable_execute(self, command):
+		if command == 'list':
+			self._list()
+		else:
+			self.cli.print("Unclear.")
+
 	def prompt(self):
 		return f'[1-{len(self.available_options)}]> '
 
@@ -57,3 +63,11 @@ class Conversation(scene.Scene):
 			available=option_data.get('available', True),
 			message=option_data.get('message', "")
 		))
+
+	def _list(self):
+		self.cli.print("Options:")
+		offset = 0
+
+		for option in self.options:
+			offset += 1
+			self.cli.print(f"\t{offset}.", option)

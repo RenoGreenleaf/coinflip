@@ -29,6 +29,12 @@ class CoinFlip(scene.Scene):
 		self.cli.print('The coin fell on ' + colour + fell_on + '\033[0m.')
 		self.cli.print(f'{self.my_score}/{self.opponents_score}\n')
 
+	def editable_execute(self, command):
+		if command == 'list':
+			self._list()
+		else:
+			self.cli.print("Unclear.")
+
 	def prompt(self):
 		return '[heads, tails]> '
 
@@ -43,8 +49,7 @@ class CoinFlip(scene.Scene):
 			'opponent_won': self.opponent_won.serialize()
 		}
 
-	def get_structure(self):
-		return {
-			('i_won', "An event for victory"): self.i_won.serialize(),
-			('opponent_won', "An event for loss"): self.opponent_won.serialize()
-		}
+	def _list(self):
+		self.cli.print("Events:")
+		self.cli.print(f"\ti_won: {self.i_won.serialize()}")
+		self.cli.print(f"\topponent_won: {self.opponent_won.serialize()}")

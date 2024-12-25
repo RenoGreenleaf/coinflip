@@ -15,7 +15,11 @@ class Ending(scene.Scene):
 			'message': self.message
 		}
 
-	def get_structure(self):
-		return {
-			('message', "Message shown on exit."): self.message
-		}
+	def editable_execute(self, command):
+		if command == 'list':
+			self._list()
+		else:
+			self.cli.print("Unclear.")
+
+	def _list(self):
+		self.cli.print(f"Message: {self.message}")

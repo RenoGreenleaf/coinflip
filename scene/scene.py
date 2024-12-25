@@ -20,6 +20,9 @@ class Scene:
 		else:
 			self.cli.print("Unclear.\n")
 
+	def editable_execute(self, command):
+		self.cli.print("There's nothing to edit in the scene.")
+
 	def prompt(self):
 		"""Prefixes users input."""
 		return '> '
@@ -39,10 +42,6 @@ class Scene:
 		pass
 
 	def serialize(self):
-		return {}
-
-	def get_structure(self):
-		"""Describes how a scene can be edited."""
 		return {}
 
 	def __repr__(self):

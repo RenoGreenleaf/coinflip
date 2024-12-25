@@ -1,6 +1,7 @@
 {
 	"exit": {
-		"type": "exit"
+		"type": "exit",
+		"message": "Bye-bye!"
 	},
 	"coin_flip": {
 		"type": "coin_flip",
