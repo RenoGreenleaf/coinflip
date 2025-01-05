@@ -6,6 +6,4 @@ from cli import CLI
 
 
 editor = Editor(CLI(), events, scenes)
-
-while True:
-	editor.edit()
+editor.cmdloop()

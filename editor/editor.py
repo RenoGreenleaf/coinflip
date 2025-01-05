@@ -1,9 +1,41 @@
-class Editor:
+import cmd
+
+
+class Editor(cmd.Cmd):
+	prompt = '> '
+
 	def __init__(self, cli, events, scenes):
+		super().__init__()
 		self.cli = cli
 		self.events = events
 		self.scenes = scenes
 		self.current_editable = self
+
+	def do_list(self, args):
+		"""Overview of instances for editing."""
+		group = args.split(' ')[0]
+
+		if group == '' or group == 'events':
+			self._list_events()
+
+		if group == '' or group == 'scenes':
+			self._list_scenes()
+
+	def do_exit(self, args):
+		"""Leave entirely."""
+		self.cli.exit()
+
+	def do_back(self, args):
+		"""Leave currently selected instance."""
+
+	def do_select(self, args):
+		"""Make further commands to be applied to selected instance."""
+
+	def complete_list(self, text, line, begidx, endidx):
+		return [c for c in ('scenes', 'events') if c.startswith(text)]
+
+	def complete_select(self, text, line, begidx, endidx):
+		return [name for name in self.scenes if name.startswith(text)]
 
 	def edit(self):
 		command = input(f'{self.current_editable}> ')
@@ -25,12 +57,16 @@ class Editor:
 		else:
 			self.cli.print("Unclear.")
 
-	def _list(self):
+	def emptyline(self):
+		"""Default emptyline() behaviour isn't acceptable."""
+
+	def _list_events(self):
 		self.cli.print("Events:")
 
 		for event_name in self.events:
 			self.cli.print("\t", event_name)
 
+	def _list_scenes(self):
 		self.cli.print("Scenes:")
 
 		for scene_name in self.scenes:
