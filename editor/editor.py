@@ -30,6 +30,14 @@ class Editor(cmd.Cmd):
 
 	def do_select(self, args):
 		"""Make further commands to be applied to selected instance."""
+		scene_name = args.split(' ')[0]
+		scene = self.scenes.get(scene_name)
+
+		if scene:
+			self.current_editable = scene
+			self.prompt = f"{scene}> "
+		else:
+			self.cli.print(f"There's no scene \"{scene_name}\".")
 
 	def complete_list(self, text, line, begidx, endidx):
 		return [c for c in ('scenes', 'events') if c.startswith(text)]
