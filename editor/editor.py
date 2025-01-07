@@ -45,26 +45,6 @@ class Editor(cmd.Cmd):
 	def complete_select(self, text, line, begidx, endidx):
 		return [name for name in self.scenes if name.startswith(text)]
 
-	def edit(self):
-		command = input(f'{self.current_editable}> ')
-
-		if command == 'exit':
-			exit()
-		elif command == 'back':
-			self.current_editable = self
-		else:
-			self.current_editable.editable_execute(command)
-
-	def editable_execute(self, command):
-		if command == 'list':
-			self._list()
-		elif command.startswith('select '):
-			_, scene_name = command.split(' ')
-			scene = self.scenes[scene_name]
-			self.current_editable = scene
-		else:
-			self.cli.print("Unclear.")
-
 	def emptyline(self):
 		"""Default emptyline() behaviour isn't acceptable."""
 
