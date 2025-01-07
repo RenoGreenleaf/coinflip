@@ -9,7 +9,7 @@ class Editor(cmd.Cmd):
 		self.cli = cli
 		self.events = events
 		self.scenes = scenes
-		self.current_editable = self
+		self._set_current_editable(self)
 
 	def do_list(self, args):
 		"""Overview of instances for editing."""
@@ -27,6 +27,7 @@ class Editor(cmd.Cmd):
 
 	def do_back(self, args):
 		"""Leave currently selected instance."""
+		self._set_current_editable(self)
 
 	def do_select(self, args):
 		"""Make further commands to be applied to selected instance."""
@@ -34,8 +35,7 @@ class Editor(cmd.Cmd):
 		scene = self.scenes.get(scene_name)
 
 		if scene:
-			self.current_editable = scene
-			self.prompt = f"{scene}> "
+			self._set_current_editable(scene)
 		else:
 			self.cli.print(f"There's no scene \"{scene_name}\".")
 
@@ -79,6 +79,11 @@ class Editor(cmd.Cmd):
 
 		for scene_name in self.scenes:
 			self.cli.print("\t", scene_name)
+
+	def _set_current_editable(self, editable):
+		"""Prevents code duplication."""
+		self.current_editable = editable
+		self.prompt = f"{editable}> "
 
 	def __repr__(self):
 		return 'all'
