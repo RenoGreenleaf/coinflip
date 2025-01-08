@@ -7,6 +7,7 @@ class Ending(scene.Scene):
 		self.cli.exit()
 
 	def load(self, scene_data, events):
+		super().load(scene_data, events)
 		self.message = scene_data.get('message', "")
 
 	def serialize(self):

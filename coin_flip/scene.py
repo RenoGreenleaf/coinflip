@@ -39,6 +39,7 @@ class CoinFlip(scene.Scene):
 		return '[heads, tails]> '
 
 	def load(self, scene_data, events):
+		super().load(scene_data, events)
 		self.i_won = events[scene_data['i_won']]
 		self.opponent_won = events[scene_data['opponent_won']]
 

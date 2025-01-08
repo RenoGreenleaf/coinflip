@@ -1,21 +1,26 @@
 {
 	"exit": {
 		"type": "exit",
-		"message": "Bye-bye!"
+		"message": "Bye-bye!",
+		"slug": "exit"
 	},
 	"coin_flip": {
 		"type": "coin_flip",
 		"i_won": "coinflip.i_won",
-		"opponent_won": "coinflip.opponent_won"
+		"opponent_won": "coinflip.opponent_won",
+		"slug": "coin_flip"
 	},
 	"lockpick": {
-		"type": "lockpick"
+		"type": "lockpick",
+		"slug": "lockpick"
 	},
 	"room": {
-		"type": "room"
+		"type": "room",
+		"slug": "room"
 	},
 	"menu": {
 		"type": "conversation",
+		"slug": "menu",
 		"options": [
 			{
 				"description": "Coin flip",
@@ -44,6 +49,7 @@
 	},
 	"help": {
 		"type": "conversation",
+		"slug": "help",
 		"options": [
 			{
 				"description": "Where am I?",

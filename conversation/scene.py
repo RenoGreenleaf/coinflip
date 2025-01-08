@@ -42,6 +42,8 @@ class Conversation(scene.Scene):
 		pass
 
 	def load(self, scene_data, events):
+		super().load(scene_data, events)
+
 		for option_data in scene_data['options']:
 			self._load_option(option_data, events)
 

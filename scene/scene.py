@@ -39,10 +39,10 @@ class Scene:
 		pass
 
 	def load(self, scene_data, events):
-		pass
+		self.slug = scene_data.get('slug', '')
 
 	def serialize(self):
 		return {}
 
 	def __repr__(self):
-		return 'scene'
+		return self.slug
