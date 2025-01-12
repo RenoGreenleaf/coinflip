@@ -50,6 +50,9 @@ class CoinFlip(scene.Scene):
 			'opponent_won': self.opponent_won.serialize()
 		}
 
+	def list(self):
+		return ('i_won', 'opponent_won')
+
 	def _list(self):
 		self.cli.print("Events:")
 		self.cli.print(f"\ti_won: {self.i_won.serialize()}")

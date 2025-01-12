@@ -44,5 +44,8 @@ class Scene:
 	def serialize(self):
 		return {}
 
+	def list(self):
+		return ()
+
 	def __repr__(self):
 		return self.slug

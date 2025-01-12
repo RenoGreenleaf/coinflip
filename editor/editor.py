@@ -13,6 +13,10 @@ class Editor(cmd.Cmd):
 
 	def do_list(self, args):
 		"""Overview of instances for editing."""
+		if self.current_editable is not self:
+			print('\n'.join(self.current_editable.list()))
+			return
+
 		group = args.split(' ')[0]
 
 		if group == '' or group == 'events':

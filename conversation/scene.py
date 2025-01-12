@@ -52,6 +52,16 @@ class Conversation(scene.Scene):
 			'type': 'conversation'
 		}
 
+	def list(self):
+		offset = 0
+		result = []
+
+		for option in self.options:
+			offset += 1
+			result.append(f"{offset}. {option}")
+
+		return result
+
 	def _add_option(self, option):
 		if option.is_available():
 			self.available_options.append(option)

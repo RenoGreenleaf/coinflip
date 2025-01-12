@@ -22,5 +22,8 @@ class Ending(scene.Scene):
 		else:
 			self.cli.print("Unclear.")
 
+	def list(self):
+		return ('message',)
+
 	def _list(self):
 		self.cli.print(f"Message: {self.message}")
