@@ -20,9 +20,6 @@ class Scene:
 		else:
 			self.cli.print("Unclear.\n")
 
-	def editable_execute(self, command):
-		self.cli.print("There's nothing to edit in the scene.")
-
 	def prompt(self):
 		"""Prefixes users input."""
 		return '> '

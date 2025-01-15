@@ -16,12 +16,6 @@ class Ending(scene.Scene):
 			'message': self.message
 		}
 
-	def editable_execute(self, command):
-		if command == 'list':
-			self._list()
-		else:
-			self.cli.print("Unclear.")
-
 	def list(self):
 		return ('message',)
 
