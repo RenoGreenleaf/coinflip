@@ -12,5 +12,7 @@
 	"menu.exploration_selected",
 	"menu.help_selected",
 	"state_machine.previous_scene_available",
-	"state_machine.previous_requested"
+	"state_machine.previous_requested",
+
+	"ui.exit"
 ]

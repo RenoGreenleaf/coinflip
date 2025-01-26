@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 from state_machine.state_machine import StateMachine
-from instances import scenes, state_machine
+from instances import scenes, state_machine, events
+from player.player import Player
+
 
 state_machine = StateMachine(
 	state_machine.transitions,
@@ -13,6 +15,5 @@ state_machine.start_listening()
 for scene in scenes.scenes.values():
 	scene.start_listening()
 
-while True:
-	scene = state_machine.get_current_scene()
-	scene.play()
+player = Player(events.events)
+player.cmdloop()

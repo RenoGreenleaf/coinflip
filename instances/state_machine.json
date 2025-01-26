@@ -6,7 +6,9 @@
 		"menu.coinflip_selected": "coin_flip",
 		"menu.lockpick_selected": "lockpick",
 		"menu.exploration_selected": "room",
-		"menu.help_selected": "help"
+		"menu.help_selected": "help",
+
+		"ui.exit": "exit"
 	},
 	"current_scene": "menu",
 	"previous_scene_available": "state_machine.previous_scene_available",

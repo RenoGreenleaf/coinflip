@@ -34,6 +34,7 @@ class StateMachine:
 					self.previous_available.trigger()
 
 				self.current_scene = scene
+				scene.play()
 				break
 
 	def get_current_scene(self):
