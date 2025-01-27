@@ -14,3 +14,6 @@ class Player(Cmd):
 
 	def do_menu(self, args):
 		self.menu.trigger()
+
+	def default(self, line):
+		print("Unclear.")
