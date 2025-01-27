@@ -8,7 +8,8 @@
 		"menu.exploration_selected": "room",
 		"menu.help_selected": "help",
 
-		"ui.exit": "exit"
+		"ui.exit": "exit",
+		"ui.menu": "menu"
 	},
 	"current_scene": "menu",
 	"previous_scene_available": "state_machine.previous_scene_available",

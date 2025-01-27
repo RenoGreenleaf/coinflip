@@ -14,5 +14,6 @@
 	"state_machine.previous_scene_available",
 	"state_machine.previous_requested",
 
-	"ui.exit"
+	"ui.exit",
+	"ui.menu"
 ]

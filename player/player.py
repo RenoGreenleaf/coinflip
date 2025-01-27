@@ -7,6 +7,10 @@ class Player(Cmd):
 	def __init__(self, events):
 		super().__init__()
 		self.exit = events['ui.exit']
+		self.menu = events['ui.menu']
 
 	def do_exit(self, args):
 		self.exit.trigger()
+
+	def do_menu(self, args):
+		self.menu.trigger()
