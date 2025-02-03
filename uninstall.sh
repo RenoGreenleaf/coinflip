@@ -1,0 +1,1 @@
+rm -rf .venv db.sqlite3 db.sqlite3-shm db.sqlite3-wal
