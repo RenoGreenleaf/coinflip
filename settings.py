@@ -4,6 +4,7 @@ TORTOISE = {
     },
     "apps": {"models": {"models": [
         "aerich.models",
-        "ending.models"
+        "ending.models",
+        "event.models"
     ]}}
 }
