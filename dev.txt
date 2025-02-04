@@ -1,9 +1,1 @@
-In General
-The app is event driven. It consists of events, publishers and subscribers. These are interfaces. Any class may implement one or more of them.
-Publishers trigger events. That makes events to notify their subscribers.
-
-File/Folder Organization
-Each root folder contains implementation of an entity. Currently there're folders:
-* "instances" is a pool from which an ingame object can be pulled. It also encapsulates instantiation of objects. Note, an object here means an instance of a class.
-* "event" contains implementation of events. See above.
-* folders for scenes, "scene" and "state_machine". Provide gameplay of switching between scenes. It's not fixed/frozen. It's fine for these folders to go away or change drastically.
+Each folder represents an entity type. It consists of a model, editor, and player. Either editor or player wrap a model to provide a user with access to it. Entities communicate with each other using events. For this reason all objects should be loaded in memory (so that not a single event be missed by a subscriber). Direct communication should be minimazed.
