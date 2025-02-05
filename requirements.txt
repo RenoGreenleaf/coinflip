@@ -1,2 +1,2 @@
-tortoise-orm
-aerich[toml]
+SQLAlchemy
+alembic
