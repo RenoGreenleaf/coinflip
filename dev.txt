@@ -1,1 +1,3 @@
 Each folder represents an entity type. It consists of a model, editor, and player. Either editor or player wrap a model to provide a user with access to it. Entities communicate with each other using events. For this reason all objects should be loaded in memory (so that not a single event be missed by a subscriber). Direct communication should be minimazed.
+
+* "reusables" contains abstract classes or helper functions. As the name suggests the purpose of this directory is to provide common code pieces to be used throughout the whole project. It doesn't represent an entity type.
