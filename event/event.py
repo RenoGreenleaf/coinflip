@@ -6,6 +6,7 @@ class Event:
 		self.name = name
 
 	def subscribe(self, subscriber):
+		"""Let event know whom to notify if it's triggered."""
 		self.subscribers.append(subscriber)
 
 	def trigger(self):
