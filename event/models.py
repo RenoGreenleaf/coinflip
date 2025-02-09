@@ -1,6 +1,7 @@
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import mapped_column
 from reusables.model import Model
+from event.editor import Editor
 
 
 class Event(Model):
@@ -12,6 +13,9 @@ class Event(Model):
 	def __repr__(self):
 		return self.name
 
+	def wrap_for_editing(self):
+		return Editor(self)
+
 
 class Irrelevant:
 	# TODO: make it a model, so that it, instead of NULL, is stored.
@@ -22,3 +26,6 @@ class Irrelevant:
 
 	def __repr__(self):
 		return '<Irrelevant>'
+
+	def wrap_for_editing(self):
+		return Editor(self)
