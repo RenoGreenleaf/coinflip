@@ -23,6 +23,7 @@ class Irrelevant:
 	Empty event, it supposed to be triggered by default.
 	It's for Null Object pattern.
 	"""
+	id = ''
 
 	def __repr__(self):
 		return '<Irrelevant>'
