@@ -1,9 +1,14 @@
 #!/usr/bin/env python
-from instances.scenes import scenes
-from instances.events import events
-from editor.editor import Editor
-from cli import CLI
+from instances import pool
 
 
-editor = Editor(CLI(), events, scenes)
-editor.cmdloop()
+current_editable = [None]
+
+while True:
+	editable = current_editable[0]
+
+	if not editable:
+		editable = pool
+
+	editor = editable.wrap_for_editing()
+	editor.interact(current_editable)
