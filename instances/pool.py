@@ -14,11 +14,14 @@ def update_event(event):
 		session.commit()
 
 
+def update():
+	"""Makes pool up to date with last changes."""
+	global events
+
+	with Session() as session:
+		events = [Irrelevant()] + session.scalars(select(Event)).all()
+
+
 def wrap_for_editing():
 	with_keys = {event.id: event for event in events}
 	return Editor(with_keys)
-
-
-#  the following script is expected to be executed on (first) import.
-with Session() as session:
-	events = [Irrelevant()] + session.scalars(select(Event)).all()

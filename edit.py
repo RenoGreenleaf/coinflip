@@ -9,6 +9,7 @@ while True:
 
 	if not editable:
 		editable = pool
+		editable.update()
 
 	editor = editable.wrap_for_editing()
 	editor.interact(current_editable)

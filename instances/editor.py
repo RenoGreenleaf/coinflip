@@ -1,5 +1,6 @@
 from cmd import Cmd
 from reusables.session import Session
+from event.models import Event
 
 
 class Editor(Cmd):
@@ -29,7 +30,9 @@ class Editor(Cmd):
 	# TODO: following functions require state machine
 
 	def do_create(self, args):
-		pass
+		new_event = Event(name="New Event")
+		self.current_editable[0] = new_event
+		return True
 
 	def do_update(self, args):
 		self.current_editable[0] = self.events[int(args)]

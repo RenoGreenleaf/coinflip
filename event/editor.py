@@ -6,7 +6,7 @@ class Editor:
 		self.event = model
 
 	def interact(self, current_editable):
-		new_name = input(f'Rename {self.event.name} to:\n')
+		new_name = input(f'Rename "{self.event.name}" to:\n')
 
 		if not new_name:
 			current_editable[0] = None
