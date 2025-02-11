@@ -7,7 +7,8 @@ class Editor(Cmd):
 		super().__init__()
 		self.events = events
 
-	def interact(self):
+	def interact(self, current_editable):
+		self.current_editable = current_editable
 		self.cmdloop()
 
 	def do_list(self, args):
@@ -23,7 +24,7 @@ class Editor(Cmd):
 
 	def do_exit(self, args):
 		print("Leaving.")
-		return True
+		exit()
 
 	# TODO: following functions require state machine
 
@@ -31,4 +32,5 @@ class Editor(Cmd):
 		pass
 
 	def do_update(self, args):
-		pass
+		self.current_editable[0] = self.events[int(args)]
+		return True
