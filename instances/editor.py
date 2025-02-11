@@ -27,8 +27,6 @@ class Editor(Cmd):
 		print("Leaving.")
 		exit()
 
-	# TODO: following functions require state machine
-
 	def do_create(self, args):
 		new_event = Event(name="New Event")
 		self.current_editable[0] = new_event

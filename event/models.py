@@ -1,6 +1,6 @@
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import mapped_column
-from reusables.model import Model
+from reusables.models import Model
 from event.editor import Editor
 
 

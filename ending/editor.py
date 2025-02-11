@@ -1,4 +1,3 @@
-from tortoise import run_async
 from cmd import Cmd
 
 
@@ -17,4 +16,4 @@ class Editor(Cmd):
 
 	def do_edit(self, args):
 		self.model.message = input("New message: ")
-		run_async(self.model.save())
+		self.model.save()
