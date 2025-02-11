@@ -4,24 +4,23 @@ from event.models import Event, Irrelevant
 from instances.editor import Editor
 
 
-def get_all_events():
-	return events
+class Pool:
+	def __init__(self):
+		self.events = []
 
+	def get_all_events(self):
+		return self.events
 
-def update_event(event):
-	with Session() as session:
-		session.add(event)
-		session.commit()
+	def update_event(self, event):
+		with Session() as session:
+			session.add(event)
+			session.commit()
 
+	def update(self):
+		"""Makes pool up to date with last changes."""
+		with Session() as session:
+			self.events = [Irrelevant()] + session.scalars(select(Event)).all()
 
-def update():
-	"""Makes pool up to date with last changes."""
-	global events
-
-	with Session() as session:
-		events = [Irrelevant()] + session.scalars(select(Event)).all()
-
-
-def wrap_for_editing():
-	with_keys = {event.id: event for event in events}
-	return Editor(with_keys)
+	def wrap_for_editing(self):
+		with_keys = {event.id: event for event in self.events}
+		return Editor(with_keys)

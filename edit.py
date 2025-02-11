@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-from instances import pool
+from instances.pool import Pool
 
 
+pool = Pool()
 current_editable = [None]
 
 while True:
