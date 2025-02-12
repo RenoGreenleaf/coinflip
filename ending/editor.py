@@ -1,19 +1,22 @@
-from cmd import Cmd
+from reusables.session import Session
 
 
-class Editor(Cmd):
+class Editor():
 	def __init__(self, model):
 		super().__init__()
 		self.model = model
 
-	def do_list(self, args):
-		print("Fields:")
-		print(f"\tmessage: {self.model.message}")
+	def interact(self, current_editable):
+		new_message = input("New message to be shown when ending:\n")
 
-	def do_exit(self, args):
-		print("Leaving.")
-		return True
+		if not new_message:
+			current_editable[0] = None
+			return
 
-	def do_edit(self, args):
-		self.model.message = input("New message: ")
-		self.model.save()
+		self.model.message = new_message
+
+		with Session() as session:
+			session.add(self.model)
+			session.commit()
+
+		current_editable[0] = None

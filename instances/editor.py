@@ -22,10 +22,10 @@ class Editor(Cmd):
 			self._list_scenes()
 
 	def do_delete(self, args):
-		event = self.pool[self.current_type].pop(int(args))
+		editable = self.pool[self.current_type].pop(int(args))
 
 		with Session() as session:
-			session.delete(event)
+			session.delete(editable)
 			session.commit()
 
 	def do_exit(self, args):
@@ -41,6 +41,7 @@ class Editor(Cmd):
 			pass
 
 	def do_update(self, args):
+		"""Make changes to an editable."""
 		self.current_editable[0] = self.pool[self.current_type][int(args)]
 		return True
 

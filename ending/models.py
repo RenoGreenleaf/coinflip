@@ -13,5 +13,5 @@ class Ending(Scene):
         'polymorphic_identity': 'ending'
     }
 
-    def wrap_with_editor(self):
+    def wrap_for_editing(self):
         return Editor(self)
