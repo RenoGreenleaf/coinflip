@@ -8,24 +8,21 @@ class Editor(Cmd):
 	def __init__(self, pool):
 		super().__init__()
 		self.pool = pool
+		self.current_type = 'events'
+		self.prompt = f"{self.current_type}> "
 
 	def interact(self, current_editable):
 		self.current_editable = current_editable
 		self.cmdloop()
 
 	def do_list(self, args):
-		print("Events:")
-
-		for identifier, event in self.pool['events'].items():
-			print(f"\t{identifier} {event}")
-
-		print("Scenes:")
-
-		for identifier, scene in self.pool['scenes'].items():
-			print(f"\t{identifier} {scene}")
+		if self.current_type == 'events':
+			self._list_events()
+		elif self.current_type == 'scenes':
+			self._list_scenes()
 
 	def do_delete(self, args):
-		event = self.pool['events'].pop(int(args))
+		event = self.pool[self.current_type].pop(int(args))
 
 		with Session() as session:
 			session.delete(event)
@@ -36,10 +33,30 @@ class Editor(Cmd):
 		exit()
 
 	def do_create(self, args):
-		new_event = Event(name="New Event")
-		self.current_editable[0] = new_event
-		return True
+		if self.current_type == 'events':
+			new_event = Event(name="New Event")
+			self.current_editable[0] = new_event
+			return True
+		elif self.current_type == 'scenes':
+			pass
 
 	def do_update(self, args):
-		self.current_editable[0] = self.pool['events'][int(args)]
+		self.current_editable[0] = self.pool[self.current_type][int(args)]
 		return True
+
+	def do_switch(self, args):
+		"""Select type to work with."""
+		self.current_type = args
+		self.prompt = f"{self.current_type}> "
+
+	def complete_switch(self, text, line, begidx, endidx):
+		types = ['events', 'scenes']
+		return [name for name in types if name.startswith(text)]
+
+	def _list_events(self):
+		for identifier, event in self.pool['events'].items():
+			print(f"{identifier} {event}")
+
+	def _list_scenes(self):
+		for identifier, scene in self.pool['scenes'].items():
+			print(f"{identifier} {scene}")
