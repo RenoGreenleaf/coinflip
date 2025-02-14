@@ -38,7 +38,13 @@ class Editor(Cmd):
 			self.current_editable[0] = new_event
 			return True
 		elif self.current_type == 'scenes':
-			pass
+			new_scene = self._scene_by_type(args)
+			self.current_editable[0] = new_scene
+			return True
+
+	def complete_create(self, text, line, begidx, endidx):
+		types = ['ending']
+		return [name for name in types if name.startswith(text)]
 
 	def do_update(self, args):
 		"""Make changes to an editable."""
@@ -61,3 +67,9 @@ class Editor(Cmd):
 	def _list_scenes(self):
 		for identifier, scene in self.pool['scenes'].items():
 			print(f"{identifier} {scene}")
+
+	def _scene_by_type(self, typed):
+		if typed == 'ending':
+			return Ending()
+		else:
+			raise Exception(f"Unknown scene type ({typed}).")
