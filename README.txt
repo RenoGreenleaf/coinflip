@@ -1,0 +1,1 @@
+Before using make sure to run ". .venv/bin/activate"
