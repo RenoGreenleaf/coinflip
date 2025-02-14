@@ -10,8 +10,12 @@ class Ending(Scene):
     message = mapped_column(String())
 
     __mapper_args__ = {
-        'polymorphic_identity': 'ending'
+        'polymorphic_identity': 'ending',
+        'polymorphic_load': 'selectin'
     }
 
     def wrap_for_editing(self):
         return Editor(self)
+
+    def __repr__(self):
+        return f"Ending ({self.message[:15]})"
