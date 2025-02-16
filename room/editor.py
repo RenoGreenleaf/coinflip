@@ -27,6 +27,23 @@ class Editor(Cmd):
 		print("Going back.")
 		return True
 
+	def do_delete(self, args):
+		exit_ = self.model.find_exit_by_name(args)
+
+		with Session() as session:
+			self.model.exits.remove(exit_)
+			session.delete(exit_)
+			session.commit()
+
+		print(f"{exit_} is removed.")
+
+	def complete_delete(self, text, line, begidx, endidx):
+		return self._exits_names_complete(text)
+
+	def _exits_names_complete(self, text):
+		exits = self.model.find_exits(text)
+		return [exit_.name for exit_ in exits]
+
 	def _update_model(self):
 		with Session() as session:
 			session.add(self.model)

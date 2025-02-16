@@ -19,6 +19,17 @@ class Room(Scene):
 	def wrap_for_editing(self):
 		return Editor(self)
 
+	def find_exits(self, startswith):
+		return [exit_ for exit_ in self.exits if exit_.name.startswith(startswith)]
+
+	def find_exit_by_name(self, name):
+		exits = [exit_ for exit_ in self.exits if exit_.name == name]
+
+		if exits:
+			return exits[0]
+		else:
+			raise Exception(f"There's no exit named {name}")
+
 	def __repr__(self):
 		return f"Room ({self.description[:15]}…)"
 
