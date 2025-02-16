@@ -30,6 +30,9 @@ class Room(Scene):
 		else:
 			raise Exception(f"There's no exit named {name}")
 
+	def add_exit(self, name):
+		self.exits.append(Exit(name=name))
+
 	def __repr__(self):
 		return f"Room ({self.description[:15]}…)"
 

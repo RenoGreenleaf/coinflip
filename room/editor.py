@@ -3,6 +3,8 @@ from reusables.session import Session
 
 
 class Editor(Cmd):
+	prompt = "room> "
+
 	def __init__(self, room):
 		super().__init__()
 		self.model = room
@@ -32,10 +34,21 @@ class Editor(Cmd):
 
 		with Session() as session:
 			self.model.exits.remove(exit_)
-			session.delete(exit_)
+			session.add(self.model)
 			session.commit()
 
 		print(f"{exit_} is removed.")
+
+	def do_add(self, args):
+		name = input("Name of the exit:\n")
+
+		if not name:
+			return
+
+		with Session() as session:
+			self.model.add_exit(name=name)
+			session.add(self.model)
+			session.commit()
 
 	def complete_delete(self, text, line, begidx, endidx):
 		return self._exits_names_complete(text)
