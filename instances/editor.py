@@ -2,6 +2,7 @@ from cmd import Cmd
 from reusables.session import Session
 from event.models import Event
 from ending.models import Ending
+from room.models import Room
 
 
 class Editor(Cmd):
@@ -43,7 +44,7 @@ class Editor(Cmd):
 			return True
 
 	def complete_create(self, text, line, begidx, endidx):
-		types = ['ending']
+		types = ['ending', 'room']
 		return [name for name in types if name.startswith(text)]
 
 	def do_update(self, args):
@@ -71,5 +72,7 @@ class Editor(Cmd):
 	def _scene_by_type(self, typed):
 		if typed == 'ending':
 			return Ending()
+		elif typed == 'room':
+			return Room()
 		else:
 			raise Exception(f"Unknown scene type ({typed}).")
