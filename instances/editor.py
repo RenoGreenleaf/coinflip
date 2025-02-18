@@ -55,14 +55,18 @@ class Editor(Cmd):
 		self.current_editable[0] = self.pool[self.current_type][int(args)]
 		return True
 
-	def do_switch(self, args):
-		"""Select type to work with."""
-		self.current_type = args
-		self.prompt = f"{self.current_type}> "
+	def do_scenes(self, args):
+		"""Switches to editing scenes."""
+		self._switch('scenes')
 
-	def complete_switch(self, text, line, begidx, endidx):
-		types = ['events', 'scenes']
-		return [name for name in types if name.startswith(text)]
+	def do_events(self, args):
+		"""Switches to editing events."""
+		self._switch('events')
+
+	def _switch(self, typed):
+		"""Select type to work with."""
+		self.current_type = typed
+		self.prompt = f"{self.current_type}> "
 
 	def _list_events(self):
 		for identifier, event in self.pool['events'].items():
