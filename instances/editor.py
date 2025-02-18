@@ -1,4 +1,4 @@
-from cmd import Cmd
+from cmd2 import Cmd
 from reusables.session import Session
 from event.models import Event
 from ending.models import Ending
