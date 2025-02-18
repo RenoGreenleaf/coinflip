@@ -12,6 +12,9 @@ class Editor(Cmd):
 		self.current_type = 'events'
 		self.prompt = f"{self.current_type}> "
 
+	def update_pool(self, pool):
+		self.pool = pool
+
 	def interact(self, current_editable):
 		self.current_editable = current_editable
 		self.cmdloop()

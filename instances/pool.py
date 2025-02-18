@@ -7,6 +7,7 @@ from instances.editor import Editor
 
 class Pool:
 	def __init__(self):
+		self.editor = None
 		self.events = []
 		self.scenes = []
 
@@ -29,4 +30,10 @@ class Pool:
 			'events': {event.id: event for event in self.events},
 			'scenes': {scene.id: scene for scene in self.scenes}
 		}
-		return Editor(keyed)
+
+		if self.editor:
+			self.editor.update_pool(keyed)
+		else:
+			self.editor = Editor(keyed)
+
+		return self.editor
