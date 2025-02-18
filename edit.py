@@ -14,3 +14,6 @@ while True:
 
 	editor = editable.wrap_for_editing()
 	editor.interact(current_editable)
+
+	if editable == pool and not current_editable[0]:
+		exit()

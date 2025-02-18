@@ -34,7 +34,8 @@ class Editor(Cmd):
 
 	def do_exit(self, args):
 		print("Leaving.")
-		exit()
+		self.current_editable[0] = None
+		return True
 
 	def do_create(self, args):
 		if self.current_type == 'events':
