@@ -14,7 +14,12 @@ class Room(Scene):
 	}
 	id = mapped_column(ForeignKey('scene.id'), primary_key=True)
 	description = mapped_column(String())
-	exits = relationship('Exit', back_populates='room', lazy='selectin')
+	exits = relationship(
+		'Exit',
+		back_populates='room',
+		lazy='selectin',
+		cascade='all, delete-orphan'
+	)
 
 	def wrap_for_editing(self):
 		return Editor(self)
