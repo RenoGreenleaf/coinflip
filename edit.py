@@ -3,17 +3,16 @@ from instances.pool import Pool
 
 
 pool = Pool()
-current_editable = [None]
+state = {'current': pool, 'exit': False}
 
 while True:
-	editable = current_editable[0]
+	state['current'] = state['current'] or pool
 
-	if not editable:
-		editable = pool
-		editable.update()
+	if state['current'] == pool:
+		state['current'].update()
 
-	editor = editable.wrap_for_editing()
-	editor.interact(current_editable)
+	editor = state['current'].wrap_for_editing()
+	editor.interact(state)
 
-	if editable == pool and not current_editable[0]:
+	if state['exit']:
 		exit()

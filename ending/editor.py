@@ -6,11 +6,11 @@ class Editor():
 		super().__init__()
 		self.model = model
 
-	def interact(self, current_editable):
+	def interact(self, state):
 		new_message = input("New message to be shown when ending:\n")
+		state['current'] = None
 
 		if not new_message:
-			current_editable[0] = None
 			return
 
 		self.model.message = new_message
@@ -18,5 +18,3 @@ class Editor():
 		with Session() as session:
 			session.add(self.model)
 			session.commit()
-
-		current_editable[0] = None

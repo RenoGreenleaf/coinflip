@@ -5,11 +5,11 @@ class Editor:
 	def __init__(self, model):
 		self.event = model
 
-	def interact(self, current_editable):
+	def interact(self, state):
 		new_name = input(f'Rename "{self.event.name}" to:\n')
+		state['current'] = None
 
 		if not new_name:
-			current_editable[0] = None
 			return
 
 		self.event.name = new_name
@@ -17,5 +17,3 @@ class Editor:
 		with Session() as session:
 			session.add(self.event)
 			session.commit()
-
-		current_editable[0] = None

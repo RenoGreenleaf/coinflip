@@ -15,8 +15,8 @@ class Editor(Cmd):
 	def update_pool(self, pool):
 		self.pool = pool
 
-	def interact(self, current_editable):
-		self.current_editable = current_editable
+	def interact(self, state):
+		self.state = state
 		self.cmdloop()
 
 	def do_list(self, args):
@@ -34,17 +34,17 @@ class Editor(Cmd):
 
 	def do_exit(self, args):
 		print("Leaving.")
-		self.current_editable[0] = None
+		self.state['exit'] = True
 		return True
 
 	def do_create(self, args):
 		if self.current_type == 'events':
 			new_event = Event(name="New Event")
-			self.current_editable[0] = new_event
+			self.state['current'] = new_event
 			return True
 		elif self.current_type == 'scenes':
 			new_scene = self._scene_by_type(args)
-			self.current_editable[0] = new_scene
+			self.state['current'] = new_scene
 			return True
 
 	def complete_create(self, text, line, begidx, endidx):
@@ -53,7 +53,7 @@ class Editor(Cmd):
 
 	def do_update(self, args):
 		"""Make changes to an editable."""
-		self.current_editable[0] = self.pool[self.current_type][int(args)]
+		self.state['current'] = self.pool[self.current_type][int(args)]
 		return True
 
 	def do_scenes(self, args):

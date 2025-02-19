@@ -9,7 +9,7 @@ class Editor(Cmd):
 		super().__init__()
 		self.model = room
 
-	def interact(self, current_editable):
+	def interact(self, state):
 		new_description = input("New description for the room:\n")
 
 		if new_description:
@@ -17,7 +17,7 @@ class Editor(Cmd):
 			self._update_model()
 
 		self.cmdloop()
-		current_editable[0] = None
+		state['current'] = None
 
 	def do_list(self, args):
 		print(self.model.description)
