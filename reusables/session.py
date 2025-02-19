@@ -2,7 +2,4 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-Session = sessionmaker(
-	create_engine('sqlite:///db.sqlite3'),
-	expire_on_commit=False
-)
+Session = sessionmaker(create_engine('sqlite:///db.sqlite3'))

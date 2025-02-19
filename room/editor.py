@@ -5,9 +5,10 @@ from reusables.session import Session
 class Editor(Cmd):
 	prompt = "room> "
 
-	def __init__(self, room):
+	def __init__(self, room, pool):
 		super().__init__()
 		self.model = room
+		self.pool = pool
 
 	def interact(self, state):
 		new_description = input("New description for the room:\n")
@@ -20,24 +21,24 @@ class Editor(Cmd):
 		state['current'] = None
 
 	def do_list(self, args):
-		print(self.model.description)
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			print(self.model.description)
 
-		for exit_ in self.model.exits:
-			print(f"\t{exit_.id} {exit_}")
+			for exit_ in self.model.exits:
+				print(f"\t{exit_.id} {exit_}")
 
 	def do_exit(self, args):
 		print("Going back.")
 		return True
 
 	def do_delete(self, args):
-		exit_ = self.model.find_exit_by_name(args)
-
-		with Session() as session:
-			self.model.exits.remove(exit_)
+		with self.pool.get_db_session() as session:
 			session.add(self.model)
+			exit_ = self.model.find_exit_by_name(args)
+			self.model.exits.remove(exit_)
 			session.commit()
-
-		print(f"{exit_} is removed.")
+			print(f"{exit_} is removed.")
 
 	def do_add(self, args):
 		name = input("Name of the exit:\n")
@@ -45,18 +46,18 @@ class Editor(Cmd):
 		if not name:
 			return
 
-		with Session() as session:
-			self.model.add_exit(name=name)
+		with self.pool.get_db_session() as session:
 			session.add(self.model)
+			self.model.add_exit(name=name)
 			session.commit()
 
 	def do_rename(self, args):
 		new_name = input("New name: ")
 
-		with Session() as session:
+		with self.pool.get_db_session() as session:
 			exit_ = self.model.find_exit_by_name(args)
-			exit_.name = new_name
 			session.add(exit_)
+			exit_.name = new_name
 			session.commit()
 
 	def complete_delete(self, text, line, begidx, endidx):
@@ -66,10 +67,12 @@ class Editor(Cmd):
 		return self._exits_names_autocomplete(text)
 
 	def _exits_names_autocomplete(self, text):
-		exits = self.model.find_exits(text)
-		return [exit_.name for exit_ in exits]
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			exits = self.model.find_exits(text)
+			return [exit_.name for exit_ in exits]
 
 	def _update_model(self):
-		with Session() as session:
+		with self.pool.get_db_session() as session:
 			session.add(self.model)
 			session.commit()

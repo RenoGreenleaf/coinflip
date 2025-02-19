@@ -1,5 +1,4 @@
 from cmd2 import Cmd
-from reusables.session import Session
 from event.models import Event
 from ending.models import Ending
 from room.models import Room
@@ -26,9 +25,14 @@ class Editor(Cmd):
 			self._list_scenes()
 
 	def do_delete(self, args):
-		editable = self.pool[self.current_type].pop(int(args))
+		if self.current_type == 'events':
+			editable = self.pool.get_event(int(args))
+		elif self.current_type == 'scenes':
+			editable = self.pool.get_scene(int(args))
+		else:
+			raise Exception("Something went wrong.")
 
-		with Session() as session:
+		with self.pool.get_db_session() as session:
 			session.delete(editable)
 			session.commit()
 
@@ -38,14 +42,17 @@ class Editor(Cmd):
 		return True
 
 	def do_create(self, args):
-		if self.current_type == 'events':
-			new_event = Event(name="New Event")
-			self.state['current'] = new_event
-			return True
-		elif self.current_type == 'scenes':
-			new_scene = self._scene_by_type(args)
-			self.state['current'] = new_scene
-			return True
+		with self.pool.get_db_session() as session:
+			if self.current_type == 'events':
+				new_event = Event(name="New Event")
+				session.add(new_event)
+				self.state['current'] = new_event
+				return True
+			elif self.current_type == 'scenes':
+				new_scene = self._scene_by_type(args)
+				session.add(new_scene)
+				self.state['current'] = new_scene
+				return True
 
 	def complete_create(self, text, line, begidx, endidx):
 		types = ['ending', 'room']
@@ -53,7 +60,14 @@ class Editor(Cmd):
 
 	def do_update(self, args):
 		"""Make changes to an editable."""
-		self.state['current'] = self.pool[self.current_type][int(args)]
+		if self.current_type == 'events':
+			editable = self.pool.get_event(int(args))
+		elif self.current_type == 'scenes':
+			editable = self.pool.get_scene(int(args))
+		else:
+			raise Exception("Something went wrong.")
+
+		self.state['current'] = editable
 		return True
 
 	def do_scenes(self, args):
@@ -70,12 +84,12 @@ class Editor(Cmd):
 		self.prompt = f"{self.current_type}> "
 
 	def _list_events(self):
-		for identifier, event in self.pool['events'].items():
-			print(f"{identifier} {event}")
+		for event in self.pool.get_all_events():
+			print(f"{event.id} {event}")
 
 	def _list_scenes(self):
-		for identifier, scene in self.pool['scenes'].items():
-			print(f"{identifier} {scene}")
+		for scene in self.pool.get_all_scenes():
+			print(f"{scene.id} {scene}")
 
 	def _scene_by_type(self, typed):
 		if typed == 'ending':

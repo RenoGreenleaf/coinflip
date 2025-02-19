@@ -21,8 +21,8 @@ class Room(Scene):
 		cascade='all, delete-orphan'
 	)
 
-	def wrap_for_editing(self):
-		return Editor(self)
+	def wrap_for_editing(self, pool):
+		return Editor(self, pool)
 
 	def find_exits(self, startswith):
 		return [exit_ for exit_ in self.exits if exit_.name.startswith(startswith)]

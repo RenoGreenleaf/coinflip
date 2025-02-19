@@ -11,7 +11,7 @@ while True:
 	if state['current'] == pool:
 		state['current'].update()
 
-	editor = state['current'].wrap_for_editing()
+	editor = state['current'].wrap_for_editing(pool)
 	editor.interact(state)
 
 	if state['exit']:

@@ -13,8 +13,8 @@ class Ending(Scene):
 	id = mapped_column(ForeignKey('scene.id'), primary_key=True)
 	message = mapped_column(String())
 
-	def wrap_for_editing(self):
-		return Editor(self)
+	def wrap_for_editing(self, pool):
+		return Editor(self, pool)
 
 	def __repr__(self):
 		return f"Ending ({self.message[:15]})"

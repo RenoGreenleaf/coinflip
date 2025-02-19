@@ -12,28 +12,39 @@ class Pool:
 		self.scenes = []
 
 	def get_all_events(self):
-		return self.events
+		with self.get_db_session() as session:
+			return session.scalars(select(Event)).all()
+
+	def get_all_scenes(self):
+		with self.get_db_session() as session:
+			return session.scalars(select(Scene)).all()
+
+	def get_event(self, identifier):
+		with self.get_db_session() as session:
+			return session.get(Event, identifier)
+
+	def get_scene(self, identifier):
+		with self.get_db_session() as session:
+			return session.get(Scene, identifier)
 
 	def update_event(self, event):
-		with Session() as session:
+		with self.get_db_session() as session:
 			session.add(event)
 			session.commit()
 
 	def update(self):
 		"""Makes pool up to date with last changes."""
-		with Session() as session:
+		with self.get_db_session() as session:
 			self.events = [Irrelevant()] + session.scalars(select(Event)).all()
 			self.scenes = session.scalars(select(Scene)).all()
 
-	def wrap_for_editing(self):
-		keyed = {
-			'events': {event.id: event for event in self.events},
-			'scenes': {scene.id: scene for scene in self.scenes}
-		}
-
+	def wrap_for_editing(self, pool):
 		if self.editor:
-			self.editor.update_pool(keyed)
+			self.editor.update_pool(pool)
 		else:
-			self.editor = Editor(keyed)
+			self.editor = Editor(pool)
 
 		return self.editor
+
+	def get_db_session(self):
+		return Session()
