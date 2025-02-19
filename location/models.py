@@ -1,22 +1,22 @@
 from sqlalchemy import String, Integer, ForeignKey
 from sqlalchemy.orm import mapped_column, relationship
 from reusables.models import Scene, Model
-from room.editor import Editor
+from location.editor import Editor
 
 
-class Room(Scene):
+class Location(Scene):
 	"""Things to explore."""
 
-	__tablename__ = 'room'
+	__tablename__ = 'location'
 	__mapper_args__ = {
-		'polymorphic_identity': 'room',
+		'polymorphic_identity': 'location',
 		'polymorphic_load': 'selectin'
 	}
 	id = mapped_column(ForeignKey('scene.id'), primary_key=True)
 	description = mapped_column(String())
 	exits = relationship(
 		'Exit',
-		back_populates='room',
+		back_populates='location',
 		lazy='selectin',
 		cascade='all, delete-orphan'
 	)
@@ -39,18 +39,18 @@ class Room(Scene):
 		self.exits.append(Exit(name=name))
 
 	def __repr__(self):
-		return f"Room ({self.description[:15]}…)"
+		return f"Location ({self.description[:15]}…)"
 
 
 class Exit(Model):
-	__tablename__ = 'room_exit'
+	__tablename__ = 'location_exit'
 	id = mapped_column(Integer(), primary_key=True)
-	room_id = mapped_column(ForeignKey('room.id'))
+	location_id = mapped_column(ForeignKey('location.id'))
 	name = mapped_column(String(255))  # for usage in command prompt commands
-	room = relationship(
-		Room,
+	location = relationship(
+		Location,
 		back_populates='exits',
-		foreign_keys=(room_id),
+		foreign_keys=(location_id),
 		lazy='joined'
 	)
 
