@@ -1,5 +1,5 @@
 class Event:
-	"""A message sent when something happens.
+	"""A message broadcasted when something happens.
 	Helps to interact between decoupled parts of an app."""
 	def __init__(self, name):
 		self.subscribers = []
