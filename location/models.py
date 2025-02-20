@@ -1,6 +1,7 @@
 from sqlalchemy import String, Integer, ForeignKey
 from sqlalchemy.orm import mapped_column, relationship
 from reusables.models import Scene, Model
+from event.models import Event
 from location.editor import Editor
 
 
@@ -19,6 +20,12 @@ class Location(Scene):
 		back_populates='location',
 		lazy='selectin',
 		cascade='all, delete-orphan'
+	)
+
+	discovered_event_id = mapped_column(ForeignKey(Event.id))
+	discovered_event = relationship(
+		Event,
+		lazy='joined'
 	)
 
 	def wrap_for_editing(self, pool):
