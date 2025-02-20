@@ -1,32 +1,32 @@
 from sqlalchemy import Integer, String
-from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import mapped_column, reconstructor
 from reusables.models import Model
 from event.editor import Editor
 
 
 class Event(Model):
-	__tablename__ = 'event'
+	"""A message broadcasted when something happens.
+	Helps to interact between decoupled parts of an app."""
 
+	__tablename__ = 'event'
 	id = mapped_column(Integer(), primary_key=True)
 	name = mapped_column(String(255), nullable=False)
 
-	def __repr__(self):
-		return self.name
+	@reconstructor
+	def prepare(self):
+		self.subscribers = []
 
 	def wrap_for_editing(self, pool):
 		return Editor(self, pool)
 
+	def subscribe(self, subscriber):
+		"""Let event know whom to notify if it's triggered."""
+		self.subscribers.append(subscriber)
 
-class Irrelevant:
-	# TODO: make it a model, so that it, instead of NULL, is stored.
-	"""
-	Empty event, it supposed to be triggered by default.
-	It's for Null Object pattern.
-	"""
-	id = ''
+	def trigger(self):
+		"""Signifies that an event has happened."""
+		for subscriber in self.subscribers:
+			subscriber.notify(self)
 
 	def __repr__(self):
-		return '<Irrelevant>'
-
-	def wrap_for_editing(self):
-		return Editor(self)
+		return self.name
