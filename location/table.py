@@ -7,7 +7,7 @@ class Table(Prop):
 
 	def describe(self, events, cli):
 		if self.side:
-			cli.print("A large wooden table stands in the centre of the room.\n")
+			cli.print("A large wooden table stands in the center of the room.\n")
 		else:
 			cli.print("A small decorated glass table stands here.\n")
 		return 'room'

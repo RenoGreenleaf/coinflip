@@ -3,6 +3,7 @@ from sqlalchemy.orm import mapped_column, relationship
 from reusables.models import Scene, Model
 from event.models import Event
 from location.editor import Editor
+from location.player import Player
 
 
 class Location(Scene):
@@ -30,6 +31,9 @@ class Location(Scene):
 
 	def wrap_for_editing(self, pool):
 		return Editor(self, pool)
+
+	def wrap_for_playing(self, pool):
+		return Player(self, pool)
 
 	def find_exits(self, startswith):
 		return [exit_ for exit_ in self.exits if exit_.name.startswith(startswith)]
