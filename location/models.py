@@ -58,6 +58,7 @@ class Exit(Model):
 	id = mapped_column(Integer(), primary_key=True)
 	location_id = mapped_column(ForeignKey('location.id'))
 	name = mapped_column(String(255))  # for usage in command prompt commands
+	description = mapped_column(String())
 	location = relationship(
 		Location,
 		back_populates='exits',
