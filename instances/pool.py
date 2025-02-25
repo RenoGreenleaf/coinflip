@@ -2,6 +2,7 @@ from sqlalchemy import select
 from reusables.session import Session
 from reusables.models import Scene
 from event.models import Event
+from state_machine.models import StateMachine
 from instances.editor import Editor
 
 
@@ -10,6 +11,9 @@ class Pool:
 		self.editor = None
 		self.scenes = []
 		self.events = []
+
+		with self.get_db_session() as session:
+			self.state_machine = session.scalars(select(StateMachine)).one()
 
 	def get_all_events(self):
 		with self.get_db_session() as session:
@@ -32,6 +36,11 @@ class Pool:
 		with self.get_db_session() as session:
 			session.add_all(self.scenes)
 			return session.get(Scene, identifier)
+
+	def get_state_machine(self):
+		with self.get_db_session() as session:
+			session.add(self.state_machine)
+			return session.scalars(select(StateMachine)).one()
 
 	def wrap_for_editing(self, pool):
 		if self.editor:

@@ -2,15 +2,15 @@ from cmd2 import Cmd
 
 
 class Editor(Cmd):
-	prompt = "room> "
+	prompt = "location> "
 
-	def __init__(self, room, pool):
+	def __init__(self, model, pool):
 		super().__init__()
-		self.model = room
+		self.model = model
 		self.pool = pool
 
 	def interact(self, state):
-		new_description = input("New description for the room:\n")
+		new_description = input("New description for the location:\n")
 
 		if new_description:
 			self.model.description = new_description

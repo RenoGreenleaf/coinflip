@@ -2,6 +2,7 @@ from sqlalchemy.orm import mapped_column, relationship
 from sqlalchemy import Integer, ForeignKey
 from reusables.models import Model, Scene
 from event.models import Event
+from state_machine.editor import Editor
 
 
 class StateMachine(Model):
@@ -13,6 +14,12 @@ class StateMachine(Model):
 		lazy='selectin',
 		cascade='all, delete-orphan'
 	)
+
+	def wrap_for_editing(self, pool):
+		return Editor(self, pool)
+
+	def add_transition(self, scene_id, event_id):
+		self.transitions.append(Transition(scene_id=scene_id, event_id=event_id))
 
 	def __repr__(self):
 		count = len(self.transitions)

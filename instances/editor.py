@@ -78,6 +78,10 @@ class Editor(Cmd):
 		"""Switches to editing events."""
 		self._switch('events')
 
+	def do_state_machine(self, args):
+		self.state['current'] = self.pool.get_state_machine()
+		return True
+
 	def _switch(self, typed):
 		"""Select type to work with."""
 		self.current_type = typed
