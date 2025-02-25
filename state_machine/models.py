@@ -1,5 +1,5 @@
 from sqlalchemy.orm import mapped_column, relationship
-from sqlalchemy import Integer, ForeignKey
+from sqlalchemy import Integer, ForeignKey, inspect
 from reusables.models import Model, Scene
 from event.models import Event
 from state_machine.editor import Editor
@@ -20,6 +20,12 @@ class StateMachine(Model):
 
 	def add_transition(self, scene_id, event_id):
 		self.transitions.append(Transition(scene_id=scene_id, event_id=event_id))
+
+	def delete_transition(self, identifier):
+		session = inspect(self).session
+		transition = session.get(Transition, identifier)
+		session.delete(transition)
+		session.commit()
 
 	def __repr__(self):
 		count = len(self.transitions)

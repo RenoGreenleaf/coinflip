@@ -44,3 +44,10 @@ class Editor(Cmd):
 			self.model.add_transition(scene_id, event_id)
 			session.add(self.model)
 			session.commit()
+
+	def do_delete(self, args):
+		identifier = int(args)
+
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			self.model.delete_transition(identifier)
