@@ -2,6 +2,7 @@ from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import mapped_column
 from reusables.models import Scene
 from ending.editor import Editor
+from ending.player import Player
 
 
 class Ending(Scene):
@@ -15,6 +16,9 @@ class Ending(Scene):
 
 	def wrap_for_editing(self, pool):
 		return Editor(self, pool)
+
+	def wrap_for_playing(self, pool):
+		return Player(self, pool)
 
 	def __repr__(self):
 		return f"Ending ({self.message[:15]})"
