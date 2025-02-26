@@ -1,4 +1,4 @@
-from sqlalchemy.orm import mapped_column, relationship
+from sqlalchemy.orm import mapped_column, relationship, reconstructor
 from sqlalchemy import Integer, ForeignKey, inspect
 from reusables.models import Model, Scene
 from event.models import Event
@@ -14,6 +14,23 @@ class StateMachine(Model):
 		lazy='selectin',
 		cascade='all, delete-orphan'
 	)
+
+	@reconstructor
+	def load(self):
+		self.current_scene = None
+
+	def start_listening(self):
+		for transition in self.transitions:
+			transition.event.subscribe(self)
+
+	def notify(self, triggered_event):
+		for transition in self.transitions:
+			if transition.event == triggered_event:
+				self.current_scene = transition.scene
+				break
+
+	def get_current_scene(self):
+		return self.current_scene
 
 	def wrap_for_editing(self, pool):
 		return Editor(self, pool)

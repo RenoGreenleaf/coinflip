@@ -15,3 +15,6 @@ class Scene(Model):
 		'polymorphic_identity': 'scene',
 		'polymorphic_on': 'type'
 	}
+
+	def start_listening(self):
+		pass

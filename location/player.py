@@ -3,6 +3,7 @@ from cmd2 import Cmd
 
 class Player(Cmd):
 	prompt = "> "
+
 	def __init__(self, location, pool):
 		super().__init__()
 		self.model = location
