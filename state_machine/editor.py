@@ -16,6 +16,9 @@ class Editor(Cmd):
 	transitions_parser.add_argument('scene_id', choices_provider=scene_choices)
 	transitions_parser.add_argument('event_id', choices_provider=event_choices)
 
+	scenes_parser = Cmd2ArgumentParser()
+	scenes_parser.add_argument('scene_id', choices_provider=scene_choices)
+
 	def __init__(self, model, pool):
 		super().__init__()
 		self.model = model
@@ -32,6 +35,7 @@ class Editor(Cmd):
 		with self.pool.get_db_session() as session:
 			session.add(self.model)
 			print(self.model)
+			print(f"Starts at {self.model.start}")
 
 			for transition in self.model.transitions:
 				print(f"\t{transition.id} {transition}")
@@ -42,6 +46,14 @@ class Editor(Cmd):
 			scene_id = int(args.scene_id)
 			event_id = int(args.event_id)
 			self.model.add_transition(scene_id, event_id)
+			session.add(self.model)
+			session.commit()
+
+	@with_argparser(scenes_parser)
+	def do_start(self, args):
+		with self.pool.get_db_session() as session:
+			scene_id = int(args.scene_id)
+			self.model.set_start(scene_id)
 			session.add(self.model)
 			session.commit()
 

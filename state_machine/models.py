@@ -14,6 +14,8 @@ class StateMachine(Model):
 		lazy='selectin',
 		cascade='all, delete-orphan'
 	)
+	start_id = mapped_column(ForeignKey(Scene.id))
+	start = relationship(Scene, lazy='joined')
 
 	@reconstructor
 	def load(self):
@@ -43,6 +45,9 @@ class StateMachine(Model):
 		transition = session.get(Transition, identifier)
 		session.delete(transition)
 		session.commit()
+
+	def set_start(self, scene_id):
+		self.start_id = scene_id
 
 	def __repr__(self):
 		count = len(self.transitions)
