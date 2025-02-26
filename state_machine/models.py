@@ -19,7 +19,7 @@ class StateMachine(Model):
 
 	@reconstructor
 	def load(self):
-		self.current_scene = None
+		self.current_scene = self.start
 
 	def start_listening(self):
 		for transition in self.transitions:

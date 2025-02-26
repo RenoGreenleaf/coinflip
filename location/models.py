@@ -49,6 +49,9 @@ class Location(Scene):
 	def add_exit(self, name):
 		self.exits.append(Exit(name=name))
 
+	def set_discovered_event(self, identifier):
+		self.discovered_event_id = identifier
+
 	def __repr__(self):
 		return f"Location ({self.description[:15]}…)"
 

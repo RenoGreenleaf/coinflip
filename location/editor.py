@@ -1,8 +1,15 @@
-from cmd2 import Cmd
+from cmd2 import Cmd, CompletionItem, Cmd2ArgumentParser, with_argparser
 
 
 class Editor(Cmd):
 	prompt = "location> "
+
+	def event_choices(self):
+		events = self.pool.get_all_events()
+		return [CompletionItem(event.id, str(event)) for event in events]
+
+	events_parser = Cmd2ArgumentParser()
+	events_parser.add_argument('event_id', choices_provider=event_choices)
 
 	def __init__(self, model, pool):
 		super().__init__()
@@ -19,10 +26,18 @@ class Editor(Cmd):
 		self.cmdloop()
 		state['current'] = None
 
+	@with_argparser(events_parser)
+	def do_discovered(self, args):
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			self.model.set_discovered_event(int(args.event_id))
+			session.commit()
+
 	def do_list(self, args):
 		with self.pool.get_db_session() as session:
 			session.add(self.model)
 			print(self.model.description)
+			print(f"Discovered event: {self.model.discovered_event}")
 
 			for exit_ in self.model.exits:
 				print(f"\t{exit_.id} {exit_}")

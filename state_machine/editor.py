@@ -43,10 +43,10 @@ class Editor(Cmd):
 	@with_argparser(transitions_parser)
 	def do_add(self, args):
 		with self.pool.get_db_session() as session:
+			session.add(self.model)
 			scene_id = int(args.scene_id)
 			event_id = int(args.event_id)
 			self.model.add_transition(scene_id, event_id)
-			session.add(self.model)
 			session.commit()
 
 	@with_argparser(scenes_parser)

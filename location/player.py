@@ -18,8 +18,11 @@ class Player(Cmd):
 			return
 
 		with self.pool.get_db_session() as session:
-			session.add(self.model)
 			print(self.model.description)
+
+	def do_leave(self, args):
+		self.model.discovered_event.trigger()
+		return True
 
 	def complete_look(self, text, line, begidx, endidx):
 		return ['around']
