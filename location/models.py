@@ -46,8 +46,8 @@ class Location(Scene):
 		else:
 			raise Exception(f"There's no exit named {name}")
 
-	def add_exit(self, name):
-		self.exits.append(Exit(name=name))
+	def add_exit(self, name, triggers_event_id=None):
+		self.exits.append(Exit(name=name, triggers_event_id=triggers_event_id))
 
 	def set_discovered_event(self, identifier):
 		self.discovered_event_id = identifier
@@ -59,7 +59,7 @@ class Location(Scene):
 class Exit(Model):
 	__tablename__ = 'location_exit'
 	id = mapped_column(Integer(), primary_key=True)
-	location_id = mapped_column(ForeignKey('location.id'))
+	location_id = mapped_column(ForeignKey(Location.id))
 	name = mapped_column(String(255))  # for usage in command prompt commands
 	description = mapped_column(String())
 	location = relationship(
@@ -68,6 +68,8 @@ class Exit(Model):
 		foreign_keys=(location_id),
 		lazy='joined'
 	)
+	triggers_event_id = mapped_column(ForeignKey(Event.id))
+	triggers_event = relationship(Event, lazy='joined')
 
 	def __repr__(self):
 		return f"Exit ({self.name})"

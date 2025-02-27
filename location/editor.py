@@ -40,7 +40,7 @@ class Editor(Cmd):
 			print(f"Discovered event: {self.model.discovered_event}")
 
 			for exit_ in self.model.exits:
-				print(f"\t{exit_.id} {exit_}")
+				print(f"\t{exit_.id} {exit_} (triggers {exit_.triggers_event})")
 
 	def do_exit(self, args):
 		print("Going back.")
@@ -54,15 +54,13 @@ class Editor(Cmd):
 			session.commit()
 			print(f"{exit_} is removed.")
 
+	@with_argparser(events_parser)
 	def do_add(self, args):
-		name = input("Name of the exit:\n")
-
-		if not name:
-			return
+		name = input("Name of the exit:\n") or "nameless"
 
 		with self.pool.get_db_session() as session:
 			session.add(self.model)
-			self.model.add_exit(name=name)
+			self.model.add_exit(name=name, triggers_event_id=args.event_id)
 			session.commit()
 
 	def do_rename(self, args):
