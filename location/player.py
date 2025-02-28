@@ -24,5 +24,12 @@ class Player(Cmd):
 		self.model.discovered_event.trigger()
 		return True
 
+	def do_examine(self, args):
+		exit_ = self.model.find_exit_by_name(args)
+		print(exit_.description)
+
+	def complete_examine(self, text, line, begidx, endidx):
+		return [exit_.name for exit_ in self.model.find_exits(text)]
+
 	def complete_look(self, text, line, begidx, endidx):
 		return ['around']
