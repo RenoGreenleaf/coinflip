@@ -28,6 +28,16 @@ class Player(Cmd):
 		exit_ = self.model.find_exit_by_name(args.strip('"'))
 		print(exit_.description)
 
+	def do_use(self, args):
+		name = args.strip('"')
+		print(f"You're going through {name}.")
+		exit_ = self.model.find_exit_by_name(name)
+		exit_.triggers_event.trigger()
+		return True
+
+	def complete_use(self, text, line, begidx, endidx):
+		return [exit_.name for exit_ in self.model.find_exits(text)]
+
 	def complete_examine(self, text, line, begidx, endidx):
 		return [exit_.name for exit_ in self.model.find_exits(text)]
 
