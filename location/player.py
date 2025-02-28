@@ -25,7 +25,7 @@ class Player(Cmd):
 		return True
 
 	def do_examine(self, args):
-		exit_ = self.model.find_exit_by_name(args)
+		exit_ = self.model.find_exit_by_name(args.strip('"'))
 		print(exit_.description)
 
 	def complete_examine(self, text, line, begidx, endidx):

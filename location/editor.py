@@ -49,7 +49,7 @@ class Editor(Cmd):
 	def do_delete(self, args):
 		with self.pool.get_db_session() as session:
 			session.add(self.model)
-			exit_ = self.model.find_exit_by_name(args)
+			exit_ = self.model.find_exit_by_name(args.strip('"'))
 			self.model.exits.remove(exit_)
 			session.commit()
 			print(f"{exit_} is removed.")
@@ -67,7 +67,7 @@ class Editor(Cmd):
 		new_name = input("New name: ")
 
 		with self.pool.get_db_session() as session:
-			exit_ = self.model.find_exit_by_name(args)
+			exit_ = self.model.find_exit_by_name(args.strip('"'))
 			session.add(exit_)
 			exit_.name = new_name
 			session.commit()
