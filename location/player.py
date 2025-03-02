@@ -18,6 +18,7 @@ class Player(Cmd):
 			return
 
 		with self.pool.get_db_session() as session:
+			session.add(self.model)
 			print(self.model.description)
 
 	def do_leave(self, args):
