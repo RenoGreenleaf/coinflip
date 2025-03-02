@@ -2,6 +2,7 @@ from cmd2 import Cmd
 from event.models import Event
 from ending.models import Ending
 from location.models import Location
+from coin_flip.models import CoinFlip
 
 
 class Editor(Cmd):
@@ -55,7 +56,7 @@ class Editor(Cmd):
 				return True
 
 	def complete_create(self, text, line, begidx, endidx):
-		types = ['ending', 'location']
+		types = ['ending', 'location', 'coin_flip']
 		return [name for name in types if name.startswith(text)]
 
 	def do_update(self, args):
@@ -100,5 +101,7 @@ class Editor(Cmd):
 			return Ending()
 		elif typed == 'location':
 			return Location()
+		elif typed == 'coin_flip':
+			return CoinFlip()
 		else:
 			raise Exception(f"Unknown scene type ({typed}).")

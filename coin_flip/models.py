@@ -3,6 +3,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import mapped_column, relationship, reconstructor
 from reusables.models import Scene
 from event.models import Event
+from coin_flip.editor import Editor
 
 
 class CoinFlip(Scene):
@@ -37,3 +38,12 @@ class CoinFlip(Scene):
 
 		self.cli.print(f'The coin fell on {colour} {side}\033[0m.')
 		self.cli.print(f'{self.my_score}/{self.opponents_score}\n')
+
+	def wrap_for_editing(self, pool):
+		return Editor(self, pool)
+
+	def set_won_event(self, event_id):
+		self.won_event_id = event_id
+
+	def __repr__(self):
+		return f"CoinFlip (triggers {self.won_event})"
