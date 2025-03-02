@@ -14,7 +14,7 @@ class Location(Scene):
 		'polymorphic_identity': 'location',
 		'polymorphic_load': 'selectin'
 	}
-	id = mapped_column(ForeignKey('scene.id'), primary_key=True)
+	id = mapped_column(ForeignKey(Scene.id), primary_key=True)
 	description = mapped_column(String())
 	exits = relationship(
 		'Exit',
