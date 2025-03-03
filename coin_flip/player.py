@@ -1,0 +1,36 @@
+from cmd2 import Cmd
+
+
+class Player(Cmd):
+	prompt = "[heads/tails]> "
+
+	def __init__(self, model, pool):
+		super().__init__()
+		self.model = model
+		self.pool = pool
+
+	def interact(self):
+		self.cmdloop()
+
+	def do_heads(self, args):
+		won = self.model.flip('heads')
+		self._show_result(won)
+
+		if won:
+			return True
+
+	def do_tails(self, args):
+		won = self.model.flip('tails')
+		self._show_result(won)
+
+		if won:
+			return True
+
+	def _show_result(self, won):
+		if won:
+			colour = '\033[92m'
+		else:
+			colour = '\033[91m'
+
+		print(f'The coin fell on {colour} {self.model.side}\033[0m.')
+		print(f'{self.model.my_score}/{self.model.opponents_score}\n')

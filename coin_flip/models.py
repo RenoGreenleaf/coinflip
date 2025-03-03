@@ -4,6 +4,7 @@ from sqlalchemy.orm import mapped_column, relationship, reconstructor
 from reusables.models import Scene
 from event.models import Event
 from coin_flip.editor import Editor
+from coin_flip.player import Player
 
 
 class CoinFlip(Scene):
@@ -26,21 +27,21 @@ class CoinFlip(Scene):
 		self.opponents_score = 0
 
 	def flip(self, preference):
-		side = choice(['tails', 'heads'])
+		self.side = choice(['tails', 'heads'])
 
-		if preference == side:
+		if preference == self.side:
 			self.won_event.trigger()
 			self.my_score += 1
-			colour = '\033[92m'
+			return True
 		else:
 			self.opponents_score += 1
-			colour = '\033[91m'
-
-		self.cli.print(f'The coin fell on {colour} {side}\033[0m.')
-		self.cli.print(f'{self.my_score}/{self.opponents_score}\n')
+			return False
 
 	def wrap_for_editing(self, pool):
 		return Editor(self, pool)
+
+	def wrap_for_playing(self, pool):
+		return Player(self, pool)
 
 	def set_won_event(self, event_id):
 		self.won_event_id = event_id

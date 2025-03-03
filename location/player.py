@@ -17,9 +17,7 @@ class Player(Cmd):
 			print("Unclear.")
 			return
 
-		with self.pool.get_db_session() as session:
-			session.add(self.model)
-			print(self.model.description)
+		print(self.model.description)
 
 	def do_leave(self, args):
 		self.model.discovered_event.trigger()
