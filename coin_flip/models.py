@@ -1,5 +1,5 @@
 from random import choice
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Integer
 from sqlalchemy.orm import mapped_column, relationship, reconstructor
 from reusables.models import Scene
 from event.models import Event
@@ -14,6 +14,7 @@ class CoinFlip(Scene):
 		'polymorphic_load': 'selectin'
 	}
 	id = mapped_column(ForeignKey(Scene.id), primary_key=True)
+	victory_threshold = mapped_column(Integer())
 	won_event_id = mapped_column(ForeignKey(Event.id))
 	won_event = relationship(
 		Event,
