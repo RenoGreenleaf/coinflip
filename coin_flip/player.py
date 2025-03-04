@@ -13,24 +13,21 @@ class Player(Cmd):
 		self.cmdloop()
 
 	def do_heads(self, args):
-		won = self.model.flip('heads')
-		self._show_result(won)
-
-		if won:
-			return True
+		self.model.flip('heads')
+		return self._show_result('heads')
 
 	def do_tails(self, args):
-		won = self.model.flip('tails')
-		self._show_result(won)
+		self.model.flip('tails')
+		return self._show_result('tails')
 
-		if won:
-			return True
-
-	def _show_result(self, won):
-		if won:
+	def _show_result(self, preference):
+		if preference == self.model.side:
 			colour = '\033[92m'
 		else:
 			colour = '\033[91m'
 
 		print(f'The coin fell on {colour} {self.model.side}\033[0m.')
 		print(f'{self.model.my_score}/{self.model.opponents_score}\n')
+
+		if self.model.is_victory():
+			return True

@@ -31,12 +31,15 @@ class CoinFlip(Scene):
 		self.side = choice(['tails', 'heads'])
 
 		if preference == self.side:
-			self.won_event.trigger()
 			self.my_score += 1
-			return True
 		else:
 			self.opponents_score += 1
-			return False
+
+		if self.is_victory():
+			self.won_event.trigger()
+
+	def is_victory(self):
+		return self.my_score - self.opponents_score >= self.victory_threshold
 
 	def wrap_for_editing(self, pool):
 		return Editor(self, pool)
