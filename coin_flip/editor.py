@@ -11,6 +11,9 @@ class Editor(Cmd):
 	events_parser = Cmd2ArgumentParser()
 	events_parser.add_argument('event_id', choices_provider=event_choices)
 
+	threshold_parser = Cmd2ArgumentParser()
+	threshold_parser.add_argument('threshold', type=int)
+
 	def __init__(self, model, pool):
 		super().__init__()
 		self.model = model
@@ -30,3 +33,11 @@ class Editor(Cmd):
 	def do_exit(self, args):
 		print("Leaving coin-flip editor.")
 		return True
+
+	@with_argparser(threshold_parser)
+	def do_threshold(self, args):
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			self.model.set_threshold(args.threshold)
+			session.commit()
+			print(f"Victory threshold is now {self.model.victory_threshold}.")

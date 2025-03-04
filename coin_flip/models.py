@@ -47,5 +47,8 @@ class CoinFlip(Scene):
 	def set_won_event(self, event_id):
 		self.won_event_id = event_id
 
+	def set_threshold(self, threshold):
+		self.victory_threshold = threshold
+
 	def __repr__(self):
-		return f"CoinFlip (triggers {self.won_event})"
+		return f"CoinFlip (triggers {self.won_event} after {self.victory_threshold} wins)"
