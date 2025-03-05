@@ -73,38 +73,25 @@ class Editor(Cmd):
 			self.model.add_exit(name=name, triggers_event_id=args.event_id)
 			session.commit()
 
+	@with_argparser(exits_parser)
 	def do_rename(self, args):
 		new_name = input("New name: ")
 
 		with self.pool.get_db_session() as session:
-			exit_ = self.model.find_exit_by_name(args.strip('"'))
+			exit_ = self.model.find_exit_by_id(args.exit_id)
 			session.add(exit_)
 			exit_.name = new_name
 			session.commit()
 
+	@with_argparser(exits_parser)
 	def do_describe(self, args):
-		description = input("Description:\n")
+		description = input("New description:\n")
 
-		if not description:
-			return
-
-		with self.pool.get_db_session() as session:
-			exit_ = self.model.find_exit_by_name(args)
-			session.add(exit_)
-			exit_.description = description
-			session.commit()
-
-	def complete_rename(self, text, line, begidx, endidx):
-		return self._exits_names_autocomplete(text)
-
-	def complete_describe(self, text, line, begidx, endidx):
-		return self._exits_names_autocomplete(text)
-
-	def _exits_names_autocomplete(self, text):
 		with self.pool.get_db_session() as session:
 			session.add(self.model)
-			exits = self.model.find_exits(text)
-			return [exit_.name for exit_ in exits]
+			exit_ = self.model.find_exit_by_id(args.exit_id)
+			exit_.description = description
+			session.commit()
 
 	def _update_model(self):
 		with self.pool.get_db_session() as session:

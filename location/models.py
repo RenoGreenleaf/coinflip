@@ -46,6 +46,11 @@ class Location(Scene):
 		else:
 			raise Exception(f"There's no exit named {name}")
 
+	def find_exit_by_id(self, identifier):
+		for exit_ in self.exits:
+			if exit_.id == identifier:
+				return exit_
+
 	def add_exit(self, name, triggers_event_id=None):
 		self.exits.append(Exit(name=name, triggers_event_id=triggers_event_id))
 
