@@ -8,8 +8,18 @@ class Editor(Cmd):
 		events = self.pool.get_all_events()
 		return [CompletionItem(event.id, str(event)) for event in events]
 
+	def exit_choices(self):
+		return [CompletionItem(exit_.id, exit_.name) for exit_ in self.model.exits]
+
 	events_parser = Cmd2ArgumentParser()
-	events_parser.add_argument('event_id', choices_provider=event_choices)
+	events_parser.add_argument(
+		'event_id',
+		choices_provider=event_choices,
+		type=int
+	)
+
+	exits_parser = Cmd2ArgumentParser()
+	exits_parser.add_argument('exit_id', choices_provider=exit_choices, type=int)
 
 	def __init__(self, model, pool):
 		super().__init__()
@@ -46,13 +56,13 @@ class Editor(Cmd):
 		print("Going back.")
 		return True
 
+	@with_argparser(exits_parser)
 	def do_delete(self, args):
 		with self.pool.get_db_session() as session:
 			session.add(self.model)
-			exit_ = self.model.find_exit_by_name(args.strip('"'))
-			self.model.exits.remove(exit_)
+			self.model.delete_exit(args.exit_id)
 			session.commit()
-			print(f"{exit_} is removed.")
+			print(f"Exit #{args.exit_id} is removed.")
 
 	@with_argparser(events_parser)
 	def do_add(self, args):
@@ -83,9 +93,6 @@ class Editor(Cmd):
 			session.add(exit_)
 			exit_.description = description
 			session.commit()
-
-	def complete_delete(self, text, line, begidx, endidx):
-		return self._exits_names_autocomplete(text)
 
 	def complete_rename(self, text, line, begidx, endidx):
 		return self._exits_names_autocomplete(text)
