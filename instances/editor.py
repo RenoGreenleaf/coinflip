@@ -1,4 +1,4 @@
-from cmd2 import Cmd
+from cmd2 import Cmd, Cmd2ArgumentParser, with_argparser, CompletionItem
 from event.models import Event
 from ending.models import Ending
 from location.models import Location
@@ -6,14 +6,48 @@ from coin_flip.models import CoinFlip
 
 
 class Editor(Cmd):
+	def item_choices(self):
+		"""Item is either an event or a scene."""
+		if self.current_type == 'events':
+			return [
+				CompletionItem(event.id, str(event))
+				for event
+				in self.pool.get_all_events()
+			]
+		elif self.current_type == 'scenes':
+			return [
+				CompletionItem(scene.id, str(scene))
+				for scene
+				in self.pool.get_all_scenes()
+			]
+		else:
+			raise Exception("Neither scenes nor events are current?")
+
+	def types_choices(self):
+		if self.current_type == 'scenes':
+			return ['ending', 'location', 'coin_flip']
+		else:
+			return []
+
+	items_parser = Cmd2ArgumentParser()
+	items_parser.add_argument(
+		'item_id',
+		choices_provider=item_choices,
+		type=int
+	)
+
+	types_parser = Cmd2ArgumentParser()
+	types_parser.add_argument(
+		'scene_type',
+		choices_provider=types_choices,
+		nargs='?'
+	)
+
 	def __init__(self, pool):
 		super().__init__()
 		self.pool = pool
 		self.current_type = 'events'
 		self.prompt = f"{self.current_type}> "
-
-	def update_pool(self, pool):
-		self.pool = pool
 
 	def interact(self, state):
 		self.state = state
@@ -25,11 +59,12 @@ class Editor(Cmd):
 		elif self.current_type == 'scenes':
 			self._list_scenes()
 
+	@with_argparser(items_parser)
 	def do_delete(self, args):
 		if self.current_type == 'events':
-			editable = self.pool.get_event(int(args))
+			editable = self.pool.get_event(args.item_id)
 		elif self.current_type == 'scenes':
-			editable = self.pool.get_scene(int(args))
+			editable = self.pool.get_scene(args.item_id)
 		else:
 			raise Exception("Something went wrong.")
 
@@ -42,6 +77,7 @@ class Editor(Cmd):
 		self.state['exit'] = True
 		return True
 
+	@with_argparser(types_parser)
 	def do_create(self, args):
 		with self.pool.get_db_session() as session:
 			if self.current_type == 'events':
@@ -50,21 +86,18 @@ class Editor(Cmd):
 				self.state['current'] = new_event
 				return True
 			elif self.current_type == 'scenes':
-				new_scene = self._scene_by_type(args)
+				new_scene = self._scene_by_type(args.scene_type)
 				session.add(new_scene)
 				self.state['current'] = new_scene
 				return True
 
-	def complete_create(self, text, line, begidx, endidx):
-		types = ['ending', 'location', 'coin_flip']
-		return [name for name in types if name.startswith(text)]
-
+	@with_argparser(items_parser)
 	def do_update(self, args):
 		"""Make changes to an editable."""
 		if self.current_type == 'events':
-			editable = self.pool.get_event(int(args))
+			editable = self.pool.get_event(args.item_id)
 		elif self.current_type == 'scenes':
-			editable = self.pool.get_scene(int(args))
+			editable = self.pool.get_scene(args.item_id)
 		else:
 			raise Exception("Something went wrong.")
 

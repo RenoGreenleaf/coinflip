@@ -43,9 +43,7 @@ class Pool:
 			return session.scalars(select(StateMachine)).one()
 
 	def wrap_for_editing(self, pool):
-		if self.editor:
-			self.editor.update_pool(pool)
-		else:
+		if not self.editor:
 			self.editor = Editor(pool)
 
 		return self.editor
