@@ -12,12 +12,26 @@ class Editor(Cmd):
 		events = self.pool.get_all_events()
 		return [CompletionItem(event.id, str(event)) for event in events]
 
+	def transitions_choices(self):
+		return [
+			CompletionItem(transition.id, str(transition))
+			for transition
+			in self.model.transitions
+		]
+
 	transitions_parser = Cmd2ArgumentParser()
 	transitions_parser.add_argument('scene_id', choices_provider=scene_choices)
 	transitions_parser.add_argument('event_id', choices_provider=event_choices)
 
 	scenes_parser = Cmd2ArgumentParser()
 	scenes_parser.add_argument('scene_id', choices_provider=scene_choices)
+
+	delete_parser = Cmd2ArgumentParser()
+	delete_parser.add_argument(
+		'transition_id',
+		choices_provider=transitions_choices,
+		type=int
+	)
 
 	def __init__(self, model, pool):
 		super().__init__()
@@ -31,7 +45,7 @@ class Editor(Cmd):
 	def do_exit(self, args):
 		return True
 
-	def do_describe(self, args):
+	def do_list(self, args):
 		with self.pool.get_db_session() as session:
 			session.add(self.model)
 			print(self.model)
@@ -57,9 +71,8 @@ class Editor(Cmd):
 			session.add(self.model)
 			session.commit()
 
+	@with_argparser(delete_parser)
 	def do_delete(self, args):
-		identifier = int(args)
-
 		with self.pool.get_db_session() as session:
 			session.add(self.model)
-			self.model.delete_transition(identifier)
+			self.model.delete_transition(args.transition_id)

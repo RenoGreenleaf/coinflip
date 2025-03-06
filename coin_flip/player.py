@@ -13,10 +13,12 @@ class Player(Cmd):
 		self.cmdloop()
 
 	def do_heads(self, args):
+		print("Flipping.")
 		self.model.flip('heads')
 		return self._show_result('heads')
 
 	def do_tails(self, args):
+		print("Flipping.")
 		self.model.flip('tails')
 		return self._show_result('tails')
 

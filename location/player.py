@@ -43,15 +43,13 @@ class Player(Cmd):
 			print("Unclear.")
 
 	def do_leave(self, args):
+		print("Leaving.")
 		self.model.discovered_event.trigger()
 		return True
 
+	@with_argparser(at_parser)
 	def do_use(self, args):
-		name = args.strip('"')
-		print(f"You're going through {name}.")
-		exit_ = self.model.find_exit_by_name(name)
+		print(f"You're going through {args.exit}.")
+		exit_ = self.model.find_exit_by_name(args.exit)
 		exit_.triggers_event.trigger()
 		return True
-
-	def complete_use(self, text, line, begidx, endidx):
-		return [exit_.name for exit_ in self.model.find_exits(text)]
