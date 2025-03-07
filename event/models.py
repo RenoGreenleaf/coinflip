@@ -10,7 +10,7 @@ class Event(Model):
 
 	__tablename__ = 'event'
 	id = mapped_column(Integer(), primary_key=True)
-	name = mapped_column(String(255), nullable=False)
+	name = mapped_column(String(255), nullable=False, default="")
 
 	@reconstructor
 	def prepare(self):

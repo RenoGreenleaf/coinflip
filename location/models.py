@@ -15,7 +15,7 @@ class Location(Scene):
 		'polymorphic_load': 'selectin'
 	}
 	id = mapped_column(ForeignKey(Scene.id), primary_key=True)
-	description = mapped_column(String())
+	description = mapped_column(String(), nullable=False, default="")
 	exits = relationship(
 		'Exit',
 		back_populates='location',
@@ -23,7 +23,7 @@ class Location(Scene):
 		cascade='all, delete-orphan'
 	)
 
-	discovered_event_id = mapped_column(ForeignKey(Event.id))
+	discovered_event_id = mapped_column(ForeignKey(Event.id), nullable=False)
 	discovered_event = relationship(
 		Event,
 		lazy='joined'
@@ -72,16 +72,16 @@ class Location(Scene):
 class Exit(Model):
 	__tablename__ = 'location_exit'
 	id = mapped_column(Integer(), primary_key=True)
-	location_id = mapped_column(ForeignKey(Location.id))
-	name = mapped_column(String(255))  # for usage in command prompt commands
-	description = mapped_column(String())
+	location_id = mapped_column(ForeignKey(Location.id), nullable=False)
+	name = mapped_column(String(255), nullable=False, default="")  # for usage in command prompt commands
+	description = mapped_column(String(), nullable=False, default="")
 	location = relationship(
 		Location,
 		back_populates='exits',
 		foreign_keys=(location_id),
 		lazy='joined'
 	)
-	triggers_event_id = mapped_column(ForeignKey(Event.id))
+	triggers_event_id = mapped_column(ForeignKey(Event.id), nullable=False)
 	triggers_event = relationship(Event, lazy='joined')
 
 	def __repr__(self):
