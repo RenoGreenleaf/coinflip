@@ -14,7 +14,7 @@ class StateMachine(Model):
 		lazy='selectin',
 		cascade='all, delete-orphan'
 	)
-	start_id = mapped_column(ForeignKey(Scene.id))
+	start_id = mapped_column(ForeignKey(Scene.id), nullable=False)
 	start = relationship(Scene, lazy='joined')
 
 	@reconstructor
@@ -57,9 +57,9 @@ class StateMachine(Model):
 class Transition(Model):
 	__tablename__ = 'transition'
 	id = mapped_column(Integer, primary_key=True)
-	event_id = mapped_column(ForeignKey(Event.id))
-	scene_id = mapped_column(ForeignKey(Scene.id))
-	state_machine_id = mapped_column(ForeignKey(StateMachine.id))
+	event_id = mapped_column(ForeignKey(Event.id), nullable=False)
+	scene_id = mapped_column(ForeignKey(Scene.id), nullable=False)
+	state_machine_id = mapped_column(ForeignKey(StateMachine.id), nullable=False)
 
 	event = relationship(Event, lazy='joined', foreign_keys=event_id)
 	scene = relationship(Scene, lazy='joined', foreign_keys=scene_id)
