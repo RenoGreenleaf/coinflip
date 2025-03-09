@@ -13,7 +13,12 @@ class Pool:
 		self.events = []
 
 		with self.get_db_session() as session:
-			self.state_machine = session.scalars(select(StateMachine)).one()
+			self.state_machine = session.scalars(select(StateMachine)).one_or_none()
+
+			if self.state_machine is None:
+				self.state_machine = StateMachine()
+				session.add(self.state_machine)
+				session.commit()
 
 	def get_all_events(self):
 		with self.get_db_session() as session:
