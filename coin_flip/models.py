@@ -15,7 +15,7 @@ class CoinFlip(Scene):
 	}
 	id = mapped_column(ForeignKey(Scene.id), primary_key=True)
 	victory_threshold = mapped_column(Integer(), nullable=False, default=3)
-	won_event_id = mapped_column(ForeignKey(Event.id), nullable=False)
+	won_event_id = mapped_column(ForeignKey(Event.id), nullable=False, default=0)
 	won_event = relationship(
 		Event,
 		foreign_keys=(won_event_id,),

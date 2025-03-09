@@ -17,11 +17,15 @@ class Event(Model):
 		self.subscribers = []
 
 	def wrap_for_editing(self, pool):
+		if self.id == 0:
+			raise Exception("<Irrelevant> event can't be edited.")
+
 		return Editor(self, pool)
 
 	def subscribe(self, subscriber):
 		"""Let event know whom to notify if it's triggered."""
-		self.subscribers.append(subscriber)
+		if self.id != 0:
+			self.subscribers.append(subscriber)
 
 	def trigger(self):
 		"""Signifies that an event has happened."""

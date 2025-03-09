@@ -14,7 +14,7 @@ class StateMachine(Model):
 		lazy='selectin',
 		cascade='all, delete-orphan'
 	)
-	start_id = mapped_column(ForeignKey(Scene.id), nullable=False)
+	start_id = mapped_column(ForeignKey(Scene.id), nullable=False, default=0)
 	start = relationship(Scene, lazy='joined')
 
 	@reconstructor
