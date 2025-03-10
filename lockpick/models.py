@@ -1,0 +1,41 @@
+from sqlalchemy import Integer, Boolean, ForeignKey, inspect, select
+from sqlalchemy.orm import mapped_column, relationship
+from reusables.models import Scene, Model
+
+
+class Lock(Scene):
+	__tablename__ = 'lock'
+	__mapper_args__ = {
+		'polymorphic_identity': 'lock',
+		'polymorphic_load': 'selectin'
+	}
+	id = mapped_column(ForeignKey(Scene.id), primary_key=True)
+	pins = relationship(
+		'Pin',
+		back_populates='lock',
+		lazy='selectin',
+		cascade='all, delete-orphan'
+	)
+
+	def add_pin(self, is_clockwise):
+		session = inspect(self).session
+		last_pin = session.scalars(
+			select(Pin).where(Pin.lock == self).order_by(Pin.offset.desc())
+		).first()
+		offset = 0 if last_pin is None else last_pin.offset + 1
+		pin = Pin(offset=offset, is_clockwise=is_clockwise)
+		self.pins.append(pin)
+
+
+class Pin(Model):
+	__tablename__ = 'lock_pin'
+	id = mapped_column(Integer(), primary_key=True)
+	is_clockwise = mapped_column(Boolean(), nullable=False)
+	lock_id = mapped_column(ForeignKey(Lock.id), nullable=False)
+	offset = mapped_column(Integer(), nullable=False)  # for sorting
+	lock = relationship(
+		Lock,
+		lazy='joined',
+		back_populates='pins',
+		foreign_keys=lock_id
+	)
