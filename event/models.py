@@ -1,6 +1,7 @@
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import mapped_column, reconstructor
 from reusables.models import Model
+from reusables import nulls
 from event.editor import Editor
 
 
@@ -18,7 +19,7 @@ class Event(Model):
 
 	def wrap_for_editing(self, pool):
 		if self.id == 0:
-			raise Exception("<Irrelevant> event can't be edited.")
+			return nulls.Editor(self, pool)
 
 		return Editor(self, pool)
 
