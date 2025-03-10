@@ -1,0 +1,17 @@
+Architecture:
+Each folder represents an entity type (except for "reusables" and "alembic"). It usually consists of a model, editor, and player. Either editor or player wrap a model to provide a UI for it. Entities communicate with each other using events. For this reason all objects should be loaded into memory (so that not a single event is missed by a subscriber). Direct communication between entities should be minimized.
+
+Interfaces:
+* Editable
+	wrap_for_editing()
+
+* Playable
+	wrap_for_playing()
+
+* Subscriber
+	start_listening()
+	notify()
+
+* Event
+	subscribe()
+	trigger()

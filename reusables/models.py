@@ -18,3 +18,15 @@ class Scene(Model):
 
 	def start_listening(self):
 		pass
+
+	def notify(self):
+		pass
+
+	def wrap_for_editing(self, pool):
+		raise Exception("Dead-end can't be edited.")
+
+	def wrap_for_playing(self, pool):
+		raise Exception("Dead-end isn't playable.")
+
+	def __repr__(self):
+		return "<Dead-end>"
