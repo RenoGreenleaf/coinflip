@@ -1,6 +1,7 @@
 from sqlalchemy import Integer, Boolean, ForeignKey, inspect, select
 from sqlalchemy.orm import mapped_column, relationship
 from reusables.models import Scene, Model
+from lockpick.editor import Editor
 
 
 class Lock(Scene):
@@ -26,6 +27,13 @@ class Lock(Scene):
 		pin = Pin(offset=offset, is_clockwise=is_clockwise)
 		self.pins.append(pin)
 
+	def wrap_for_editing(self, pool):
+		return Editor(self, pool)
+
+	def __repr__(self):
+		amount = len(self.pins)
+		return f"Lock with {amount} pins"
+
 
 class Pin(Model):
 	__tablename__ = 'lock_pin'
@@ -39,3 +47,7 @@ class Pin(Model):
 		back_populates='pins',
 		foreign_keys=lock_id
 	)
+
+	def __repr__(self):
+		direction = 'clockwise' if self.is_clockwise else 'counterclockwise'
+		return f"Pin #{self.offset}, {direction}"

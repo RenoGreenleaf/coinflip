@@ -3,6 +3,7 @@ from event.models import Event
 from ending.models import Ending
 from location.models import Location
 from coin_flip.models import CoinFlip
+from lockpick.models import Lock
 
 
 class Editor(Cmd):
