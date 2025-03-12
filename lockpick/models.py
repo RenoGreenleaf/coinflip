@@ -27,6 +27,24 @@ class Lock(Scene):
 		pin = Pin(offset=offset, is_clockwise=is_clockwise)
 		self.pins.append(pin)
 
+	def delete_pin(self, offset):
+		for pin in self.pins:
+			if pin.offset == offset:
+				break
+
+		self.pins.remove(pin)
+
+		for offset, pin in zip(range(len(self.pins)), self.pins):
+			pin.offset = offset
+
+	def switch_pin(self, offset):
+		for pin in self.pins:
+			if pin.offset == offset:
+				break
+
+		pin.is_clockwise = not pin.is_clockwise
+		return pin.is_clockwise
+
 	def wrap_for_editing(self, pool):
 		return Editor(self, pool)
 

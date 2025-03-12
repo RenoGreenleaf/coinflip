@@ -1,4 +1,4 @@
-from cmd2 import Cmd, Cmd2ArgumentParser, with_argparser
+from cmd2 import Cmd, Cmd2ArgumentParser, with_argparser, CompletionItem
 
 
 class Editor(Cmd):
@@ -7,8 +7,13 @@ class Editor(Cmd):
 	def get_directions(self):
 		return ['clockwise', 'counterclockwise']
 
+	def get_pins(self):
+		return [CompletionItem(pin.offset, str(pin)) for pin in self.model.pins]
+
 	directions_parser = Cmd2ArgumentParser()
 	directions_parser.add_argument('direction', choices_provider=get_directions)
+	pins_parser = Cmd2ArgumentParser()
+	pins_parser.add_argument('pin_offset', choices_provider=get_pins, type=int)
 
 	def __init__(self, model, pool):
 		super().__init__()
@@ -27,6 +32,25 @@ class Editor(Cmd):
 			session.add(self.model)
 			self.model.add_pin(is_clockwise)
 			session.commit()
+
+	@with_argparser(pins_parser)
+	def do_delete(self, args):
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			self.model.delete_pin(args.pin_offset)
+			session.commit()
+
+	@with_argparser(pins_parser)
+	def do_switch(self, args):
+		print(f"Switching pin {args.pin_offset}.")
+
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			is_clockwise = self.model.switch_pin(args.pin_offset)
+			session.commit()
+
+		direction = 'clockwise' if is_clockwise else 'counterclockwise'
+		print(f"Pin #{args.pin_offset} is {direction} now.")
 
 	def do_list(self, args):
 		with self.pool.get_db_session() as session:
