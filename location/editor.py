@@ -40,7 +40,7 @@ class Editor(Cmd):
 	def do_discovered(self, args):
 		with self.pool.get_db_session() as session:
 			session.add(self.model)
-			self.model.set_discovered_event(int(args.event_id))
+			self.model.set_discovered_event(args.event_id)
 			session.commit()
 
 	def do_list(self, args):

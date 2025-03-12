@@ -1,7 +1,9 @@
 from sqlalchemy import Integer, Boolean, ForeignKey, inspect, select
-from sqlalchemy.orm import mapped_column, relationship
+from sqlalchemy.orm import mapped_column, relationship, reconstructor
 from reusables.models import Scene, Model
+from event.models import Event
 from lockpick.editor import Editor
+from lockpick.player import Player
 
 
 class Lock(Scene):
@@ -11,12 +13,26 @@ class Lock(Scene):
 		'polymorphic_load': 'selectin'
 	}
 	id = mapped_column(ForeignKey(Scene.id), primary_key=True)
+	unlocked_event_id = mapped_column(
+		ForeignKey(Event.id),
+		nullable=False,
+		default=0
+	)
+	unlocked_event = relationship(
+		Event,
+		lazy='joined',
+		foreign_keys=unlocked_event_id
+	)
 	pins = relationship(
 		'Pin',
 		back_populates='lock',
 		lazy='selectin',
 		cascade='all, delete-orphan'
 	)
+
+	@reconstructor
+	def prepare(self):
+		pass
 
 	def add_pin(self, is_clockwise):
 		session = inspect(self).session
@@ -47,6 +63,12 @@ class Lock(Scene):
 
 	def wrap_for_editing(self, pool):
 		return Editor(self, pool)
+
+	def wrap_for_playing(self, pool):
+		return Player(self, pool)
+
+	def set_unlocked(self, event_id):
+		self.unlocked_event_id = event_id
 
 	def __repr__(self):
 		amount = len(self.pins)
