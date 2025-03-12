@@ -32,7 +32,18 @@ class Lock(Scene):
 
 	@reconstructor
 	def prepare(self):
-		pass
+		self.position = 0
+
+	def turn(self, is_clockwise):
+		if self.pins[self.position].is_clockwise == is_clockwise:
+			self.position += 1
+			return True
+		else:
+			self.position = 0
+			return False
+
+	def is_unlocked(self):
+		return self.position == len(self.pins)
 
 	def add_pin(self, is_clockwise):
 		session = inspect(self).session
