@@ -7,7 +7,7 @@ class Editor:
 		with self.pool.get_db_session() as session:
 			session.add(self.event)
 			new_name = input(f'Rename "{self.event.name}" to:\n')
-			state['current'] = None
+			state['path'].pop()
 
 			if not new_name:
 				return

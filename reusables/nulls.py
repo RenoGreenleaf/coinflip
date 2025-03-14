@@ -7,7 +7,7 @@ class Editor:
 
 	def interact(self, state):
 		print(f"\033[91m{self.model} can't be edited.\033[0m")
-		state['current'] = None
+		state['path'].pop()
 
 
 class Player:

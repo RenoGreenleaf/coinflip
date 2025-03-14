@@ -40,7 +40,7 @@ class Editor(Cmd):
 
 	def interact(self, state):
 		self.cmdloop()
-		state['current'] = None
+		state['path'].pop()
 
 	def do_exit(self, args):
 		return True

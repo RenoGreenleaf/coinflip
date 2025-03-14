@@ -75,7 +75,7 @@ class Editor(Cmd):
 
 	def do_exit(self, args):
 		print("Leaving.")
-		self.state['exit'] = True
+		self.state['path'].pop()
 		return True
 
 	@with_argparser(types_parser)
@@ -84,12 +84,12 @@ class Editor(Cmd):
 			if self.current_type == 'events':
 				new_event = Event(name="New Event")
 				session.add(new_event)
-				self.state['current'] = new_event
+				self.state['path'].append(new_event)
 				return True
 			elif self.current_type == 'scenes':
 				new_scene = self._scene_by_type(args.scene_type)
 				session.add(new_scene)
-				self.state['current'] = new_scene
+				self.state['path'].append(new_scene)
 				return True
 
 	@with_argparser(items_parser)
@@ -102,7 +102,7 @@ class Editor(Cmd):
 		else:
 			raise Exception("Something went wrong.")
 
-		self.state['current'] = editable
+		self.state['path'].append(editable)
 		return True
 
 	def do_scenes(self, args):
@@ -114,7 +114,7 @@ class Editor(Cmd):
 		self._switch('events')
 
 	def do_state_machine(self, args):
-		self.state['current'] = self.pool.get_state_machine()
+		self.state['path'].append(self.pool.get_state_machine())
 		return True
 
 	def _switch(self, typed):

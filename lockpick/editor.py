@@ -31,7 +31,7 @@ class Editor(Cmd):
 
 	def interact(self, state):
 		self.cmdloop()
-		state['current'] = None
+		state['path'].pop()
 
 	@with_argparser(directions_parser)
 	def do_create(self, args):

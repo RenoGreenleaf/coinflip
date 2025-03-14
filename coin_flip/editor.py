@@ -21,7 +21,7 @@ class Editor(Cmd):
 
 	def interact(self, state):
 		self.cmdloop()
-		state['current'] = None
+		state['path'].pop()
 
 	@with_argparser(events_parser)
 	def do_won(self, args):

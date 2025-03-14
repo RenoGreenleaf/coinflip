@@ -6,7 +6,7 @@ class Editor():
 
 	def interact(self, state):
 		new_message = input("New message to be shown when ending:\n")
-		state['current'] = None
+		state['path'].pop()
 
 		with self.pool.get_db_session() as session:
 			session.add(self.model)

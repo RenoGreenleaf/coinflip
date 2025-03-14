@@ -34,7 +34,7 @@ class Editor(Cmd):
 			self._update_model()
 
 		self.cmdloop()
-		state['current'] = None
+		state['path'].pop()
 
 	@with_argparser(events_parser)
 	def do_discovered(self, args):

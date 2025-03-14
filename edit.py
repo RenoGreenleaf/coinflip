@@ -3,12 +3,8 @@ from instances.pool import Pool
 
 
 pool = Pool()
-state = {'current': pool, 'exit': False}
+state = {'path': [pool]}
 
-while True:
-	state['current'] = state['current'] or pool
-	editor = state['current'].wrap_for_editing(pool)
+while state['path'] != []:
+	editor = state['path'][-1].wrap_for_editing(pool)
 	editor.interact(state)
-
-	if state['exit']:
-		exit()
