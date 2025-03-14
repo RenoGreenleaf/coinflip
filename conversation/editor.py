@@ -1,0 +1,172 @@
+from cmd2 import Cmd, Cmd2ArgumentParser, with_argparser, CompletionItem
+
+
+class Editor(Cmd):
+	prompt = "conversation> "
+
+	def option_choices(self):
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			return [
+				CompletionItem(option.id, str(option))
+				for option
+				in self.model.options
+			]
+
+	options_parser = Cmd2ArgumentParser()
+	options_parser.add_argument(
+		'option_id',
+		choices_provider=option_choices,
+		type=int
+	)
+
+	def __init__(self, model, pool):
+		super().__init__()
+		self.model = model
+		self.pool = pool
+
+	def interact(self, state):
+		self.state = state
+		self.cmdloop()
+
+	def do_add(self, args):
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			option = self.model.add_option()
+			session.commit()
+
+		self.state['path'].append(option)
+		return True
+
+	@with_argparser(options_parser)
+	def do_update(self, args):
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			option = self.model.get_option(args.option_id)
+
+		self.state['path'].append(option)
+		return True
+
+	@with_argparser(options_parser)
+	def do_delete(self, args):
+		print("Removing the option.")
+
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			self.model.delete_option(args.option_id)
+			session.commit()
+
+	def do_list(self, args):
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			print(self.model)
+
+			for option in self.model.options:
+				print(f"\t{option}")
+
+	def do_exit(self, args):
+		print("Leaving conversation editor.")
+		self.state['path'].pop()
+		return True
+
+
+class OptionEditor(Cmd):
+	prompt = ("option> ")
+
+	def event_choices(self):
+		return [
+			CompletionItem(event.id, str(event))
+			for event
+			in self.pool.get_all_events()
+		]
+
+	def boolean_choice(self):
+		return ['true', 'false']
+
+	events_parser = Cmd2ArgumentParser()
+	events_parser.add_argument(
+		'event_id',
+		choices_provider=event_choices,
+		type=int
+	)
+	boolean_parser = Cmd2ArgumentParser()
+	boolean_parser.add_argument(
+		'choice',
+		choices_provider=boolean_choice
+	)
+
+	def __init__(self, model, pool):
+		super().__init__()
+		self.model = model
+		self.pool = pool
+
+	def interact(self, state):
+		self.cmdloop()
+		state['path'].pop()
+
+	def do_list(self, state):
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			print(f"Description: {self.model.description}")
+			print(f"Triggers: {self.model.triggers}")
+			print(f"Hidden by: {self.model.hide}")
+			print(f"Shown by: {self.model.show}")
+			print(f"Is available by default: {self.model.available}")
+			print(f"Message: {self.model.message}")
+
+	def do_description(self, args):
+		print("Updating description.")
+
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			self.model.description = args
+			session.commit()
+
+	@with_argparser(events_parser)
+	def do_triggers(self, args):
+		print("Setting triggering event.")
+
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			self.model.triggers_id = args.event_id
+			session.commit()
+
+	@with_argparser(events_parser)
+	def do_hide(self, args):
+		print("Setting hiding event.")
+
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			self.model.hide_id = args.event_id
+			session.commit()
+
+	@with_argparser(events_parser)
+	def do_show(self, args):
+		print("Setting hiding event.")
+
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			self.model.show_id = args.event_id
+			session.commit()
+
+	@with_argparser(boolean_parser)
+	def do_available(self, args):
+		print("Setting availability.")
+		choice = True if args.choice == 'true' else False
+
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			self.model.available = choice
+			session.commit()
+
+	def do_message(self, args):
+		print("Updating message.")
+
+		with self.pool.get_db_session() as session:
+			session.add(self.model)
+			self.model.message = args
+			session.commit()
+
+	def do_exit(self, args):
+		print("Leaving option editor.")
+		return True

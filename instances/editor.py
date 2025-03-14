@@ -4,6 +4,7 @@ from ending.models import Ending
 from location.models import Location
 from coin_flip.models import CoinFlip
 from lockpick.models import Lock
+from conversation.models import Conversation
 
 
 class Editor(Cmd):
@@ -26,7 +27,7 @@ class Editor(Cmd):
 
 	def types_choices(self):
 		if self.current_type == 'scenes':
-			return ['ending', 'location', 'coin_flip']
+			return ['ending', 'location', 'coin_flip', 'lock', 'conversation']
 		else:
 			return []
 
@@ -128,14 +129,24 @@ class Editor(Cmd):
 
 	def _list_scenes(self):
 		for scene in self.pool.get_all_scenes():
-			print(f"{scene.id} {scene}")
+			print(scene)
 
 	def _scene_by_type(self, typed):
 		if typed == 'ending':
-			return Ending()
+			scene = Ending()
 		elif typed == 'location':
-			return Location()
+			scene = Location()
 		elif typed == 'coin_flip':
-			return CoinFlip()
+			scene = CoinFlip()
+		elif typed == 'lock':
+			scene = Lock()
+		elif typed == 'conversation':
+			scene = Conversation()
 		else:
 			raise Exception(f"Unknown scene type ({typed}).")
+
+		with self.pool.get_db_session() as session:
+			session.add(scene)
+			session.commit()
+
+		return scene

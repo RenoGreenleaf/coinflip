@@ -30,4 +30,7 @@ class Scene(Model):
 		return Player(self, pool)
 
 	def __repr__(self):
-		return "<Dead-end>"
+		if self.id == 0:
+			return "<Dead-End>"
+		else:
+			return "Nameless"
