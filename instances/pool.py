@@ -34,7 +34,7 @@ class Pool:
 
 	def get_event(self, identifier):
 		with self.get_db_session() as session:
-			session.add_all(self.scenes)
+			session.add_all(self.events)
 			return session.get(Event, identifier)
 
 	def get_scene(self, identifier):

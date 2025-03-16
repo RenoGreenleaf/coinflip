@@ -31,8 +31,8 @@ class StateMachine(Model):
 				self.current_scene = transition.scene
 				break
 
-	def get_current_scene(self):
-		return self.current_scene
+	def get_current_scene(self, pool):
+		return pool.get_scene(self.current_scene.id)
 
 	def wrap_for_editing(self, pool):
 		return Editor(self, pool)

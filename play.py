@@ -9,11 +9,11 @@ with pool.get_db_session() as session:
 	session.add(sm)
 	sm.start_listening()
 
-	# for scene in pool.get_all_scenes():
-	# 	scene.start_listening()
+	for scene in pool.get_all_scenes():
+		scene.start_listening()
 
-	player = sm.get_current_scene().wrap_for_playing(pool)
+	player = sm.get_current_scene(pool).wrap_for_playing(pool)
 
 	while True:
 		player.interact()
-		player = sm.get_current_scene().wrap_for_playing(pool)
+		player = sm.get_current_scene(pool).wrap_for_playing(pool)
