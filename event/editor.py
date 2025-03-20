@@ -1,16 +1,13 @@
 class Editor:
 	def __init__(self, model, pool):
-		self.event = model
+		self.model = model
 		self.pool = pool
 
 	def interact(self, state):
-		with self.pool.get_db_session() as session:
-			session.add(self.event)
-			new_name = input(f'Rename "{self.event.name}" to:\n')
-			state['path'].pop()
+		new_name = input(f'Rename "{self.model.name}" to:\n')
+		state['path'].pop()
 
-			if not new_name:
-				return
+		if not new_name:
+			return
 
-			self.event.name = new_name
-			session.commit()
+		self.model.name = new_name

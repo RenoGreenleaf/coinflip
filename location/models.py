@@ -1,37 +1,14 @@
-from sqlalchemy import String, Integer, ForeignKey
-from sqlalchemy.orm import mapped_column, relationship
-from reusables.models import Scene, Model
-from event.models import Event
+from reusables.models import Scene
 from location.editor import Editor
 from location.player import Player
 
 
 class Location(Scene):
 	"""Things to explore."""
-
-	__tablename__ = 'location'
-	__mapper_args__ = {
-		'polymorphic_identity': 'location',
-		'polymorphic_load': 'selectin'
-	}
-	id = mapped_column(ForeignKey(Scene.id), primary_key=True)
-	description = mapped_column(String(), nullable=False, default="")
-	exits = relationship(
-		'Exit',
-		back_populates='location',
-		lazy='selectin',
-		cascade='all, delete-orphan'
-	)
-
-	discovered_event_id = mapped_column(
-		ForeignKey(Event.id),
-		nullable=False,
-		default=0
-	)
-	discovered_event = relationship(
-		Event,
-		lazy='joined'
-	)
+	def __init__(self):
+		self.description = ""
+		self.exits = []
+		self.discovered_event = None
 
 	def wrap_for_editing(self, pool):
 		return Editor(self, pool)
@@ -55,11 +32,11 @@ class Location(Scene):
 			if exit_.id == identifier:
 				return exit_
 
-	def add_exit(self, name, triggers_event_id=None):
-		self.exits.append(Exit(name=name, triggers_event_id=triggers_event_id))
-
-	def set_discovered_event(self, identifier):
-		self.discovered_event_id = identifier
+	def add_exit(self, name, triggers_event=None):
+		exit_ = Exit()
+		exit_.name = name
+		exit_.triggers_event = triggers_event
+		self.exits.append(exit_)
 
 	def delete_exit(self, identifier):
 		for exit_ in self.exits:
@@ -73,28 +50,11 @@ class Location(Scene):
 		return f"Location ({self.description[:15]}…)"
 
 
-class Exit(Model):
-	__tablename__ = 'location_exit'
-	id = mapped_column(Integer(), primary_key=True)
-	location_id = mapped_column(
-		ForeignKey(Location.id),
-		nullable=False,
-		default=0
-	)
-	name = mapped_column(String(255), nullable=False, default="")  # for usage in command prompt commands
-	description = mapped_column(String(), nullable=False, default="")
-	location = relationship(
-		Location,
-		back_populates='exits',
-		foreign_keys=(location_id),
-		lazy='joined'
-	)
-	triggers_event_id = mapped_column(
-		ForeignKey(Event.id),
-		nullable=False,
-		default=0
-	)
-	triggers_event = relationship(Event, lazy='joined')
+class Exit:
+	def __init__(self):
+		self.name = ""
+		self.description = ""
+		self.triggers_event = None
 
 	def __repr__(self):
 		return f"Exit ({self.name})"

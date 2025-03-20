@@ -7,10 +7,10 @@ class Editor(Cmd):
 	def get_directions(self):
 		return ['clockwise', 'counterclockwise']
 
-	def get_pins(self):
+	def pins_choice(self):
 		return [CompletionItem(pin.offset, str(pin)) for pin in self.model.pins]
 
-	def get_events(self):
+	def events_choice(self):
 		return [
 			CompletionItem(event.id, str(event))
 			for event
@@ -20,9 +20,9 @@ class Editor(Cmd):
 	directions_parser = Cmd2ArgumentParser()
 	directions_parser.add_argument('direction', choices_provider=get_directions)
 	pins_parser = Cmd2ArgumentParser()
-	pins_parser.add_argument('pin_offset', choices_provider=get_pins, type=int)
+	pins_parser.add_argument('pin_offset', choices_provider=pins_choice, type=int)
 	events_parser = Cmd2ArgumentParser()
-	events_parser.add_argument('event_id', choices_provider=get_events, type=int)
+	events_parser.add_argument('event_id', choices_provider=events_choice, type=int)
 
 	def __init__(self, model, pool):
 		super().__init__()
@@ -36,46 +36,32 @@ class Editor(Cmd):
 	@with_argparser(directions_parser)
 	def do_create(self, args):
 		is_clockwise = True if args.direction == 'clockwise' else False
-
-		with self.pool.get_db_session() as session:
-			session.add(self.model)
-			self.model.add_pin(is_clockwise)
-			session.commit()
+		self.model.add_pin(is_clockwise)
 
 	@with_argparser(pins_parser)
 	def do_delete(self, args):
-		with self.pool.get_db_session() as session:
-			session.add(self.model)
-			self.model.delete_pin(args.pin_offset)
-			session.commit()
+		self.model.delete_pin(args.pin_offset)
 
 	@with_argparser(pins_parser)
 	def do_switch(self, args):
 		print(f"Switching pin {args.pin_offset}.")
-
-		with self.pool.get_db_session() as session:
-			session.add(self.model)
-			is_clockwise = self.model.switch_pin(args.pin_offset)
-			session.commit()
-
+		is_clockwise = self.model.switch_pin(args.pin_offset)
 		direction = 'clockwise' if is_clockwise else 'counterclockwise'
 		print(f"Pin #{args.pin_offset} is {direction} now.")
 
 	@with_argparser(events_parser)
 	def do_unlocked(self, args):
-		with self.pool.get_db_session() as session:
-			session.add(self.model)
-			self.model.set_unlocked(args.event_id)
-			session.commit()
+		self.model.unlocked_event = self.pool.events[args.event_id]
 
 	def do_list(self, args):
-		with self.pool.get_db_session() as session:
-			session.add(self.model)
-			print(self.model)
-			print(f"Unlocking triggers {self.model.unlocked_event}.")
+		print(self.model)
+		print(f"Unlocking triggers {self.model.unlocked_event}.")
 
-			for pin in self.model.pins:
-				print(f"\t{pin}")
+		index = 0
+
+		for pin in self.model.pins:
+			print(f"\t#{index} {pin}")
+			index += 1
 
 	def do_exit(self, args):
 		print("Leaving lock editor.")

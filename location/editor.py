@@ -31,26 +31,20 @@ class Editor(Cmd):
 
 		if new_description:
 			self.model.description = new_description
-			self._update_model()
 
 		self.cmdloop()
 		state['path'].pop()
 
 	@with_argparser(events_parser)
 	def do_discovered(self, args):
-		with self.pool.get_db_session() as session:
-			session.add(self.model)
-			self.model.set_discovered_event(args.event_id)
-			session.commit()
+		self.model.discovered_event = self.pool.events[args.event_id]
 
 	def do_list(self, args):
-		with self.pool.get_db_session() as session:
-			session.add(self.model)
-			print(self.model.description)
-			print(f"Discovered event: {self.model.discovered_event}")
+		print(self.model.description)
+		print(f"Discovered event: {self.model.discovered_event}")
 
-			for exit_ in self.model.exits:
-				print(f"\t{exit_.id} {exit_} (triggers {exit_.triggers_event})")
+		for exit_ in self.model.exits:
+			print(f"\t{exit_.id} {exit_} (triggers {exit_.triggers_event})")
 
 	def do_exit(self, args):
 		print("Going back.")
@@ -58,42 +52,26 @@ class Editor(Cmd):
 
 	@with_argparser(exits_parser)
 	def do_delete(self, args):
-		with self.pool.get_db_session() as session:
-			session.add(self.model)
-			self.model.delete_exit(args.exit_id)
-			session.commit()
-			print(f"Exit #{args.exit_id} is removed.")
+		self.model.delete_exit(args.exit_id)
+		print(f"Exit #{args.exit_id} is removed.")
 
 	@with_argparser(events_parser)
 	def do_add(self, args):
 		name = input("Name of the exit:\n") or "nameless"
-
-		with self.pool.get_db_session() as session:
-			session.add(self.model)
-			self.model.add_exit(name=name, triggers_event_id=args.event_id)
-			session.commit()
+		self.model.add_exit(
+			name=name,
+			triggers_event=self.pool.events[args.event_id]
+		)
 
 	@with_argparser(exits_parser)
 	def do_rename(self, args):
 		new_name = input("New name: ")
-
-		with self.pool.get_db_session() as session:
-			exit_ = self.model.find_exit_by_id(args.exit_id)
-			session.add(exit_)
-			exit_.name = new_name
-			session.commit()
+		exit_ = self.model.find_exit_by_id(args.exit_id)
+		exit_.name = new_name
 
 	@with_argparser(exits_parser)
 	def do_describe(self, args):
 		description = input("New description:\n")
+		exit_ = self.model.find_exit_by_id(args.exit_id)
+		exit_.description = description
 
-		with self.pool.get_db_session() as session:
-			session.add(self.model)
-			exit_ = self.model.find_exit_by_id(args.exit_id)
-			exit_.description = description
-			session.commit()
-
-	def _update_model(self):
-		with self.pool.get_db_session() as session:
-			session.add(self.model)
-			session.commit()

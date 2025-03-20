@@ -1,28 +1,11 @@
-from sqlalchemy import ForeignKey, String, Boolean, Integer
-from sqlalchemy.orm import mapped_column, relationship, reconstructor
-from reusables.models import Model, Scene
-from event.models import Event
+from reusables.models import Scene
 from conversation.editor import Editor, OptionEditor
 from conversation.player import Player
 
 
 class Conversation(Scene):
-	__tablename__ = 'conversation'
-	__mapper_args__ = {
-		'polymorphic_identity': 'conversation',
-		'polymorphic_load': 'selectin'
-	}
-	id = mapped_column(ForeignKey(Scene.id), primary_key=True)
-	options = relationship(
-		'Option',
-		back_populates='conversation',
-		lazy='selectin',
-		cascade='all, delete-orphan'
-	)
-
-	@reconstructor
-	def prepare(self):
-		self.available_options = []
+	def __init__(self):
+		self.options = []
 
 	def wrap_for_editing(self, pool):
 		return Editor(self, pool)
@@ -56,33 +39,15 @@ class Conversation(Scene):
 		return f"Conversation #{self.id} with {len(self.options)} Options"
 
 
-class Option(Model):
-	__tablename__ = 'conversation_option'
-	id = mapped_column(Integer(), primary_key=True)
-	conversation_id = mapped_column(
-		ForeignKey(Conversation.id),
-		nullable=False,
-		default=0
-	)
-	description = mapped_column(String(), nullable=False, default="")
-	triggers_id = mapped_column(ForeignKey(Event.id), nullable=False, default=0)
-	hide_id = mapped_column(ForeignKey(Event.id), nullable=False, default=0)
-	show_id = mapped_column(ForeignKey(Event.id), nullable=False, default=0)
-	# whether an option is available *by default*
-	available = mapped_column(Boolean, nullable=False, default=True)
-	message = mapped_column(String(), nullable=False, default="")
-	conversation = relationship(
-		Conversation,
-		lazy='joined',
-		back_populates='options',
-		foreign_keys=conversation_id
-	)
-	triggers = relationship(Event, lazy='joined', foreign_keys=triggers_id)
-	hide = relationship(Event, lazy='joined', foreign_keys=hide_id)
-	show = relationship(Event, lazy='joined', foreign_keys=show_id)
+class Option:
+	def __init__(self):
+		self.description = ""
+		self.available = True  # by default
+		self.message = ""
+		self.triggers = None
+		self.hide = None
+		self.show = None
 
-	@reconstructor
-	def prepare(self):
 		self.is_available = self.available
 
 	def wrap_for_editing(self, pool):

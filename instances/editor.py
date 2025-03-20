@@ -1,10 +1,5 @@
 from cmd2 import Cmd, Cmd2ArgumentParser, with_argparser, CompletionItem
 from event.models import Event
-from ending.models import Ending
-from location.models import Location
-from coin_flip.models import CoinFlip
-from lockpick.models import Lock
-from conversation.models import Conversation
 
 
 class Editor(Cmd):
@@ -64,15 +59,11 @@ class Editor(Cmd):
 	@with_argparser(items_parser)
 	def do_delete(self, args):
 		if self.current_type == 'events':
-			editable = self.pool.get_event(args.item_id)
+			self.pool.delete_event(args.item_id)
 		elif self.current_type == 'scenes':
-			editable = self.pool.get_scene(args.item_id)
+			self.pool.delete_scene(args.item_id)
 		else:
 			raise Exception("Something went wrong.")
-
-		with self.pool.get_db_session() as session:
-			session.delete(editable)
-			session.commit()
 
 	def do_exit(self, args):
 		print("Leaving.")
@@ -81,17 +72,20 @@ class Editor(Cmd):
 
 	@with_argparser(types_parser)
 	def do_create(self, args):
-		with self.pool.get_db_session() as session:
-			if self.current_type == 'events':
-				new_event = Event(name="New Event")
-				session.add(new_event)
-				self.state['path'].append(new_event)
-				return True
-			elif self.current_type == 'scenes':
-				new_scene = self._scene_by_type(args.scene_type)
-				session.add(new_scene)
-				self.state['path'].append(new_scene)
-				return True
+		if self.current_type == 'events':
+			event = Event()
+			event.id = max(self.pool.events, default=0) + 1
+			self.pool.events[event.id] = event
+			self.state['path'].append(event)
+			return True
+		elif self.current_type == 'scenes':
+			scene = self._scene_by_type(args.scene_type)
+			scene.id = max(self.pool.scenes, default=0) + 1
+			self.pool.scenes[scene.id] = scene
+			self.state['path'].append(scene)
+			return True
+		else:
+			raise Exception("Mode {self.current_type} is not supported.")
 
 	@with_argparser(items_parser)
 	def do_update(self, args):
@@ -101,7 +95,7 @@ class Editor(Cmd):
 		elif self.current_type == 'scenes':
 			editable = self.pool.get_scene(args.item_id)
 		else:
-			raise Exception("Something went wrong.")
+			raise Exception("Mode {self.current_type} is not supported.")
 
 		self.state['path'].append(editable)
 		return True
@@ -132,21 +126,4 @@ class Editor(Cmd):
 			print(scene)
 
 	def _scene_by_type(self, typed):
-		if typed == 'ending':
-			scene = Ending()
-		elif typed == 'location':
-			scene = Location()
-		elif typed == 'coin_flip':
-			scene = CoinFlip()
-		elif typed == 'lock':
-			scene = Lock()
-		elif typed == 'conversation':
-			scene = Conversation()
-		else:
-			raise Exception(f"Unknown scene type ({typed}).")
-
-		with self.pool.get_db_session() as session:
-			session.add(scene)
-			session.commit()
-
-		return scene
+		return self.pool.scene_by_type({'type': typed})
