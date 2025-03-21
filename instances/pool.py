@@ -1,6 +1,7 @@
 from event.models import Event
 from state_machine.models import StateMachine
 from instances.editor import Editor
+from reusables import nulls
 
 from ending.models import Ending
 from location.models import Location
@@ -17,19 +18,19 @@ class Pool:
 		self.events = {}
 		self.state_machine = None
 
-	def load(self, dictionary):
+	def load(self, dictionary, pool):
 		for identifier, event_data in dictionary['events'].items():
 			event = Event()
 			event.load(event_data, self)
-			self.events[identifier] = event
+			self.events[int(identifier)] = event
 
 		for identifier, scene_data in dictionary['scenes'].items():
 			scene = self.scene_by_type(scene_data)
 			scene.load(scene_data, self)
-			self.scenes[identifier] = scene
+			self.scenes[int(identifier)] = scene
 
 		self.state_machine = StateMachine()
-		self.state_machine.load(dictionary['state_machine'])
+		self.state_machine.load(dictionary['state_machine'], self)
 
 	def save(self):
 		result = {'events': {}, 'scenes': {}, 'state_machine': {}}
@@ -50,7 +51,7 @@ class Pool:
 			scene = Ending()
 		elif typed == 'location':
 			scene = Location()
-		elif typed == 'coin_flip':
+		elif typed == 'coinflip':
 			scene = CoinFlip()
 		elif typed == 'lock':
 			scene = Lock()
@@ -68,10 +69,10 @@ class Pool:
 		return self.scenes.values()
 
 	def get_event(self, identifier):
-		return self.events[identifier]
+		return self.events.get(identifier, nulls.event)
 
 	def get_scene(self, identifier):
-		return self.scenes[identifier]
+		return self.scenes.get(identifier, nulls.scene)
 
 	def get_state_machine(self):
 		if not self.state_machine:

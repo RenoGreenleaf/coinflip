@@ -1,4 +1,5 @@
 from reusables.models import Scene
+from reusables import nulls
 from location.editor import Editor
 from location.player import Player
 
@@ -6,9 +7,41 @@ from location.player import Player
 class Location(Scene):
 	"""Things to explore."""
 	def __init__(self):
+		self.id = 0
 		self.description = ""
 		self.exits = []
-		self.discovered_event = None
+		self.discovered_event = nulls.event
+
+	def save(self):
+		result = {
+			'id': self.id,
+			'type': 'location',
+			'description': self.description,
+			'discovered_event': self.discovered_event.id,
+			'exits': []
+		}
+
+		for exit_ in self.exits:
+			result['exits'].append({
+				'name': exit_.name,
+				'description': exit_.description,
+				'triggers_event': exit_.triggers_event.id
+			})
+
+		return result
+
+	def load(self, dictionary, pool):
+		self.exits = []
+		self.id = dictionary['id']
+		self.description = dictionary['description']
+		self.discovered_event = pool.get_event(dictionary['discovered_event'])
+
+		for exit_data in dictionary['exits']:
+			exit_ = Exit()
+			exit_.name = exit_data['name']
+			exit_.description = exit_data['description']
+			exit_.triggers_event = pool.get_event(exit_data['triggers_event'])
+			self.exits.append(exit_)
 
 	def wrap_for_editing(self, pool):
 		return Editor(self, pool)
@@ -54,7 +87,7 @@ class Exit:
 	def __init__(self):
 		self.name = ""
 		self.description = ""
-		self.triggers_event = None
+		self.triggers_event = nulls.event
 
 	def __repr__(self):
 		return f"Exit ({self.name})"

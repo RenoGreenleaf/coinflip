@@ -1,12 +1,36 @@
+from reusables import nulls
 from state_machine.editor import Editor
 
 
 class StateMachine:
 	def __init__(self):
 		self.transitions = []
-		self.start = None
+		self.start = nulls.scene
 
 		self.current_scene = self.start
+
+	def save(self):
+		result = {
+			'start': self.start.id,
+			'transitions': []
+		}
+
+		for transition in self.transitions:
+			result['transitions'].append({
+				'scene': transition.scene.id,
+				'event': transition.event.id
+			})
+
+		return result
+
+	def load(self, dictionary, pool):
+		self.start = pool.get_scene(dictionary['start'])
+
+		for transition_data in dictionary['transitions']:
+			transition = Transition()
+			transition.scene = pool.get_scene(transition_data['scene'])
+			transition.event = pool.get_event(transition_data['event'])
+			self.transitions.append(transition)
 
 	def start_listening(self):
 		for transition in self.transitions:
@@ -43,8 +67,8 @@ class StateMachine:
 
 class Transition:
 	def __init__(self):
-		self.event = None
-		self.scene = None
+		self.event = nulls.event
+		self.scene = nulls.scene
 
 	def __repr__(self):
 		return f"To {self.scene} by {self.event}"

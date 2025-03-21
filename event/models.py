@@ -6,9 +6,20 @@ class Event:
 	Helps to interact between decoupled parts of an app."""
 
 	def __init__(self, **kwargs):
+		self.id = 0
 		self.name = ""
 
 		self.subscribers = []
+
+	def save(self):
+		return {
+			'id': self.id,
+			'name': self.name
+		}
+
+	def load(self, dictionary, pool):
+		self.id = dictionary['id']
+		self.name = dictionary['name']
 
 	def wrap_for_editing(self, pool):
 		return Editor(self, pool)

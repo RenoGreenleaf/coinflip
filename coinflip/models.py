@@ -1,17 +1,31 @@
 from random import choice
 from reusables.models import Scene
-from event.models import Event
+from reusables import nulls
 from coinflip.editor import Editor
 from coinflip.player import Player
 
 
 class CoinFlip(Scene):
 	def __init__(self):
+		self.id = 0
 		self.victory_threshold = 3
-		self.won_event = None
+		self.won_event = nulls.event
 
 		self.my_score = 0
 		self.opponents_score = 0
+
+	def save(self):
+		return {
+			'id': self.id,
+			'type': 'coinflip',
+			'victory_threshold': self.victory_threshold,
+			'won_event': self.won_event.id
+		}
+
+	def load(self, dictionary, pool):
+		self.id = dictionary['id']
+		self.victory_threshold = dictionary['victory_threshold']
+		self.won_event = pool.get_event(dictionary['won_event'])
 
 	def flip(self, preference):
 		self.side = choice(['tails', 'heads'])

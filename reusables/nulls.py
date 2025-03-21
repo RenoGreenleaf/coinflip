@@ -1,6 +1,21 @@
 """UIs for null objects."""
 
 
+class Scene:
+	def __init__(self):
+		self.id = 0
+
+	def __repr__(self):
+		return "<Dead-End>"
+
+
+class Event:
+	def __init__(self):
+		self.id = 0
+
+	def __repr__(self):
+		return "<Irrelevant>"
+
 class Editor:
 	def __init__(self, model, pool):
 		self.model = model
@@ -16,3 +31,7 @@ class Player:
 
 	def interact(self):
 		raise Exception(f"\033[91mError (stumbled into {self.model})!.\033[0m")
+
+
+scene = Scene()
+event = Event()

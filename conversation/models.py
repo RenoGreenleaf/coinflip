@@ -1,10 +1,12 @@
 from reusables.models import Scene
+from reusables import nulls
 from conversation.editor import Editor, OptionEditor
 from conversation.player import Player
 
 
 class Conversation(Scene):
 	def __init__(self):
+		self.id = 0
 		self.options = []
 
 	def wrap_for_editing(self, pool):
@@ -12,6 +14,38 @@ class Conversation(Scene):
 
 	def wrap_for_playing(self, pool):
 		return Player(self, pool)
+
+	def save(self):
+		result = {
+			'id': self.id,
+			'type': 'conversation',
+			'options': [],
+		}
+
+		for option in self.options:
+			result['options'].append({
+				'description': option.description,
+				'available': option.available,
+				'message': option.message,
+				'triggers': option.triggers.id,
+				'hide': option.hide.id,
+				'show': option.show.id
+			})
+
+		return result
+
+	def load(self, dictionary, pool):
+		self.id = dictionary['id']
+
+		for option_data in dictionary['options']:
+			option = Option()
+			option.description = option_data['description']
+			option.available = option_data['available']
+			option.message = option_data['message']
+			option.triggers = pool.get_event(option_data['triggers'])
+			option.hide = pool.get_event(option_data['hide'])
+			option.show = pool.get_event(option_data['show'])
+			self.options.append(option)
 
 	def add_option(self):
 		option = Option()
@@ -44,9 +78,9 @@ class Option:
 		self.description = ""
 		self.available = True  # by default
 		self.message = ""
-		self.triggers = None
-		self.hide = None
-		self.show = None
+		self.triggers = nulls.event
+		self.hide = nulls.event
+		self.show = nulls.event
 
 		self.is_available = self.available
 

@@ -1,0 +1,8 @@
+{
+	"scenes": {},
+	"events": {},
+	"state_machine": {
+		"start": 0,
+		"transitions": []
+	}
+}
