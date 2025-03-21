@@ -51,7 +51,7 @@ class Editor(Cmd):
 
 	@with_argparser(events_parser)
 	def do_unlocked(self, args):
-		self.model.unlocked_event = self.pool.events[args.event_id]
+		self.model.unlocked_event = self.pool.get_event(args.event_id)
 
 	def do_list(self, args):
 		print(self.model)

@@ -59,13 +59,13 @@ class Editor(Cmd):
 
 	@with_argparser(transitions_parser)
 	def do_add(self, args):
-		scene = self.pool.scenes[args.scene_id]
-		event = self.pool.events[args.event_id]
+		scene = self.pool.get_scene(args.scene_id)
+		event = self.pool.get_event(args.event_id)
 		self.model.add_transition(scene, event)
 
 	@with_argparser(scenes_parser)
 	def do_start(self, args):
-		scene = self.pool.scenes[args.scene_id]
+		scene = self.pool.get_scene(args.scene_id)
 		self.model.set_start(scene)
 
 	@with_argparser(delete_parser)

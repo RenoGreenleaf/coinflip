@@ -29,7 +29,7 @@ class Editor(Cmd):
 
 	@with_argparser(events_parser)
 	def do_won(self, args):
-		self.model.won_event = self.pool.events[args.event_id]
+		self.model.won_event = self.pool.get_event(args.event_id)
 
 	def do_exit(self, args):
 		print("Leaving coin-flip editor.")

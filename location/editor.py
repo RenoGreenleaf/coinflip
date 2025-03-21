@@ -37,7 +37,7 @@ class Editor(Cmd):
 
 	@with_argparser(events_parser)
 	def do_discovered(self, args):
-		self.model.discovered_event = self.pool.events[args.event_id]
+		self.model.discovered_event = self.pool.get_event(args.event_id)
 
 	def do_list(self, args):
 		print(self.model.description)
@@ -60,7 +60,7 @@ class Editor(Cmd):
 		name = input("Name of the exit:\n") or "nameless"
 		self.model.add_exit(
 			name=name,
-			triggers_event=self.pool.events[args.event_id]
+			triggers_event=self.pool.get_event(args.event_id)
 		)
 
 	@with_argparser(exits_parser)

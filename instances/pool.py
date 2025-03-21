@@ -63,10 +63,10 @@ class Pool:
 		return scene
 
 	def get_all_events(self):
-		return self.events.values()
+		return [nulls.event] + list(self.events.values())
 
 	def get_all_scenes(self):
-		return self.scenes.values()
+		return [nulls.scene] + list(self.scenes.values())
 
 	def get_event(self, identifier):
 		return self.events.get(identifier, nulls.event)

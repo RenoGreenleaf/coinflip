@@ -105,17 +105,17 @@ class OptionEditor(Cmd):
 	@with_argparser(events_parser)
 	def do_triggers(self, args):
 		print("Setting triggering event.")
-		self.model.triggers = self.pool.events[args.event_id]
+		self.model.triggers = self.pool.get_event(args.event_id)
 
 	@with_argparser(events_parser)
 	def do_hide(self, args):
 		print("Setting hiding event.")
-		self.model.hide = self.pool.events[args.event_id]
+		self.model.hide = self.pool.get_event(args.event_id)
 
 	@with_argparser(events_parser)
 	def do_show(self, args):
 		print("Setting hiding event.")
-		self.model.show = self.pool.events[args.event_id]
+		self.model.show = self.pool.get_event(args.event_id)
 
 	@with_argparser(boolean_parser)
 	def do_available(self, args):
