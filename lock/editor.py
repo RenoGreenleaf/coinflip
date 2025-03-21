@@ -8,7 +8,11 @@ class Editor(Cmd):
 		return ['clockwise', 'counterclockwise']
 
 	def pins_choice(self):
-		return [CompletionItem(pin.offset, str(pin)) for pin in self.model.pins]
+		index = 0
+
+		for pin in self.model.pins:
+			yield CompletionItem(index, str(pin))
+			index += 1
 
 	def events_choice(self):
 		return [
@@ -20,7 +24,7 @@ class Editor(Cmd):
 	directions_parser = Cmd2ArgumentParser()
 	directions_parser.add_argument('direction', choices_provider=get_directions)
 	pins_parser = Cmd2ArgumentParser()
-	pins_parser.add_argument('pin_offset', choices_provider=pins_choice, type=int)
+	pins_parser.add_argument('index', choices_provider=pins_choice, type=int)
 	events_parser = Cmd2ArgumentParser()
 	events_parser.add_argument('event_id', choices_provider=events_choice, type=int)
 
@@ -40,14 +44,14 @@ class Editor(Cmd):
 
 	@with_argparser(pins_parser)
 	def do_delete(self, args):
-		self.model.delete_pin(args.pin_offset)
+		self.model.delete_pin(args.index)
 
 	@with_argparser(pins_parser)
 	def do_switch(self, args):
-		print(f"Switching pin {args.pin_offset}.")
-		is_clockwise = self.model.switch_pin(args.pin_offset)
+		print(f"Switching pin {args.index}.")
+		is_clockwise = self.model.switch_pin(args.index)
 		direction = 'clockwise' if is_clockwise else 'counterclockwise'
-		print(f"Pin #{args.pin_offset} is {direction} now.")
+		print(f"Pin #{args.index} is {direction} now.")
 
 	@with_argparser(events_parser)
 	def do_unlocked(self, args):

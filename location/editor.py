@@ -9,7 +9,11 @@ class Editor(Cmd):
 		return [CompletionItem(event.id, str(event)) for event in events]
 
 	def exit_choices(self):
-		return [CompletionItem(exit_.id, exit_.name) for exit_ in self.model.exits]
+		index = 0
+
+		for exit_ in self.model.exits:
+			yield CompletionItem(index, str(exit_))
+			index += 1
 
 	events_parser = Cmd2ArgumentParser()
 	events_parser.add_argument(
@@ -19,7 +23,7 @@ class Editor(Cmd):
 	)
 
 	exits_parser = Cmd2ArgumentParser()
-	exits_parser.add_argument('exit_id', choices_provider=exit_choices, type=int)
+	exits_parser.add_argument('index', choices_provider=exit_choices, type=int)
 
 	def __init__(self, model, pool):
 		super().__init__()
@@ -44,7 +48,7 @@ class Editor(Cmd):
 		print(f"Discovered event: {self.model.discovered_event}")
 
 		for exit_ in self.model.exits:
-			print(f"\t{exit_.id} {exit_} (triggers {exit_.triggers_event})")
+			print(f"\t{exit_} (triggers {exit_.triggers_event})")
 
 	def do_exit(self, args):
 		print("Going back.")
@@ -52,8 +56,8 @@ class Editor(Cmd):
 
 	@with_argparser(exits_parser)
 	def do_delete(self, args):
-		self.model.delete_exit(args.exit_id)
-		print(f"Exit #{args.exit_id} is removed.")
+		self.model.delete_exit(args.index)
+		print(f"Exit #{args.index} is removed.")
 
 	@with_argparser(events_parser)
 	def do_add(self, args):
@@ -66,12 +70,9 @@ class Editor(Cmd):
 	@with_argparser(exits_parser)
 	def do_rename(self, args):
 		new_name = input("New name: ")
-		exit_ = self.model.find_exit_by_id(args.exit_id)
-		exit_.name = new_name
+		self.model.exits[args.index].name = new_name
 
 	@with_argparser(exits_parser)
 	def do_describe(self, args):
 		description = input("New description:\n")
-		exit_ = self.model.find_exit_by_id(args.exit_id)
-		exit_.description = description
-
+		self.model.exits[args.index].description = description

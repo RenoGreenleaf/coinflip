@@ -52,11 +52,11 @@ class Lock(Scene):
 		pin.is_clockwise = is_clockwise
 		self.pins.append(pin)
 
-	def delete_pin(self, offset):
-		del self.pins[offset]
+	def delete_pin(self, index):
+		del self.pins[index]
 
-	def switch_pin(self, offset):
-		pin = self.pins[offset]
+	def switch_pin(self, index):
+		pin = self.pins[index]
 		pin.is_clockwise = not pin.is_clockwise
 		return pin.is_clockwise
 

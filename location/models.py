@@ -71,13 +71,8 @@ class Location(Scene):
 		exit_.triggers_event = triggers_event
 		self.exits.append(exit_)
 
-	def delete_exit(self, identifier):
-		for exit_ in self.exits:
-			if exit_.id == identifier:
-				to_delete = exit_
-				break
-
-		self.exits.remove(to_delete)
+	def delete_exit(self, index):
+		del self.exits[index]
 
 	def __repr__(self):
 		return f"Location ({self.description[:15]}…)"

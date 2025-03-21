@@ -52,15 +52,11 @@ class Conversation(Scene):
 		self.options.append(option)
 		return option
 
-	def get_option(self, identifier):
-		for option in self.options:
-			if option.id == identifier:
-				return option
+	def get_option(self, index):
+		return self.options[index]
 
-	def delete_option(self, identifier):
-		for option in self.options:
-			if option.id == identifier:
-				self.options.remove(option)
+	def delete_option(self, index):
+		del self.options[index]
 
 	def get_options(self):
 		return [option for option in self.options if option.is_available]

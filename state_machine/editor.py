@@ -13,23 +13,34 @@ class Editor(Cmd):
 		return [CompletionItem(event.id, str(event)) for event in events]
 
 	def transitions_choices(self):
-		result = []
 		index = 0
 
 		for transition in self.model.transitions:
-			result.append(CompletionItem(index, str(transition)))
+			yield CompletionItem(index, str(transition))
 			index += 1
 
 	transitions_parser = Cmd2ArgumentParser()
-	transitions_parser.add_argument('scene_id', choices_provider=scene_choices, type=int)
-	transitions_parser.add_argument('event_id', choices_provider=event_choices, type=int)
+	transitions_parser.add_argument(
+		'scene_id',
+		choices_provider=scene_choices,
+		type=int
+	)
+	transitions_parser.add_argument(
+		'event_id',
+		choices_provider=event_choices,
+		type=int
+	)
 
 	scenes_parser = Cmd2ArgumentParser()
-	scenes_parser.add_argument('scene_id', choices_provider=scene_choices, type=int)
+	scenes_parser.add_argument(
+		'scene_id',
+		choices_provider=scene_choices,
+		type=int
+	)
 
 	delete_parser = Cmd2ArgumentParser()
 	delete_parser.add_argument(
-		'transition_id',
+		'index',
 		choices_provider=transitions_choices,
 		type=int
 	)
@@ -70,4 +81,5 @@ class Editor(Cmd):
 
 	@with_argparser(delete_parser)
 	def do_delete(self, args):
-		self.model.delete_transition(args.transition_id)
+		self.model.delete_transition(args.index)
+		print("The transition is removed.")

@@ -6,15 +6,15 @@ class Editor(Cmd):
 
 	def option_choices(self):
 		"""Selection of an option for updating."""
-		return [
-			CompletionItem(option.id, str(option))
-			for option
-			in self.model.options
-		]
+		index = 0
+
+		for option in self.model.options:
+			yield CompletionItem(index, str(option))
+			index += 1
 
 	options_parser = Cmd2ArgumentParser()
 	options_parser.add_argument(
-		'option_id',
+		'index',
 		choices_provider=option_choices,
 		type=int
 	)
@@ -35,14 +35,14 @@ class Editor(Cmd):
 
 	@with_argparser(options_parser)
 	def do_update(self, args):
-		option = self.model.get_option(args.option_id)
+		option = self.model.get_option(args.index)
 		self.state['path'].append(option)
 		return True
 
 	@with_argparser(options_parser)
 	def do_delete(self, args):
 		print("Removing the option.")
-		self.model.delete_option(args.option_id)
+		self.model.delete_option(args.index)
 
 	def do_list(self, args):
 		print(self.model)
