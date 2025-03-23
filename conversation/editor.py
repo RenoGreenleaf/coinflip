@@ -1,7 +1,8 @@
-from cmd2 import Cmd, Cmd2ArgumentParser, with_argparser, CompletionItem
+from cmd2 import Cmd2ArgumentParser, with_argparser, CompletionItem
+from reusables import editor
 
 
-class Editor(Cmd):
+class Editor(editor.Editor):
 	prompt = "conversation> "
 
 	def option_choices(self):
@@ -18,11 +19,6 @@ class Editor(Cmd):
 		choices_provider=option_choices,
 		type=int
 	)
-
-	def __init__(self, model, pool):
-		super().__init__()
-		self.model = model
-		self.pool = pool
 
 	def interact(self, state):
 		self.state = state
@@ -56,39 +52,17 @@ class Editor(Cmd):
 		return True
 
 
-class OptionEditor(Cmd):
+class OptionEditor(editor.Editor):
 	prompt = ("option> ")
-
-	def event_choices(self):
-		return [
-			CompletionItem(event.id, str(event))
-			for event
-			in self.pool.get_all_events()
-		]
 
 	def boolean_choice(self):
 		return ['true', 'false']
 
-	events_parser = Cmd2ArgumentParser()
-	events_parser.add_argument(
-		'event_id',
-		choices_provider=event_choices,
-		type=int
-	)
 	boolean_parser = Cmd2ArgumentParser()
 	boolean_parser.add_argument(
 		'choice',
 		choices_provider=boolean_choice
 	)
-
-	def __init__(self, model, pool):
-		super().__init__()
-		self.model = model
-		self.pool = pool
-
-	def interact(self, state):
-		self.cmdloop()
-		state['path'].pop()
 
 	def do_list(self, state):
 		print(f"Description: {self.model.description}")
@@ -102,19 +76,19 @@ class OptionEditor(Cmd):
 		print("Updating description.")
 		self.model.description = args
 
-	@with_argparser(events_parser)
+	@with_argparser(editor.events_parser)
 	def do_triggers(self, args):
 		print("Setting triggering event.")
 		self.model.triggers = self.pool.get_event(args.event_id)
 
-	@with_argparser(events_parser)
+	@with_argparser(editor.events_parser)
 	def do_hide(self, args):
 		print("Setting hiding event.")
 		self.model.hide = self.pool.get_event(args.event_id)
 
-	@with_argparser(events_parser)
+	@with_argparser(editor.events_parser)
 	def do_show(self, args):
-		print("Setting hiding event.")
+		print("Setting showing event.")
 		self.model.show = self.pool.get_event(args.event_id)
 
 	@with_argparser(boolean_parser)
@@ -126,7 +100,3 @@ class OptionEditor(Cmd):
 	def do_message(self, args):
 		print("Updating message.")
 		self.model.message = args
-
-	def do_exit(self, args):
-		print("Leaving option editor.")
-		return True

@@ -4,7 +4,7 @@ class Editor:
 		self.pool = pool
 
 	def interact(self, state):
-		new_name = input(f'Rename "{self.model.name}" to:\n')
+		new_name = input("New event name: ")
 		state['path'].pop()
 
 		if not new_name:

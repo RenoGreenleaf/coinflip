@@ -1,16 +1,13 @@
 from cmd2 import Cmd, CompletionItem, Cmd2ArgumentParser, with_argparser
+from reusables import editor
 
 
-class Editor(Cmd):
+class Editor(editor.Editor):
 	prompt = 'SM> '
 
 	def scene_choices(self):
 		scenes = self.pool.get_all_scenes()
 		return [CompletionItem(scene.id, str(scene)) for scene in scenes]
-
-	def event_choices(self):
-		events = self.pool.get_all_events()
-		return [CompletionItem(event.id, str(event)) for event in events]
 
 	def transitions_choices(self):
 		index = 0
@@ -27,7 +24,7 @@ class Editor(Cmd):
 	)
 	transitions_parser.add_argument(
 		'event_id',
-		choices_provider=event_choices,
+		choices_provider=editor.event_choices,
 		type=int
 	)
 
@@ -44,19 +41,6 @@ class Editor(Cmd):
 		choices_provider=transitions_choices,
 		type=int
 	)
-
-	def __init__(self, model, pool):
-		super().__init__()
-		self.model = model
-		self.pool = pool
-
-	def interact(self, state):
-		self.cmdloop()
-		state['path'].pop()
-
-	def do_exit(self, args):
-		print("Leaving state machine editor.")
-		return True
 
 	def do_list(self, args):
 		print(self.model)
