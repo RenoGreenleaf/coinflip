@@ -12,7 +12,7 @@ class Scene:
 		self.id = 0
 
 	def __repr__(self):
-		return "<Dead-End>"
+		return "<None>"
 
 
 class Event:
