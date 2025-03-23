@@ -7,8 +7,6 @@ class StateMachine:
 		self.transitions = []
 		self.start = nulls.scene
 
-		self.current_scene = self.start
-
 	def save(self):
 		result = {
 			'start': self.start.id,
@@ -31,6 +29,8 @@ class StateMachine:
 			transition.scene = pool.get_scene(transition_data['scene'])
 			transition.event = pool.get_event(transition_data['event'])
 			self.transitions.append(transition)
+
+		self.current_scene = self.start
 
 	def start_listening(self):
 		for transition in self.transitions:

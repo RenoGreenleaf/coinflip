@@ -2,6 +2,12 @@
 
 
 class Scene:
+	def start_listening(self):
+		pass
+
+	def wrap_for_playing(self, pool):
+		return Player(self, pool)
+
 	def __init__(self):
 		self.id = 0
 
@@ -10,6 +16,12 @@ class Scene:
 
 
 class Event:
+	def trigger(self):
+		pass
+
+	def subscribe(self, subscriber):
+		pass
+
 	def __init__(self):
 		self.id = 0
 

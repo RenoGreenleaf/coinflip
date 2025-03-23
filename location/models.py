@@ -60,20 +60,6 @@ class Location(Scene):
 		else:
 			raise Exception(f"There's no exit named {name}")
 
-	def find_exit_by_id(self, identifier):
-		for exit_ in self.exits:
-			if exit_.id == identifier:
-				return exit_
-
-	def add_exit(self, name, triggers_event=None):
-		exit_ = Exit()
-		exit_.name = name
-		exit_.triggers_event = triggers_event
-		self.exits.append(exit_)
-
-	def delete_exit(self, index):
-		del self.exits[index]
-
 	def __repr__(self):
 		return f"Location ({self.description[:15]}…)"
 

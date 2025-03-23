@@ -14,8 +14,3 @@ class Scene:
 	def wrap_for_playing(self, pool):
 		return Player(self, pool)
 
-	def __repr__(self):
-		if self.id == 0:
-			return "<Dead-End>"
-		else:
-			return "Nameless"

@@ -1,19 +1,21 @@
 #!/usr/bin/env python
+from json import load
 from instances.pool import Pool
 
 
 pool = Pool()
 
-with pool.get_db_session() as session:
-	sm = pool.get_state_machine()
-	session.add(sm)
-	sm.start_listening()
+with open('pool.json', 'r') as pool_data:
+	pool.load(load(pool_data), pool)
 
-	for scene in pool.get_all_scenes():
-		scene.start_listening()
+sm = pool.get_state_machine()
+sm.start_listening()
 
-	player = sm.get_current_scene(pool).wrap_for_playing(pool)
+for scene in pool.get_all_scenes():
+	scene.start_listening()
 
-	while True:
-		player.interact()
-		player = sm.get_current_scene(pool).wrap_for_playing(pool)
+player = sm.get_current_scene().wrap_for_playing(pool)
+
+while True:
+	player.interact()
+	player = sm.get_current_scene().wrap_for_playing(pool)
