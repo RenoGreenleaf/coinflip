@@ -5,6 +5,9 @@ class Scene:
 	def start_listening(self):
 		pass
 
+	def notify(self):
+		pass
+
 	def wrap_for_playing(self, pool):
 		return Player(self, pool)
 

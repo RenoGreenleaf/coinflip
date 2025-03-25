@@ -13,4 +13,3 @@ class Scene:
 
 	def wrap_for_playing(self, pool):
 		return Player(self, pool)
-
