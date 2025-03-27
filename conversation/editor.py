@@ -78,16 +78,25 @@ class OptionEditor(editor.Editor):
 
 	@with_argparser(editor.events_parser)
 	def do_triggers(self, args):
+		if not editor.is_event_id(args.event_id, self.pool):
+			return
+
 		print("Setting triggering event.")
 		self.model.triggers = self.pool.get_event(args.event_id)
 
 	@with_argparser(editor.events_parser)
 	def do_hide(self, args):
+		if not editor.is_event_id(args.event_id, self.pool):
+			return
+
 		print("Setting hiding event.")
 		self.model.hide = self.pool.get_event(args.event_id)
 
 	@with_argparser(editor.events_parser)
 	def do_show(self, args):
+		if not editor.is_event_id(args.event_id, self.pool):
+			return
+
 		print("Setting showing event.")
 		self.model.show = self.pool.get_event(args.event_id)
 

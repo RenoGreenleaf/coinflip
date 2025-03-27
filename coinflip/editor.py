@@ -9,6 +9,9 @@ class Editor(editor.Editor):
 
 	@with_argparser(editor.events_parser)
 	def do_won(self, args):
+		if not editor.is_event_id(args.event_id, self.pool):
+			return
+
 		self.model.won_event = self.pool.get_event(args.event_id)
 
 	@with_argparser(threshold_parser)

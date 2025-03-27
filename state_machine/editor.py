@@ -54,6 +54,9 @@ class Editor(editor.Editor):
 
 	@with_argparser(transitions_parser)
 	def do_add(self, args):
+		if not editor.is_event_id(args.event_id, self.pool):
+			return
+
 		scene = self.pool.get_scene(args.scene_id)
 		event = self.pool.get_event(args.event_id)
 		self.model.add_transition(scene, event)

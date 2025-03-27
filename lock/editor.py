@@ -38,6 +38,9 @@ class Editor(editor.Editor):
 
 	@with_argparser(editor.events_parser)
 	def do_unlocked(self, args):
+		if not editor.is_event_id(args.event_id, self.pool):
+			return
+
 		self.model.unlocked_event = self.pool.get_event(args.event_id)
 
 	def do_list(self, args):

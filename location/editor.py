@@ -26,6 +26,9 @@ class Editor(editor.Editor):
 
 	@with_argparser(editor.events_parser)
 	def do_discovered(self, args):
+		if not editor.is_event_id(args.event_id, self.pool):
+			return
+
 		self.model.discovered_event = self.pool.get_event(args.event_id)
 
 	def do_list(self, args):
@@ -42,6 +45,9 @@ class Editor(editor.Editor):
 
 	@with_argparser(editor.events_parser)
 	def do_add(self, args):
+		if not editor.is_event_id(args.event_id, self.pool):
+			return
+
 		name = input("Name of the exit:\n") or "nameless"
 		self.model.add_exit(
 			name=name,

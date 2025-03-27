@@ -31,3 +31,13 @@ events_parser.add_argument(
 	choices_provider=event_choices,
 	type=int
 )
+
+
+def is_event_id(identifier, pool):
+	ids = set(event.id for event in pool.get_all_events())
+
+	if identifier not in ids:
+		print(f"There's no event with ID {identifier}.")
+		return False
+	else:
+		return True
