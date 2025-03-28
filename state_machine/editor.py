@@ -54,7 +54,10 @@ class Editor(editor.Editor):
 
 	@with_argparser(transitions_parser)
 	def do_add(self, args):
-		if not editor.is_event_id(args.event_id, self.pool):
+		if (
+			not editor.is_event_id(args.event_id, self.pool)
+			or not is_scene_id(args.scene_id, self.pool)
+		):
 			return
 
 		scene = self.pool.get_scene(args.scene_id)
@@ -63,6 +66,9 @@ class Editor(editor.Editor):
 
 	@with_argparser(scenes_parser)
 	def do_start(self, args):
+		if not is_scene_id(args.scene_id, self.pool):
+			return
+
 		scene = self.pool.get_scene(args.scene_id)
 		self.model.set_start(scene)
 
@@ -70,3 +76,13 @@ class Editor(editor.Editor):
 	def do_delete(self, args):
 		self.model.delete_transition(args.index)
 		print("The transition is removed.")
+
+
+def is_scene_id(identifier, pool):
+	ids = set(scene.id for scene in pool.get_all_scenes())
+
+	if identifier not in ids:
+		print(f"There's no scene with ID {identifier}.")
+		return False
+	else:
+		return True
