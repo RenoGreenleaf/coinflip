@@ -60,11 +60,18 @@ class Round:
 	def wrap_for_editing(self, pool):
 		return RoundEditor(self, pool)
 
-	def add_outcome(self, ai_strategy, players_strategy, next_round):
+	def add_outcome(
+		self,
+		ai_strategy,
+		players_strategy,
+		next_round,
+		message
+	):
 		outcome = Outcome()
 		outcome.ai_strategy = ai_strategy
 		outcome.players_strategy = players_strategy
 		outcome.next_round = next_round
+		outcome.message = message
 		self.outcomes.append(outcome)
 		return outcome
 
@@ -77,12 +84,14 @@ class Outcome:
 		self.ai_strategy = None
 		self.players_strategy = None
 		self.next_round = False
+		self.message = ""
 
 	def save(self):
 		return {
 			'ai_strategy': self.ai_strategy,
 			'players_strategy': self.players_strategy,
-			'next_round': self.next_round
+			'next_round': self.next_round,
+			'message': self.message
 		}
 
 	def load(self, dictionary, pool):
@@ -90,6 +99,7 @@ class Outcome:
 		self.ai_strategy = dictionary['ai_strategy']
 		self.players_strategy = dictionary['players_strategy']
 		self.next_round = dictionary['next_round']
+		self.message = dictionary['message']
 
 	def __repr__(self):
 		return f"Outcome (AI: {self.ai_strategy}, P: {self.players_strategy})"

@@ -17,4 +17,4 @@ while state['path'] != []:
 	print("Saving.")
 
 	with open('pool.json', 'w') as pool_data:
-		dump(pool.save(), pool_data, sort_keys=True, indent=4)
+		dump(pool.save(), pool_data, indent=4)

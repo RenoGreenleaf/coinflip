@@ -74,6 +74,7 @@ class RoundEditor(editor.Editor):
 	outcome_parser.add_argument('ai_strategy')
 	outcome_parser.add_argument('players_strategy')
 	outcome_parser.add_argument('next_round', choices=('true', 'false'))
+	outcome_parser.add_argument('message')
 
 	delete_parser = Cmd2ArgumentParser()
 	delete_parser.add_argument(
@@ -94,7 +95,8 @@ class RoundEditor(editor.Editor):
 		self.model.add_outcome(
 			args.ai_strategy,
 			args.players_strategy,
-			True if args.next_round == 'true' else False
+			True if args.next_round == 'true' else False,
+			args.message
 		)
 		print("The outcome is added.")
 
