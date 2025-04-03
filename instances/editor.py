@@ -22,7 +22,7 @@ class Editor(Cmd):
 
 	def types_choices(self):
 		if self.current_type == 'scenes':
-			return ['ending', 'location', 'coinflip', 'lock', 'conversation']
+			return ['ending', 'location', 'coinflip', 'lock', 'conversation', 'combat']
 		else:
 			return []
 

@@ -1,4 +1,5 @@
 from reusables.models import Scene
+from combat.editor import Editor
 
 
 class Combat(Scene):
@@ -8,11 +9,9 @@ class Combat(Scene):
 		self.rounds = []
 
 	def save(self):
-		result = {'rounds': [], 'ai_moves': []}
+		result = {'rounds': [], 'type': 'combat'}
 		result['id'] = self.id
-
-		for move in self.ai_moves:
-			result['ai_moves'].append(move.save())
+		result['ai_moves'] = self.ai_moves
 
 		for round_ in self.rounds:
 			result['rounds'].append(round_.save())
@@ -21,16 +20,15 @@ class Combat(Scene):
 
 	def load(self, dictionary, pool):
 		self.id = dictionary['id']
-
-		for move_data in dictionary['ai_moves']:
-			strategy = Strategy()
-			strategy.load(move_data, pool)
-			self.ai_moves.append(strategy)
+		self.ai_moves = dictionary['ai_moves']
 
 		for round_data in dictionary['rounds']:
 			round_ = Round()
 			round.load(round_data, pool)
 			self.rounds.append(round_)
+
+	def wrap_for_editing(self, pool):
+		return Editor(self, pool)
 
 	def __repr__(self):
 		return f"Combat #{self.id}"

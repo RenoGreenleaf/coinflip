@@ -8,6 +8,7 @@ from location.models import Location
 from coinflip.models import CoinFlip
 from lock.models import Lock
 from conversation.models import Conversation
+from combat.models import Combat
 
 
 class Pool:
@@ -57,6 +58,8 @@ class Pool:
 			scene = Lock()
 		elif typed == 'conversation':
 			scene = Conversation()
+		elif typed == 'combat':
+			scene = Combat()
 		else:
 			raise Exception(f"Unknown scene type ({typed}).")
 
