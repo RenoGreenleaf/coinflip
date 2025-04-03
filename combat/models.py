@@ -92,4 +92,4 @@ class Outcome:
 		self.next_round = dictionary['next_round']
 
 	def __repr__(self):
-		return "Outcome"
+		return f"Outcome (AI: {self.ai_strategy}, P: {self.players_strategy})"

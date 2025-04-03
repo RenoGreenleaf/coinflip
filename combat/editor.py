@@ -63,10 +63,24 @@ class Editor(editor.Editor):
 class RoundEditor(editor.Editor):
 	prompt = "round> "
 
+	def outcome_choices(self):
+		index = 0
+
+		for outcome in self.model.outcomes:
+			yield CompletionItem(index, str(outcome))
+			index += 1
+
 	outcome_parser = Cmd2ArgumentParser()
 	outcome_parser.add_argument('ai_strategy')
 	outcome_parser.add_argument('players_strategy')
 	outcome_parser.add_argument('next_round', choices=('true', 'false'))
+
+	delete_parser = Cmd2ArgumentParser()
+	delete_parser.add_argument(
+		'index',
+		type=int,
+		choices_provider=outcome_choices
+	)
 
 	def do_list(self, args):
 		print(self.model)
@@ -83,3 +97,12 @@ class RoundEditor(editor.Editor):
 			True if args.next_round == 'true' else False
 		)
 		print("The outcome is added.")
+
+	@with_argparser(delete_parser)
+	def do_delete(self, args):
+		if not args.index >= 0 or not args.index < len(self.model.outcomes):
+			print("The index is out of range.")
+			return
+
+		del self.model.outcomes[args.index]
+		print("The outcome is removed.")
