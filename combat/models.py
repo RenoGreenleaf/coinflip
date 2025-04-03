@@ -1,5 +1,5 @@
 from reusables.models import Scene
-from combat.editor import Editor
+from combat.editor import Editor, RoundEditor
 
 
 class Combat(Scene):
@@ -24,11 +24,16 @@ class Combat(Scene):
 
 		for round_data in dictionary['rounds']:
 			round_ = Round()
-			round.load(round_data, pool)
+			round_.load(round_data, pool)
 			self.rounds.append(round_)
 
 	def wrap_for_editing(self, pool):
 		return Editor(self, pool)
+
+	def add_round(self):
+		round_ = Round()
+		self.rounds.append(round_)
+		return round_
 
 	def __repr__(self):
 		return f"Combat #{self.id}"
@@ -52,6 +57,20 @@ class Round:
 			outcome.load(outcome_data, pool)
 			self.outcomes.append(outcome)
 
+	def wrap_for_editing(self, pool):
+		return RoundEditor(self, pool)
+
+	def add_outcome(self, ai_strategy, players_strategy, next_round):
+		outcome = Outcome()
+		outcome.ai_strategy = ai_strategy
+		outcome.players_strategy = players_strategy
+		outcome.next_round = next_round
+		self.outcomes.append(outcome)
+		return outcome
+
+	def __repr__(self):
+		return f"Round with {len(self.outcomes)} Outcomes"
+
 
 class Outcome:
 	def __init__(self):
@@ -71,3 +90,6 @@ class Outcome:
 		self.ai_strategy = dictionary['ai_strategy']
 		self.players_strategy = dictionary['players_strategy']
 		self.next_round = dictionary['next_round']
+
+	def __repr__(self):
+		return "Outcome"
