@@ -70,6 +70,9 @@ class Editor(Cmd):
 		self.state['path'].pop()
 		return True
 
+	def do_eof(self, args):
+		return self.do_exit(args)
+
 	@with_argparser(types_parser)
 	def do_create(self, args):
 		if self.current_type == 'events':

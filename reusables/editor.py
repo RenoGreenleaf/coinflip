@@ -16,6 +16,9 @@ class Editor(Cmd):
 		print("Leaving the editor.")
 		return True
 
+	def do_eof(self, args):
+		return self.do_exit(args)
+
 	def do_list(self, args):
 		print(self.model)
 
