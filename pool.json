@@ -1,8 +1,112 @@
 {
-    "events": {},
-    "scenes": {},
+    "events": {
+        "1": {
+            "id": 1,
+            "name": "Veni"
+        },
+        "2": {
+            "id": 2,
+            "name": "Vidi"
+        },
+        "3": {
+            "id": 3,
+            "name": "Vici"
+        }
+    },
+    "scenes": {
+        "2": {
+            "id": 2,
+            "type": "ending",
+            "message": ""
+        },
+        "3": {
+            "id": 3,
+            "type": "coinflip",
+            "victory_threshold": 3,
+            "won_event": 0
+        },
+        "4": {
+            "rounds": [
+                {
+                    "outcomes": [
+                        {
+                            "ai_strategy": "attack",
+                            "players_strategy": "defend",
+                            "next_round": false,
+                            "message": "Some"
+                        },
+                        {
+                            "ai_strategy": "attack",
+                            "players_strategy": "defend",
+                            "next_round": false,
+                            "message": "Some message"
+                        }
+                    ]
+                },
+                {
+                    "outcomes": [
+                        {
+                            "ai_strategy": "block",
+                            "players_strategy": "block",
+                            "next_round": false,
+                            "message": "ABC DEF"
+                        },
+                        {
+                            "ai_strategy": "block",
+                            "players_strategy": "hit",
+                            "next_round": false,
+                            "message": "ABC DEF"
+                        },
+                        {
+                            "ai_strategy": "hit",
+                            "players_strategy": "block",
+                            "next_round": false,
+                            "message": "ABC DEF"
+                        },
+                        {
+                            "ai_strategy": "hit",
+                            "players_strategy": "hit",
+                            "next_round": false,
+                            "message": "ABC DEF"
+                        }
+                    ]
+                },
+                {
+                    "outcomes": [
+                        {
+                            "ai_strategy": "a",
+                            "players_strategy": "b",
+                            "next_round": false,
+                            "message": "Some other message."
+                        }
+                    ]
+                },
+                {
+                    "outcomes": [
+                        {
+                            "ai_strategy": "hit",
+                            "players_strategy": "block",
+                            "next_round": false,
+                            "message": "The opponent hits, you block. Cling!"
+                        }
+                    ]
+                }
+            ],
+            "type": "combat",
+            "id": 4,
+            "ai_moves": [
+                "hit",
+                "block"
+            ]
+        }
+    },
     "state_machine": {
-        "start": 0,
-        "transitions": []
+        "start": 4,
+        "transitions": [
+            {
+                "scene": 2,
+                "event": 2
+            }
+        ]
     }
 }

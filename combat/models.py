@@ -1,5 +1,6 @@
 from reusables.models import Scene
 from combat.editor import Editor, RoundEditor
+from combat.player import Player
 
 
 class Combat(Scene):
@@ -29,6 +30,9 @@ class Combat(Scene):
 
 	def wrap_for_editing(self, pool):
 		return Editor(self, pool)
+
+	def wrap_for_playing(self, pool):
+		return Player(self, pool)
 
 	def add_round(self):
 		round_ = Round()
