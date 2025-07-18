@@ -1,10 +1,22 @@
 #!/usr/bin/env python
+import json
+
 from main import World
 
 
-world = World()
+def load(persistent):
+    with open('world.json', 'r') as world_file:
+        world_data = json.load(world_file)
+        persistent.load(world_data)
 
-while True:
-	option = world.get_option()
-	message = option.get_message()
-	world.process(message)
+
+def mainloop(world):
+    while True:
+        option = world.get_option()
+        message = option.get_message()
+        world.process(message)
+
+
+world = World()
+load(world)
+mainloop(world)

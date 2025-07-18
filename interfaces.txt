@@ -6,3 +6,9 @@ Message (data structure)
 World
 	-process(message)
 	-get_option()
+
+
+
+Persistent
+	-load(json)
+	-save()

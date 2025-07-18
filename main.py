@@ -12,15 +12,38 @@ class World:
 	"""Majority of game objects reside here."""
 
 	def get_option(self):
-		input()
-		return Option()
+		key = input()
+
+		if key not in self.options:
+			option = Option()
+			option.load({'text': 'Unclear'})
+			return option
+
+		return self.options[key]
 
 	def process(self, message):
 		print(message.text)
+
+	def save(self):
+		return {}
+
+	def load(self, json):
+		self.options = {}
+
+		for key, raw_option in json.items():
+			option = Option()
+			option.load(raw_option)
+			self.options[key] = option
 
 
 class Option:
 	"""Represents what can be done at the moment."""
 
 	def get_message(self):
-		return Message(text="Hello, world!")
+		return Message(text=self.text)
+
+	def save(self):
+		return {}
+
+	def load(self, json):
+		self.text = json['text']
