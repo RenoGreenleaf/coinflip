@@ -22,7 +22,10 @@ class World:
 		return self.options[key]
 
 	def process(self, message):
-		print(message.text)
+		print(message.text, "\n")
+
+		for option in self.options.values():
+			print(option)
 
 	def save(self):
 		return {}
@@ -47,3 +50,6 @@ class Option:
 
 	def load(self, json):
 		self.text = json['text']
+
+	def __repr__(self):
+		return 'An option'

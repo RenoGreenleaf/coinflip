@@ -1,3 +1,5 @@
+#General
+
 Option
 	-get_message()
 
@@ -7,8 +9,11 @@ World
 	-process(message)
 	-get_option()
 
-
+#Specific to current implementation
 
 Persistent
 	-load(json)
 	-save()
+
+Stringable
+	-__repr__()
