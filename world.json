@@ -1,11 +1,14 @@
 {
 	"hello": {
-		"text": "Hello there!"
+		"text": "Hello there!",
+		"description": "Greet"
 	},
 	"how do you do?": {
-		"text": "I'm fine. Thank you."
+		"text": "I'm fine. Thank you.",
+		"description": "Formalities"
 	},
 	"Syberia": {
-		"text": "Yeah, that's a nice game."
+		"text": "Yeah, that's a nice game.",
+		"description": "Syberia"
 	}
 }
