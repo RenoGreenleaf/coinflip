@@ -1,14 +1,25 @@
 {
 	"hello": {
-		"text": "Hello there!",
+		"message": {
+			"text": "Hello there!",
+			"actions": {
+				"remove": ["hello"]
+			}
+		},
 		"description": "Greet"
 	},
 	"how do you do?": {
-		"text": "I'm fine. Thank you.",
+		"message": {
+			"text": "I'm fine. Thank you.",
+			"actions": {}
+		},
 		"description": "Formalities"
 	},
 	"Syberia": {
-		"text": "Yeah, that's a nice game.",
+		"message": {
+			"text": "Yeah, that's a nice game.",
+			"actions": {}
+		},
 		"description": "Syberia"
 	}
 }
