@@ -3,23 +3,28 @@
 		"message": {
 			"text": "Hello there!",
 			"actions": {
-				"remove": ["hello"]
+				"hide": ["hello"]
 			}
 		},
-		"description": "Greet"
+		"description": "Greet",
+		"pattern": "hello"
 	},
 	"how do you do?": {
 		"message": {
 			"text": "I'm fine. Thank you.",
 			"actions": {}
 		},
-		"description": "Formalities"
+		"description": "Formalities",
+		"pattern": "how do you do"
 	},
 	"Syberia": {
 		"message": {
 			"text": "Yeah, that's a nice game.",
-			"actions": {}
+			"actions": {
+				"hide": ["Syberia"]
+			}
 		},
-		"description": "Syberia"
+		"description": "Syberia",
+		"pattern": "syberia"
 	}
 }

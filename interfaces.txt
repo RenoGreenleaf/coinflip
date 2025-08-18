@@ -12,8 +12,13 @@ World
 #Specific to current implementation
 
 Persistent
-	-load(json)
+	-load(json, relationships)
 	-save()
 
-Stringable
+Text
 	-__repr__()
+	-matches(text)
+
+Relationships
+	-set(key, identifier, value)
+	-get(key, identifier)
