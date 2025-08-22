@@ -38,6 +38,7 @@ class World:
 	def __init__(self):
 		self.callbacks = {}
 		self.options = {}
+		self.hidden = {}
 
 	def get_option(self):
 		command = input("> ")
@@ -65,11 +66,17 @@ class World:
 	def load(self, json, relationships):
 		self.callbacks['hide'] = self._hide
 
-		for key in json:
+		for key in json['available']:
 			self.options[key] = Option()
 
+		for key in json['hidden']:
+			self.hidden[key] = Option()
+
 		for key, option in self.options.items():
-			option.load(json[key], relationships)
+			option.load(json['available'][key], relationships)
+
+		for key, option in self.hidden.items():
+			option.load(json['hidden'][key], relationships)
 
 	def set(self, key, identifier, value):
 		if key == 'callback':
@@ -81,17 +88,19 @@ class World:
 		if key == 'callback':
 			return self.callbacks[identifier]
 		elif key == 'option':
-			return self.options[identifier]
+			return self.options.get(identifier, self.hidden.get(identifier))
 		else:
 			raise Exception("The key isn't supported.")
 
 	def unid(self):
 		self.options = list(self.options.values())
+		self.hidden = list(self.hidden.values())
 		del self.callbacks
 
 	def _hide(self, options):
 		for option in options:
 			self.options.remove(option)
+			self.hidden.append(option)
 
 	def _print(self, text):
 		if text != "":
