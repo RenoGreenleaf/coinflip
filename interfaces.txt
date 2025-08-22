@@ -22,3 +22,4 @@ Text
 Relationships
 	-set(key, identifier, value)
 	-get(key, identifier)
+	-unid(key)

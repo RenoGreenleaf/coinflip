@@ -18,9 +18,18 @@ class Message:
 
 		for name, argument in json['actions'].items():
 			function = relationships.get('callback', name)
-			actions[function] = argument
+			loaded_argument = self._load_argument(name, argument, relationships)
+			actions[function] = loaded_argument
 
 		self.actions = MappingProxyType(actions)
+
+	def _load_argument(self, callback, argument, relationships):
+		if callback == 'hide':
+			return list(self._load_options(argument, relationships))
+
+	def _load_options(self, ids, relationships):
+		for identifier in ids:
+			yield relationships.get('option', identifier)
 
 
 class World:
@@ -33,7 +42,7 @@ class World:
 	def get_option(self):
 		command = input("> ")
 
-		for option in self.options.values():
+		for option in self.options:
 			if option.matches(command):
 				return option
 
@@ -47,7 +56,7 @@ class World:
 		for function, argument in message.actions.items():
 			function(argument)
 
-		for option in self.options.values():
+		for option in self.options:
 			self._print(option)
 
 	def save(self):
@@ -56,10 +65,11 @@ class World:
 	def load(self, json, relationships):
 		self.callbacks['hide'] = self._hide
 
-		for key, raw_option in json.items():
-			option = Option()
-			option.load(raw_option, self)
-			self.options[key] = option
+		for key in json:
+			self.options[key] = Option()
+
+		for key, option in self.options.items():
+			option.load(json[key], relationships)
 
 	def set(self, key, identifier, value):
 		if key == 'callback':
@@ -70,12 +80,18 @@ class World:
 	def get(self, key, identifier):
 		if key == 'callback':
 			return self.callbacks[identifier]
+		elif key == 'option':
+			return self.options[identifier]
 		else:
 			raise Exception("The key isn't supported.")
 
+	def unid(self):
+		self.options = list(self.options.values())
+		del self.callbacks
+
 	def _hide(self, options):
-		for identifier in options:
-			self.options.pop(identifier)
+		for option in options:
+			self.options.remove(option)
 
 	def _print(self, text):
 		if text != "":
@@ -107,12 +123,3 @@ class Option:
 class EmptyOption:
 	def get_message(self):
 		return Message()
-
-
-
-class EmptyRelationships:
-	def set(self, key, identifier, value):
-		pass
-
-	def get(self, key, identifier):
-		pass

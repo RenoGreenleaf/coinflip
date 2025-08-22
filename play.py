@@ -1,13 +1,15 @@
 #!/usr/bin/env python
 import json
 
-from main import World, EmptyRelationships
+from main import World
 
 
-def load(persistent):
+def load(persistent, relationships):
     with open('world.json', 'r') as world_file:
         world_data = json.load(world_file)
-        persistent.load(world_data, EmptyRelationships())
+        persistent.load(world_data, relationships)
+
+    relationships.unid()
 
 
 def mainloop(world):
@@ -18,5 +20,5 @@ def mainloop(world):
 
 
 world = World()
-load(world)
+load(world, world)
 mainloop(world)
