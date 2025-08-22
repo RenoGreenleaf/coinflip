@@ -24,7 +24,7 @@ class Message:
 		self.actions = MappingProxyType(actions)
 
 	def _load_argument(self, callback, argument, relationships):
-		if callback == 'hide':
+		if callback == 'hide' or callback == 'show':
 			return list(self._load_options(argument, relationships))
 
 	def _load_options(self, ids, relationships):
@@ -64,7 +64,10 @@ class World:
 		return {}
 
 	def load(self, json, relationships):
-		self.callbacks['hide'] = self._hide
+		self.callbacks = {
+			'hide': self._hide,
+			'show': self._show
+		}
 
 		for key in json['available']:
 			self.options[key] = Option()
@@ -101,6 +104,11 @@ class World:
 		for option in options:
 			self.options.remove(option)
 			self.hidden.append(option)
+
+	def _show(self, options):
+		for option in options:
+			self.hidden.remove(option)
+			self.options.append(option)
 
 	def _print(self, text):
 		if text != "":

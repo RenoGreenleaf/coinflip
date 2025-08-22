@@ -22,7 +22,8 @@
 			"message": {
 				"text": "Yeah, that's a nice game.",
 				"actions": {
-					"hide": ["Syberia"]
+					"hide": ["Syberia"],
+					"show": ["Syberia2"]
 				}
 			},
 			"description": "Syberia",
@@ -30,6 +31,15 @@
 		}
 	},
 	"hidden": {
-		
+		"Syberia2": {
+			"message": {
+				"text": "The sequel is fine too.",
+				"actions": {
+					"hide": ["Syberia2"]
+				}
+			},
+			"description": "Syberia",
+			"pattern": "syberia"
+		}
 	}
 }
