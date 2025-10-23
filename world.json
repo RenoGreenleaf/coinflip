@@ -35,11 +35,20 @@
 			"message": {
 				"text": "The sequel is fine too.",
 				"actions": {
-					"hide": ["Syberia2"]
+					"hide": ["Syberia2"],
+					"show": ["other"]
 				}
 			},
 			"description": "Syberia",
 			"pattern": "syberia"
+		},
+		"other": {
+			"message": {
+				"text": "Yep, there're other artworks, plenty of'em.",
+				"actions": {"hide": ["other"]}
+			},
+			"description": "Other",
+			"pattern": "other"
 		}
 	}
 }

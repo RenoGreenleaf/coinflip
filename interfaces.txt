@@ -1,15 +1,9 @@
-#General
+Event
+	-subscribe(subscriber)
+	-trigger()
 
-Option
-	-get_message()
-
-Message (data structure)
-
-World
-	-process(message)
-	-get_option()
-
-#Specific to current implementation
+Player
+	-react(event)
 
 Persistent
 	-load(json, relationships)
