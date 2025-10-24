@@ -3,7 +3,7 @@ Event
 	-trigger()
 
 Player
-	-react(event)
+	-process(event)
 
 Persistent
 	-load(json, relationships)

@@ -1,35 +1,23 @@
-from dataclasses import dataclass
-from types import MappingProxyType
+class Player:
+	def process(self, event):
+		pass
 
 
-@dataclass
-class Message:
-	"""It's meant to be sent to a world and be processed by it."""
+class AI:
+	def process(self, event):
+		pass
 
-	text: str = ""
-	actions: dict = MappingProxyType({})
 
-	def save(self):
-		return {}
+class Event:
+	def __init__(self):
+		self.subscribers = set()
 
-	def load(self, json, relationships):
-		self.text = json['text']
-		actions = {}
+	def subscribe(self, subscriber):
+		self.subscribers.add(subscriber)
 
-		for name, argument in json['actions'].items():
-			function = relationships.get('callback', name)
-			loaded_argument = self._load_argument(name, argument, relationships)
-			actions[function] = loaded_argument
-
-		self.actions = MappingProxyType(actions)
-
-	def _load_argument(self, callback, argument, relationships):
-		if callback == 'hide' or callback == 'show':
-			return list(self._load_options(argument, relationships))
-
-	def _load_options(self, ids, relationships):
-		for identifier in ids:
-			yield relationships.get('option', identifier)
+	def trigger(self):
+		for subscriber in self.subscribers:
+			subscriber.process(self)
 
 
 class World:
@@ -40,26 +28,6 @@ class World:
 		self.options = {}
 		self.hidden = {}
 
-	def get_option(self):
-		command = input("> ")
-
-		for option in self.options:
-			if option.matches(command):
-				return option
-
-		return EmptyOption()
-
-	def process(self, message):
-		self._print("---------------")
-		self._print(message.text)
-		print()
-
-		for function, argument in message.actions.items():
-			function(argument)
-
-		for option in self.options:
-			self._print(option)
-
 	def save(self):
 		return {}
 
@@ -68,12 +36,6 @@ class World:
 			'hide': self._hide,
 			'show': self._show
 		}
-
-		for key in json['available']:
-			self.options[key] = Option()
-
-		for key in json['hidden']:
-			self.hidden[key] = Option()
 
 		for key, option in self.options.items():
 			option.load(json['available'][key], relationships)
@@ -113,30 +75,3 @@ class World:
 	def _print(self, text):
 		if text != "":
 			print(text)
-
-
-class Option:
-	"""Represents what can be done at the moment."""
-
-	def get_message(self):
-		return self.message
-
-	def save(self):
-		return {}
-
-	def load(self, json, relationships):
-		self.description = json['description']
-		self.pattern = json['pattern']
-		self.message = Message()
-		self.message.load(json['message'], relationships)
-
-	def __repr__(self):
-		return self.description
-
-	def matches(self, text):
-		return self.pattern == text
-
-
-class EmptyOption:
-	def get_message(self):
-		return Message()
