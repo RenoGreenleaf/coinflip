@@ -1,11 +1,21 @@
+from random import randint
+
 class Player:
+	def __init__(self, world):
+		self.world = world
+
 	def process(self, event):
-		pass
+		input('> ')
+		print(self.world)
 
 
 class AI:
+	def __init__(self, world):
+		self.world = world
+
 	def process(self, event):
-		pass
+		offset = randint(1, 4)
+		self.world.select(offset)
 
 
 class Event:
@@ -22,56 +32,17 @@ class Event:
 
 class World:
 	"""Majority of game objects reside here."""
-
-	def __init__(self):
-		self.callbacks = {}
-		self.options = {}
-		self.hidden = {}
-
-	def save(self):
-		return {}
-
 	def load(self, json, relationships):
-		self.callbacks = {
-			'hide': self._hide,
-			'show': self._show
-		}
+		self.messages = [
+			'Hello, world!',
+			'Bugoga!',
+			'Uaaaaaaaaa!',
+			'Bye!'
+		]
+		self.current = 0
 
-		for key, option in self.options.items():
-			option.load(json['available'][key], relationships)
+	def __repr__(self):
+		return self.messages[self.current]
 
-		for key, option in self.hidden.items():
-			option.load(json['hidden'][key], relationships)
-
-	def set(self, key, identifier, value):
-		if key == 'callback':
-			self.callbacks[identifier] = value
-		else:
-			raise Exception("The key isn't supported.")
-
-	def get(self, key, identifier):
-		if key == 'callback':
-			return self.callbacks[identifier]
-		elif key == 'option':
-			return self.options.get(identifier, self.hidden.get(identifier))
-		else:
-			raise Exception("The key isn't supported.")
-
-	def unid(self):
-		self.options = list(self.options.values())
-		self.hidden = list(self.hidden.values())
-		del self.callbacks
-
-	def _hide(self, options):
-		for option in options:
-			self.options.remove(option)
-			self.hidden.append(option)
-
-	def _show(self, options):
-		for option in options:
-			self.hidden.remove(option)
-			self.options.append(option)
-
-	def _print(self, text):
-		if text != "":
-			print(text)
+	def select(self, offset):
+		self.current = offset - 1
