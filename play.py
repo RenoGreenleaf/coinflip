@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from json import load
 from main import AI, Player, Event, World
 
 world = World()
@@ -9,7 +10,8 @@ player2 = Player(world)
 turn.subscribe(player1)
 turn.subscribe(player2)
 
-world.load({}, None)
+with open('world.json', 'r') as world_file:
+    world.load(load(world_file), None)
 
 while True:
     turn.trigger()

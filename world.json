@@ -1,54 +1,31 @@
 {
-	"available": {
-		"hello": {
-			"message": {
-				"text": "Hello there!",
-				"actions": {
-					"hide": ["hello"]
-				}
-			},
+	"available": [
+		{
+			"message": "Hello there!",
 			"description": "Greet",
 			"pattern": "hello"
 		},
-		"how do you do?": {
-			"message": {
-				"text": "I'm fine. Thank you.",
-				"actions": {}
-			},
+		{
+			"message": "I'm fine. Thank you.",
 			"description": "Formalities",
 			"pattern": "how do you do"
 		},
-		"Syberia": {
-			"message": {
-				"text": "Yeah, that's a nice game.",
-				"actions": {
-					"hide": ["Syberia"],
-					"show": ["Syberia2"]
-				}
-			},
+		{
+			"message": "Yeah, that's a nice game.",
 			"description": "Syberia",
 			"pattern": "syberia"
 		}
-	},
-	"hidden": {
-		"Syberia2": {
-			"message": {
-				"text": "The sequel is fine too.",
-				"actions": {
-					"hide": ["Syberia2"],
-					"show": ["other"]
-				}
-			},
+	],
+	"hidden": [
+		{
+			"message": "The sequel is fine too.",
 			"description": "Syberia",
 			"pattern": "syberia"
 		},
-		"other": {
-			"message": {
-				"text": "Yep, there're other artworks, plenty of'em.",
-				"actions": {"hide": ["other"]}
-			},
+		{
+			"message": "Yep, there're other artworks, plenty of'em.",
 			"description": "Other",
 			"pattern": "other"
 		}
-	}
+	]
 }
