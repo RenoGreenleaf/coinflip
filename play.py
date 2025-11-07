@@ -13,5 +13,7 @@ turn.subscribe(player2)
 with open('coinflip.json', 'r') as world_file:
     world.load(load(world_file), None)
 
+world.unid('option')
+
 while True:
     turn.trigger()
