@@ -1,31 +1,31 @@
 {
-	"available": [
-		{
+	"available": {
+		"1": {
 			"message": "Hello there!",
 			"description": "Greet",
 			"pattern": "hello"
 		},
-		{
+		"2": {
 			"message": "I'm fine. Thank you.",
 			"description": "Formalities",
 			"pattern": "how do you do"
 		},
-		{
+		"3": {
 			"message": "Yeah, that's a nice game.",
 			"description": "Syberia",
 			"pattern": "syberia"
 		}
-	],
-	"hidden": [
-		{
+	},
+	"hidden": {
+		"4": {
 			"message": "The sequel is fine too.",
 			"description": "Syberia",
 			"pattern": "syberia"
 		},
-		{
+		"5": {
 			"message": "Yep, there're other artworks, plenty of'em.",
 			"description": "Other",
 			"pattern": "other"
 		}
-	]
+	}
 }
