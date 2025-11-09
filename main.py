@@ -5,6 +5,10 @@ class Player:
 	def process(self, event):
 		print(self.world.description)
 		offset = input('> ')
+
+		if offset == 'exit':
+			exit()
+
 		self.world.select(offset)
 		print(self.world.message)
 
