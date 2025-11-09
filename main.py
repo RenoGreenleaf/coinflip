@@ -101,5 +101,11 @@ class World:
 			return super().__getattribute__(name)
 
 	def _get_description(self):
-		descriptions = [option.description for option in self.shown]
+		descriptions = []
+		offset = 0
+
+		for option in self.shown:
+			offset += 1
+			descriptions.append(str(offset) + ". " + option.description)
+
 		return "\n".join(descriptions)
