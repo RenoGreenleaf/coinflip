@@ -1,13 +1,12 @@
-from random import randint
-
-
 class Player:
 	def __init__(self, world):
 		self.world = world
 
 	def process(self, event):
+		print(self.world.description)
 		offset = input('> ')
-		print(self.world.select(int(offset)).message)
+		self.world.select(offset)
+		print(self.world.message)
 
 
 class AI:
@@ -15,8 +14,7 @@ class AI:
 		self.world = world
 
 	def process(self, event):
-		offset = randint(1, 4)
-		self.world.select(offset)
+		pass
 
 
 class Event:
@@ -62,6 +60,7 @@ class World:
 	def __init__(self):
 		self.shown = {}
 		self.hidden = {}
+		self.selected = Option()
 
 	def load(self, json, relationships):
 		for identifier, raw_option in json['available'].items():
@@ -74,12 +73,8 @@ class World:
 			option.load(raw_option, relationships)
 			self.hidden[identifier] = option
 
-	def __repr__(self):
-		options = [str(option) for option in self.shown]
-		return "\n".join(options)
-
 	def select(self, offset):
-		return self.shown[offset - 1]
+		self.selected = self.shown[int(offset) - 1]
 
 	def get(self, key, identifier):
 		if key != 'option':
@@ -96,3 +91,15 @@ class World:
 
 		self.shown = list(self.shown.values())
 		self.hidden = list(self.hidden.values())
+
+	def __getattribute__(self, name):
+		if name == 'message':
+			return self.selected.message
+		elif name == 'description':
+			return self._get_description()
+		else:
+			return super().__getattribute__(name)
+
+	def _get_description(self):
+		descriptions = [option.description for option in self.shown]
+		return "\n".join(descriptions)
