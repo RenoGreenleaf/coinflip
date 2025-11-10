@@ -1,4 +1,10 @@
 {
+	"player": {},
+	"ai": {
+		"variables": {
+			"hello": "1"
+		}
+	},
 	"available": {
 		"1": {
 			"message": "Hello there!",

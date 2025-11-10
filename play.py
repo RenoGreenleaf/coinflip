@@ -11,7 +11,10 @@ turn.subscribe(player1)
 turn.subscribe(player2)
 
 with open('coinflip.json', 'r') as world_file:
-    world.load(load(world_file), world)
+    json = load(world_file)
+    world.load(json, world)
+    player1.load(json, world)
+    player2.load(json, world)
 
 world.unid('option')
 

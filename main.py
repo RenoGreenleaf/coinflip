@@ -1,3 +1,6 @@
+from types import SimpleNamespace
+
+
 class Player:
 	def __init__(self, world):
 		self.world = world
@@ -12,13 +15,32 @@ class Player:
 		self.world.select(offset)
 		print(self.world.message)
 
+	def load(self, json, relationships):
+		pass
+
+	def save(self):
+		return {}
+
 
 class AI:
 	def __init__(self, world):
 		self.world = world
+		self.hidden = False
 
 	def process(self, event):
-		pass
+		if self.hidden:
+			self.world.show(self.hello)
+		else:
+			self.world.hide(self.hello)
+
+		self.hidden = not self.hidden
+
+	def load(self, json, relationships):
+		for name, identifier in json['ai']['variables'].items():
+			setattr(self, name, relationships.get('option', identifier))
+
+	def save(self):
+		return {}
 
 
 class Event:
@@ -76,6 +98,19 @@ class World:
 			option = Option()
 			option.load(raw_option, relationships)
 			self.hidden[identifier] = option
+
+	def save(self):
+		return {}
+
+	def hide(self, option):
+		index = self.shown.index(option)
+		self.shown.pop(index)
+		self.hidden.append(option)
+
+	def show(self, option):
+		index = self.hidden.index(option)
+		self.hidden.pop(index)
+		self.shown.append(option)
 
 	def select(self, offset):
 		self.selected = self.shown[int(offset) - 1]
