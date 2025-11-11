@@ -8,25 +8,30 @@
 	"available": {
 		"1": {
 			"message": "Hello there!",
-			"description": "Hello."
+			"description": "Hello.",
+			"permanent": false
 		},
 		"2": {
 			"message": "I'm fine. Thank you.",
-			"description": "How do you do?"
+			"description": "How do you do?",
+			"permanent": true
 		},
 		"3": {
 			"message": "Yeah, that's a nice game.",
-			"description": "Syberia"
+			"description": "Syberia",
+			"permanent": false
 		}
 	},
 	"hidden": {
 		"4": {
 			"message": "The sequel is fine too.",
-			"description": "Syberia"
+			"description": "Syberia",
+			"permanent": false
 		},
 		"5": {
 			"message": "Yep, there're other artworks, plenty of'em.",
-			"description": "Other"
+			"description": "Other",
+			"permanent": true
 		}
 	}
 }

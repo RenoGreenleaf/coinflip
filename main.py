@@ -25,12 +25,7 @@ class AI:
 		self.hidden = False
 
 	def process(self, event):
-		if self.hidden:
-			self.world.show(self.hello)
-		else:
-			self.world.hide(self.hello)
-
-		self.hidden = not self.hidden
+		pass
 
 	def load(self, json, relationships):
 		for name, identifier in json['ai']['variables'].items():
@@ -57,15 +52,18 @@ class Option:
 	def __init__(self):
 		self.description = ""
 		self.message = ""
+		self.permanent = False
 
 	def load(self, json, relationships):
 		self.description = json['description']
 		self.message = json['message']
+		self.permanent = json['permanent']
 
 	def save(self):
 		return {
 			'description': self.description,
 			'message': self.message,
+			'permanent': self.permanent,
 		}
 
 
@@ -102,6 +100,9 @@ class World:
 
 	def select(self, offset):
 		self.selected = self.shown[int(offset) - 1]
+
+		if not self.selected.permanent:
+			self.hide(self.selected)
 
 	def get(self, key, identifier):
 		if key != 'option':
