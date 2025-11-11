@@ -1,6 +1,3 @@
-from types import SimpleNamespace
-
-
 class Player:
 	def __init__(self, world):
 		self.world = world
@@ -60,25 +57,16 @@ class Option:
 	def __init__(self):
 		self.description = ""
 		self.message = ""
-		self.pattern = ""
 
 	def load(self, json, relationships):
 		self.description = json['description']
 		self.message = json['message']
-		self.pattern = json['pattern']
 
 	def save(self):
 		return {
 			'description': self.description,
 			'message': self.message,
-			'pattern': self.pattern
 		}
-
-	def matches(self, text):
-		return self.pattern == text
-
-	def __repr__(self):
-		return self.description
 
 
 class World:
