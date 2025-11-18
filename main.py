@@ -22,14 +22,22 @@ class Player:
 class AI:
 	def __init__(self, world):
 		self.world = world
-		self.hidden = False
+		self.events = {}
 
 	def process(self, event):
-		pass
+		if event == self.events['syberia']:
+			self.world.show(self.syberia2)
+		elif event == self.events['syberia2']:
+			self.world.show(self.other)
 
 	def load(self, json, relationships):
 		for name, identifier in json['ai']['variables'].items():
 			setattr(self, name, relationships.get('option', identifier))
+
+		for name, identifier in json['ai']['events'].items():
+			event = relationships.get('event', identifier)
+			self.events[name] = event
+			event.subscribe(self)
 
 	def save(self):
 		return {}
@@ -53,6 +61,7 @@ class Option:
 		self.description = ""
 		self.message = ""
 		self.permanent = False
+		self.subscribers = set()
 
 	def load(self, json, relationships):
 		self.description = json['description']
@@ -66,6 +75,13 @@ class Option:
 			'permanent': self.permanent,
 		}
 
+	def subscribe(self, subscriber):
+		self.subscribers.add(subscriber)
+
+	def trigger(self):
+		for subscriber in self.subscribers:
+			subscriber.process(self)
+
 
 class World:
 	"""Majority of game objects reside here."""
@@ -73,6 +89,7 @@ class World:
 		self.shown = {}
 		self.hidden = {}
 		self.selected = Option()
+		self.cleared = False
 
 	def load(self, json, relationships):
 		for identifier, raw_option in json['available'].items():
@@ -104,8 +121,10 @@ class World:
 		if not self.selected.permanent:
 			self.hide(self.selected)
 
+		self.selected.trigger()
+
 	def get(self, key, identifier):
-		if key != 'option':
+		if key != 'option' and key != 'event':
 			raise Exception()
 
 		return self.shown.get(
@@ -114,11 +133,13 @@ class World:
 		)
 
 	def unid(self, key):
-		if key != 'option':
+		if key != 'option' and key != 'event':
 			raise Exception()
 
-		self.shown = list(self.shown.values())
-		self.hidden = list(self.hidden.values())
+		if not self.cleared:
+			self.shown = list(self.shown.values())
+			self.hidden = list(self.hidden.values())
+			self.cleared = True
 
 	def __getattribute__(self, name):
 		if name == 'message':

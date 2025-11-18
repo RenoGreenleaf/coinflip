@@ -2,7 +2,13 @@
 	"player": {},
 	"ai": {
 		"variables": {
-			"hello": "1"
+			"syberia2": "4",
+			"other": "5"
+		},
+		"events": {
+			"syberia": "3",
+			"syberia2": "4",
+			"other": "5"
 		}
 	},
 	"available": {
