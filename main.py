@@ -1,5 +1,11 @@
-class Player:
+"""All in one."""
+
+
+class Outer:
+	"""A player making decisions using system input/output."""
+
 	def __init__(self, world):
+		"""Define initial properties to be sure they're available later."""
 		self.world = world
 
 	def process(self, event):
@@ -13,31 +19,39 @@ class Player:
 		print(self.world.message)
 
 	def load(self, json, relationships):
-		pass
+		"""Implement persistent interface."""
 
 	def save(self):
+		"""Implement persistent interface."""
 		return {}
 
 
 class AI:
+	"""A player reacting to actual players actions."""
+
 	def __init__(self, world):
+		"""Define initial properties to be sure they're available later."""
 		self.world = world
-		self.events = {}
+		self.connections = {}
 
 	def process(self, event):
-		if event == self.events['syberia']:
-			self.world.show(self.syberia2)
-		elif event == self.events['syberia2']:
-			self.world.show(self.other)
+		for action, option in self.connections.get(event, []):
+			action(option)
 
 	def load(self, json, relationships):
-		for name, identifier in json['ai']['variables'].items():
-			setattr(self, name, relationships.get('option', identifier))
+		for connection in json['ai']:
+			event = relationships.get('event', connection['trigger'])
+			option = relationships.get('option', connection['affected'])
+			action = self._hide if connection['action'] == 'hide' else self._show
+			self.connections.setdefault(event, []).append((action, option))
 
-		for name, identifier in json['ai']['events'].items():
-			event = relationships.get('event', identifier)
-			self.events[name] = event
 			event.subscribe(self)
+
+	def _hide(self, option):
+		option.hidden = True
+
+	def _show(self, option):
+		option.hidden = False
 
 	def save(self):
 		return {}
@@ -45,6 +59,7 @@ class AI:
 
 class Event:
 	def __init__(self):
+		"""Define initial properties to be sure they're available later."""
 		self.subscribers = set()
 
 	def subscribe(self, subscriber):
@@ -54,25 +69,34 @@ class Event:
 		for subscriber in self.subscribers:
 			subscriber.process(self)
 
+	def __hash__(self):
+		"""Make it usable as dictionary key."""
+		return hash(id(self))
+
 
 class Option:
 
 	def __init__(self):
+		"""Define initial properties to be sure they're available later."""
 		self.description = ""
 		self.message = ""
 		self.permanent = False
+		self.hidden = True
+
 		self.subscribers = set()
 
 	def load(self, json, relationships):
 		self.description = json['description']
 		self.message = json['message']
 		self.permanent = json['permanent']
+		self.hidden = json['hidden']
 
 	def save(self):
 		return {
 			'description': self.description,
 			'message': self.message,
 			'permanent': self.permanent,
+			'hidden': self.hidden,
 		}
 
 	def subscribe(self, subscriber):
@@ -82,12 +106,16 @@ class Option:
 		for subscriber in self.subscribers:
 			subscriber.process(self)
 
+	def __hash__(self):
+		"""Make it usable as dictionary key."""
+		return hash(id(self))
+
 
 class World:
 	"""Majority of game objects reside here."""
 	def __init__(self):
-		self.shown = {}
-		self.hidden = {}
+		"""Define initial properties to be sure they're available later."""
+		self.available = {}
 		self.selected = Option()
 		self.cleared = False
 
@@ -95,50 +123,32 @@ class World:
 		for identifier, raw_option in json['available'].items():
 			option = Option()
 			option.load(raw_option, relationships)
-			self.shown[identifier] = option
-
-		for identifier, raw_option in json['hidden'].items():
-			option = Option()
-			option.load(raw_option, relationships)
-			self.hidden[identifier] = option
+			self.available[identifier] = option
 
 	def save(self):
 		return {}
 
-	def hide(self, option):
-		index = self.shown.index(option)
-		self.shown.pop(index)
-		self.hidden.append(option)
-
-	def show(self, option):
-		index = self.hidden.index(option)
-		self.hidden.pop(index)
-		self.shown.append(option)
-
 	def select(self, offset):
-		self.selected = self.shown[int(offset) - 1]
+		options = self._get_for_player()
+		self.selected = options[int(offset) - 1]
 
 		if not self.selected.permanent:
-			self.hide(self.selected)
+			self.selected.hidden = True
 
 		self.selected.trigger()
 
 	def get(self, key, identifier):
 		if key != 'option' and key != 'event':
-			raise Exception()
+			raise KeyError()
 
-		return self.shown.get(
-			identifier,
-			self.hidden.get(identifier, Option())
-		)
+		return self.available.get(identifier, Option())
 
 	def unid(self, key):
 		if key != 'option' and key != 'event':
-			raise Exception()
+			raise KeyError()
 
 		if not self.cleared:
-			self.shown = list(self.shown.values())
-			self.hidden = list(self.hidden.values())
+			self.available = list(self.available.values())
 			self.cleared = True
 
 	def __getattribute__(self, name):
@@ -153,8 +163,15 @@ class World:
 		descriptions = []
 		offset = 0
 
-		for option in self.shown:
+		for option in self._get_for_player():
 			offset += 1
 			descriptions.append(str(offset) + ". " + option.description)
 
 		return "\n".join(descriptions)
+
+	def _get_for_player(self):
+		return [
+			option
+			for option in self.available
+			if not option.hidden
+		]
