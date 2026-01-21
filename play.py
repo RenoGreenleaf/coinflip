@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# Copyright (C) 2026  Reno Greenleaf
 """Entry point."""
 from json import load
 from main import AI, Outer, Event, World
