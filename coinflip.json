@@ -1,43 +1,29 @@
 {
-	"player": {},
-	"ai": {
-		"variables": {
-			"syberia2": "4",
-			"other": "5"
-		},
-		"events": {
-			"syberia": "3",
-			"syberia2": "4",
-			"other": "5"
-		}
-	},
-	"available": {
-		"1": {
-			"message": "Hello there!",
-			"description": "Hello.",
-			"permanent": false
-		},
-		"2": {
-			"message": "I'm fine. Thank you.",
-			"description": "How do you do?",
-			"permanent": true
-		},
-		"3": {
-			"message": "Yeah, that's a nice game.",
-			"description": "Syberia",
-			"permanent": false
-		}
-	},
-	"hidden": {
-		"4": {
-			"message": "The sequel is fine too.",
-			"description": "Syberia",
-			"permanent": false
-		},
-		"5": {
-			"message": "Yep, there're other artworks, plenty of'em.",
-			"description": "Other",
-			"permanent": true
-		}
-	}
+    "ai": [
+        {
+            "trigger": "1",
+            "affected": "3",
+            "action": "show"
+        }
+    ],
+    "available": {
+        "1": {
+            "description": "Hello!",
+            "message": "Greetings!\nDo you know where you are?",
+            "hidden": false,
+            "permanent": false
+        },
+        "2": {
+            "description": "Bye.",
+            "message": "Farewell!",
+            "hidden": false,
+            "permanent": true
+        },
+        "3": {
+            "description": "Where am I?",
+            "message": "Oh, it's such a lovely place.",
+            "hidden": true,
+            "permanent": true
+        }
+    }
 }
