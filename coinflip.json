@@ -1,29 +1,62 @@
 {
     "ai": [
         {
-            "trigger": "1",
-            "affected": "3",
+            "trigger": "6",
+            "affected": "7",
+            "action": "show"
+        },
+        {
+            "trigger": "6",
+            "affected": "8",
+            "action": "show"
+        },
+        {
+            "trigger": "6",
+            "affected": "9",
+            "action": "show"
+        },
+        {
+            "trigger": "9",
+            "affected": "10",
             "action": "show"
         }
     ],
     "available": {
-        "1": {
-            "description": "Hello!",
-            "message": "Greetings!\nDo you know where you are?",
+        "5": {
+            "description": "Help",
+            "message": "You're in a mysterious tomb. An ancient artifact is said to be hidden here.",
+            "hidden": false,
+            "permanent": true
+        },
+        "6": {
+            "description": "Look around",
+            "message": "There're 3 passages leading deeper: stairs, an arc and a wooden door.",
             "hidden": false,
             "permanent": false
         },
-        "2": {
-            "description": "Bye.",
-            "message": "Farewell!",
-            "hidden": false,
-            "permanent": true
-        },
-        "3": {
-            "description": "Where am I?",
-            "message": "Oh, it's such a lovely place.",
+        "7": {
+            "description": "Check the stairs",
+            "message": "Narrow staircase leads into a dark room. Turning on flashlight reveals a huge sarcophagus near a wall and a small section guarded by a white spooky figure.",
             "hidden": true,
-            "permanent": true
+            "permanent": false
+        },
+        "8": {
+            "description": "Check the arc",
+            "message": "A huge metal container stands behind the arc. I wonder, what could be in it.",
+            "hidden": true,
+            "permanent": false
+        },
+        "9": {
+            "description": "Check the door",
+            "message": "You've tried to open it, but it just fell to the ground and shuttered into small pieces. The opened passage revealed a dimly lit room.",
+            "hidden": true,
+            "permanent": false
+        },
+        "10": {
+            "description": "Explore the room",
+            "message": "The light comes from a small window (more like a hole).\nYou've noticed an ape in the corner. It's a baboon. The animal is persistently hitting a closed plastic bottle of Cola with a bone. More bones lie around.",
+            "hidden": true,
+            "permanent": false
         }
     }
 }
