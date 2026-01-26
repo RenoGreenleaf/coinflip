@@ -1,6 +1,26 @@
 {
     "ai": [
         {
+            "trigger": "10",
+            "affected": "11",
+            "action": "show"
+        },
+        {
+            "trigger": "8",
+            "affected": "12",
+            "action": "show"
+        },
+        {
+            "trigger": "7",
+            "affected": "13",
+            "action": "show"
+        },
+        {
+            "trigger": "7",
+            "affected": "14",
+            "action": "show"
+        },
+        {
             "trigger": "6",
             "affected": "7",
             "action": "show"
@@ -56,7 +76,31 @@
             "description": "Explore the room",
             "message": "The light comes from a small window (more like a hole).\nYou've noticed an ape in the corner. It's a baboon. The animal is persistently hitting a closed plastic bottle of Cola with a bone. More bones lie around.",
             "hidden": true,
-            "permanent": false
+            "permanent": true
+        },
+        "11": {
+            "description": "Approach the baboon",
+            "message": "You're trying to get closer to the ape, but it roars at you aggressively. The it proceeds the attempts of smashing the bottle.",
+            "hidden": true,
+            "permanent": true
+        },
+        "12": {
+            "description": "Open the container",
+            "message": "It's pointless. The container is locked and the lock is covered with rust.",
+            "hidden": true,
+            "permanent": true
+        },
+        "13": {
+            "description": "Examine the sarcophagus",
+            "message": "It's made of stone. The lid is opened. It's empty.",
+            "hidden": true,
+            "permanent": true
+        },
+        "14": {
+            "description": "Enter the section",
+            "message": "The white figure suddenly howls making you shiver. You notice it's transparent. Oh no! Is it a real ghost? You can't go further.",
+            "hidden": true,
+            "permanent": true
         }
     }
 }
