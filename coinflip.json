@@ -1,23 +1,18 @@
 {
     "ai": [
         {
-            "trigger": "10",
-            "affected": "11",
-            "action": "show"
-        },
-        {
             "trigger": "8",
             "affected": "12",
             "action": "show"
         },
         {
-            "trigger": "7",
-            "affected": "13",
+            "trigger": "10",
+            "affected": "11",
             "action": "show"
         },
         {
-            "trigger": "7",
-            "affected": "14",
+            "trigger": "10",
+            "affected": "15",
             "action": "show"
         },
         {
@@ -39,6 +34,71 @@
             "trigger": "9",
             "affected": "10",
             "action": "show"
+        },
+        {
+            "trigger": "7",
+            "affected": "13",
+            "action": "show"
+        },
+        {
+            "trigger": "7",
+            "affected": "14",
+            "action": "show"
+        },
+        {
+            "trigger": "15",
+            "affected": "11",
+            "action": "hide"
+        },
+        {
+            "trigger": "15",
+            "affected": "16",
+            "action": "show"
+        },
+        {
+            "trigger": "16",
+            "affected": "17",
+            "action": "show"
+        },
+        {
+            "trigger": "16",
+            "affected": "18",
+            "action": "show"
+        },
+        {
+            "trigger": "17",
+            "affected": "19",
+            "action": "show"
+        },
+        {
+            "trigger": "18",
+            "affected": "22",
+            "action": "show"
+        },
+        {
+            "trigger": "19",
+            "affected": "13",
+            "action": "hide"
+        },
+        {
+            "trigger": "19",
+            "affected": "14",
+            "action": "hide"
+        },
+        {
+            "trigger": "19",
+            "affected": "20",
+            "action": "show"
+        },
+        {
+            "trigger": "20",
+            "affected": "21",
+            "action": "show"
+        },
+        {
+            "trigger": "22",
+            "affected": "12",
+            "action": "hide"
         }
     ],
     "available": {
@@ -76,11 +136,11 @@
             "description": "Explore the room",
             "message": "The light comes from a small window (more like a hole).\nYou've noticed an ape in the corner. It's a baboon. The animal is persistently hitting a closed plastic bottle of Cola with a bone. More bones lie around.",
             "hidden": true,
-            "permanent": true
+            "permanent": false
         },
         "11": {
             "description": "Approach the baboon",
-            "message": "You're trying to get closer to the ape, but it roars at you aggressively. The it proceeds the attempts of smashing the bottle.",
+            "message": "You're trying to get closer to the ape, but it roars at you aggressively. Then it proceeds with the attempts of smashing the bottle.",
             "hidden": true,
             "permanent": true
         },
@@ -100,7 +160,55 @@
             "description": "Enter the section",
             "message": "The white figure suddenly howls making you shiver. You notice it's transparent. Oh no! Is it a real ghost? You can't go further.",
             "hidden": true,
-            "permanent": true
+            "permanent": false
+        },
+        "15": {
+            "description": "Turn on the player",
+            "message": "You play an obnoxious composition from a popular artist.",
+            "hidden": true,
+            "permanent": false
+        },
+        "16": {
+            "description": "Approach the baboon",
+            "message": "The ape can't withstand the sound Nicki Minaj. It squishes through the window leaving the bottle behind.",
+            "hidden": true,
+            "permanent": false
+        },
+        "17": {
+            "description": "Collect the bones",
+            "message": "You've collected the bones and placed them in your backpack.",
+            "hidden": true,
+            "permanent": false
+        },
+        "18": {
+            "description": "Take Cola",
+            "message": "You've picked the bottle and placed it in your backpack.",
+            "hidden": true,
+            "permanent": false
+        },
+        "19": {
+            "description": "Put bones into the sarcophagus",
+            "message": "You've placed the bones where they belong. The ghost disappears.",
+            "hidden": true,
+            "permanent": false
+        },
+        "20": {
+            "description": "Enter the section",
+            "message": "The path is now clear. The only thing in the section is a key haning on the wall.",
+            "hidden": true,
+            "permanent": false
+        },
+        "21": {
+            "description": "Take the key",
+            "message": "You've taken it.",
+            "hidden": true,
+            "permanent": false
+        },
+        "22": {
+            "description": "Pour Cola on the lock",
+            "message": "The drink dissolves the rust on the container quickly, revealing the lock.",
+            "hidden": true,
+            "permanent": false
         }
     }
 }
