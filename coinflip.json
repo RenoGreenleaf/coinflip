@@ -1,106 +1,178 @@
 {
-    "ai": [
-        {
-            "trigger": "8",
-            "affected": "12",
-            "action": "show"
-        },
-        {
-            "trigger": "10",
-            "affected": "11",
-            "action": "show"
-        },
-        {
-            "trigger": "10",
-            "affected": "15",
-            "action": "show"
-        },
-        {
-            "trigger": "6",
-            "affected": "7",
-            "action": "show"
-        },
-        {
-            "trigger": "6",
-            "affected": "8",
-            "action": "show"
-        },
-        {
-            "trigger": "6",
-            "affected": "9",
-            "action": "show"
-        },
-        {
-            "trigger": "9",
-            "affected": "10",
-            "action": "show"
-        },
-        {
-            "trigger": "7",
-            "affected": "13",
-            "action": "show"
-        },
-        {
-            "trigger": "7",
-            "affected": "14",
-            "action": "show"
-        },
-        {
-            "trigger": "15",
-            "affected": "11",
-            "action": "hide"
-        },
-        {
-            "trigger": "15",
-            "affected": "16",
-            "action": "show"
-        },
-        {
-            "trigger": "16",
-            "affected": "17",
-            "action": "show"
-        },
-        {
-            "trigger": "16",
-            "affected": "18",
-            "action": "show"
-        },
-        {
-            "trigger": "17",
-            "affected": "19",
-            "action": "show"
-        },
-        {
-            "trigger": "18",
-            "affected": "22",
-            "action": "show"
-        },
-        {
-            "trigger": "19",
-            "affected": "13",
-            "action": "hide"
-        },
-        {
-            "trigger": "19",
-            "affected": "14",
-            "action": "hide"
-        },
-        {
-            "trigger": "19",
-            "affected": "20",
-            "action": "show"
-        },
-        {
-            "trigger": "20",
-            "affected": "21",
-            "action": "show"
-        },
-        {
-            "trigger": "22",
-            "affected": "12",
-            "action": "hide"
+    "ai": {
+        "connections": [
+            {
+                "trigger": "19",
+                "affected": "13",
+                "action": "hide"
+            },
+            {
+                "trigger": "19",
+                "affected": "14",
+                "action": "hide"
+            },
+            {
+                "trigger": "19",
+                "affected": "20",
+                "action": "show"
+            },
+            {
+                "trigger": "10",
+                "affected": "11",
+                "action": "show"
+            },
+            {
+                "trigger": "10",
+                "affected": "15",
+                "action": "show"
+            },
+            {
+                "trigger": "17",
+                "affected": "19",
+                "action": "show"
+            },
+            {
+                "trigger": "15",
+                "affected": "11",
+                "action": "hide"
+            },
+            {
+                "trigger": "15",
+                "affected": "16",
+                "action": "show"
+            },
+            {
+                "trigger": "16",
+                "affected": "17",
+                "action": "show"
+            },
+            {
+                "trigger": "16",
+                "affected": "18",
+                "action": "show"
+            },
+            {
+                "trigger": "8",
+                "affected": "12",
+                "action": "show"
+            },
+            {
+                "trigger": "9",
+                "affected": "10",
+                "action": "show"
+            },
+            {
+                "trigger": "20",
+                "affected": "21",
+                "action": "show"
+            },
+            {
+                "trigger": "7",
+                "affected": "13",
+                "action": "show"
+            },
+            {
+                "trigger": "7",
+                "affected": "14",
+                "action": "show"
+            },
+            {
+                "trigger": "22",
+                "affected": "12",
+                "action": "hide"
+            },
+            {
+                "trigger": "18",
+                "affected": "22",
+                "action": "show"
+            },
+            {
+                "trigger": "6",
+                "affected": "7",
+                "action": "show"
+            },
+            {
+                "trigger": "6",
+                "affected": "8",
+                "action": "show"
+            },
+            {
+                "trigger": "6",
+                "affected": "9",
+                "action": "show"
+            }
+        ],
+        "nodes": {
+            "14": {
+                "x": -297.0,
+                "y": -326.0
+            },
+            "11": {
+                "x": -9.0,
+                "y": 659.0
+            },
+            "12": {
+                "x": -332.0,
+                "y": 221.0
+            },
+            "19": {
+                "x": -44.0,
+                "y": -161.0
+            },
+            "13": {
+                "x": -316.0,
+                "y": -30.0
+            },
+            "10": {
+                "x": -329.0,
+                "y": 467.0
+            },
+            "17": {
+                "x": 141.0,
+                "y": 171.0
+            },
+            "15": {
+                "x": -38.0,
+                "y": 338.0
+            },
+            "16": {
+                "x": -6.0,
+                "y": 494.0
+            },
+            "8": {
+                "x": -573.0,
+                "y": 94.0
+            },
+            "21": {
+                "x": -18.0,
+                "y": -335.0
+            },
+            "9": {
+                "x": -570.0,
+                "y": 458.0
+            },
+            "20": {
+                "x": -310.0,
+                "y": -189.0
+            },
+            "7": {
+                "x": -559.0,
+                "y": -236.0
+            },
+            "22": {
+                "x": -102.0,
+                "y": 193.0
+            },
+            "18": {
+                "x": -34.0,
+                "y": 798.0
+            },
+            "6": {
+                "x": -795.0,
+                "y": -30.0
+            }
         }
-    ],
+    },
     "available": {
         "5": {
             "description": "Help",
