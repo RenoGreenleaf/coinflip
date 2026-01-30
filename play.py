@@ -2,12 +2,13 @@
 # Copyright (C) 2026  Reno Greenleaf
 """Entry point."""
 from json import load
-from main import AI, Outer, Event, World
+import board
+import players
 
-world = World()
-turn = Event()
-player1 = AI(world)
-player2 = Outer(world)
+world = board.World()
+turn = board.Event()
+player1 = players.AI(world)
+player2 = players.System(world)
 
 turn.subscribe(player1)
 turn.subscribe(player2)
