@@ -12,9 +12,10 @@ A player has access to a board, but when it does changes (writing, editing) to i
 
 Since Python doesn't have interfaces, they're applied implicitly. Here're some of them:
 
-	Event
+	Event (hashable)
 		-subscribe(subscriber)
 		-trigger()
+		-hash()
 
 	Player
 		-process(event)
@@ -26,3 +27,6 @@ Since Python doesn't have interfaces, they're applied implicitly. Here're some o
 	Relationships
 		-get(key, identifier)
 		-unid(key)
+
+	Node (element of AI player reasoning)
+		-act(input)

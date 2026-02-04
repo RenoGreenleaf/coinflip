@@ -32,25 +32,81 @@ class AI:
 		"""Define initial properties to be sure they're available later."""
 		self.world = world
 		self.connections = {}
+		self.nodes = {}  # inner relationships
 
 	def process(self, event):
-		for action, option in self.connections.get(event, []):
-			action(option)
+		for node, input_ in self.connections.get(event, []):
+			node.act(input_)
 
 	def load(self, json, relationships):
+		for identifier, raw_node in json['ai']['nodes'].items():
+			self._obtain_node(identifier, relationships, raw_node['type'])
+
 		for connection in json['ai']['connections']:
-			event = relationships.get('event', connection['trigger'])
-			node = relationships.get('option', connection['affected'])
-			action = self._hide if connection['input'] == 0 else self._show
-			self.connections.setdefault(event, []).append((action, node))
+			event = self.nodes[connection['trigger']]
+			node = self.nodes[connection['affected']]
+			input_ = connection['input']
+			self.connections.setdefault(event, []).append((node, input_))
 
 			event.subscribe(self)
 
 	def save(self):
 		return {}
 
-	def _hide(self, option):
-		option.hidden = True
+	def _obtain_node(self, identifier, relationships, type_):
+		if type_ == 'option':
+			option = relationships.get('option', identifier)
+			self.nodes.setdefault(identifier, Option(option, option))
+		elif type_ == 'conjunction':
+			self.nodes.setdefault(identifier, Conjunction())
+		else:
+			raise TypeError()
 
-	def _show(self, option):
-		option.hidden = False
+		return self.nodes[identifier]
+
+
+class Option:
+	def __init__(self, option, event):
+		self.option = option
+		self.event = event
+
+	def act(self, input_):
+		self.option.hidden = not bool(input_)
+
+	def subscribe(self, subscriber):
+		self.event.subscribe(subscriber)
+
+	def trigger(self):
+		self.event.trigger()
+
+	def __hash__(self):
+		return hash(self.option)
+
+	def __eq__(self, other):
+		return self.option is other
+
+
+class Conjunction:
+	def __init__(self):
+		self.a = False
+		self.b = False
+		self.subscribers = set()
+
+	def act(self, input_):
+		if input_ == 0:
+			self.a = True
+		else:
+			self.b = True
+
+		if self.a and self.b:
+			self.trigger()
+
+	def subscribe(self, subscriber):
+		self.subscribers.add(subscriber)
+
+	def trigger(self):
+		for subscriber in self.subscribers:
+			subscriber.process(self)
+
+	def __hash__(self):
+		return hash(id(self))
