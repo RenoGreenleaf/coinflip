@@ -2,6 +2,7 @@
 
 class World:
 	"""Majority of game objects reside here."""
+
 	def __init__(self):
 		"""Define initial properties to be sure they're available later."""
 		self.available = {}

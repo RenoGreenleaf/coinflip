@@ -4,170 +4,187 @@
             {
                 "trigger": "19",
                 "affected": "13",
-                "action": "hide"
+                "input": 0
             },
             {
                 "trigger": "19",
                 "affected": "14",
-                "action": "hide"
+                "input": 0
             },
             {
                 "trigger": "19",
                 "affected": "20",
-                "action": "show"
+                "input": 1
             },
             {
                 "trigger": "10",
                 "affected": "11",
-                "action": "show"
+                "input": 1
             },
             {
                 "trigger": "10",
                 "affected": "15",
-                "action": "show"
+                "input": 1
             },
             {
                 "trigger": "17",
                 "affected": "19",
-                "action": "show"
+                "input": 1
             },
             {
                 "trigger": "15",
                 "affected": "11",
-                "action": "hide"
+                "input": 0
             },
             {
                 "trigger": "15",
                 "affected": "16",
-                "action": "show"
+                "input": 1
             },
             {
                 "trigger": "16",
                 "affected": "17",
-                "action": "show"
+                "input": 1
             },
             {
                 "trigger": "16",
                 "affected": "18",
-                "action": "show"
+                "input": 1
             },
             {
                 "trigger": "8",
                 "affected": "12",
-                "action": "show"
+                "input": 1
             },
             {
                 "trigger": "9",
                 "affected": "10",
-                "action": "show"
+                "input": 1
             },
             {
                 "trigger": "20",
                 "affected": "21",
-                "action": "show"
+                "input": 1
             },
             {
                 "trigger": "7",
                 "affected": "13",
-                "action": "show"
+                "input": 1
             },
             {
                 "trigger": "7",
                 "affected": "14",
-                "action": "show"
+                "input": 1
             },
             {
                 "trigger": "22",
                 "affected": "12",
-                "action": "hide"
+                "input": 0
             },
             {
                 "trigger": "18",
                 "affected": "22",
-                "action": "show"
+                "input": 1
             },
             {
                 "trigger": "6",
                 "affected": "7",
-                "action": "show"
+                "input": 1
             },
             {
                 "trigger": "6",
                 "affected": "8",
-                "action": "show"
+                "input": 1
             },
             {
                 "trigger": "6",
                 "affected": "9",
-                "action": "show"
+                "input": 1
             }
         ],
         "nodes": {
             "14": {
+                "type": "option",
                 "x": -297.0,
                 "y": -326.0
             },
             "11": {
+                "type": "option",
                 "x": -9.0,
                 "y": 659.0
             },
             "12": {
+                "type": "option",
                 "x": -332.0,
                 "y": 221.0
             },
             "19": {
+                "type": "option",
                 "x": -44.0,
                 "y": -161.0
             },
             "13": {
+                "type": "option",
                 "x": -316.0,
                 "y": -30.0
             },
             "10": {
+                "type": "option",
                 "x": -329.0,
                 "y": 467.0
             },
             "17": {
+                "type": "option",
                 "x": 141.0,
                 "y": 171.0
             },
             "15": {
+                "type": "option",
                 "x": -38.0,
                 "y": 338.0
             },
             "16": {
+                "type": "option",
                 "x": -6.0,
                 "y": 494.0
             },
             "8": {
+                "type": "option",
                 "x": -573.0,
                 "y": 94.0
             },
             "21": {
+                "type": "option",
                 "x": -18.0,
                 "y": -335.0
             },
             "9": {
+                "type": "option",
                 "x": -570.0,
                 "y": 458.0
             },
             "20": {
+                "type": "option",
                 "x": -310.0,
                 "y": -189.0
             },
             "7": {
+                "type": "option",
                 "x": -559.0,
                 "y": -236.0
             },
             "22": {
+                "type": "option",
                 "x": -102.0,
                 "y": 193.0
             },
             "18": {
+                "type": "option",
                 "x": -34.0,
                 "y": 798.0
             },
             "6": {
+                "type": "option",
                 "x": -795.0,
                 "y": -30.0
             }

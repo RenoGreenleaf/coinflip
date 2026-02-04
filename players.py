@@ -40,9 +40,9 @@ class AI:
 	def load(self, json, relationships):
 		for connection in json['ai']['connections']:
 			event = relationships.get('event', connection['trigger'])
-			option = relationships.get('option', connection['affected'])
-			action = self._hide if connection['action'] == 'hide' else self._show
-			self.connections.setdefault(event, []).append((action, option))
+			node = relationships.get('option', connection['affected'])
+			action = self._hide if connection['input'] == 0 else self._show
+			self.connections.setdefault(event, []).append((action, node))
 
 			event.subscribe(self)
 
@@ -54,4 +54,3 @@ class AI:
 
 	def _show(self, option):
 		option.hidden = False
-
