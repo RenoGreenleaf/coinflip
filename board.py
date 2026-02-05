@@ -1,18 +1,67 @@
 # Copyright (C) 2026  Reno Greenleaf
 
-class World:
+
+class Piece:
+	"""
+	Implements all interfaces for any player might need from a piece
+
+	so that various piece types don't need to do it again
+	and only have to implement what is relevant for them.
+	"""
+
+	def __init__(self):
+		self.subscribers = set()
+		self.children = []
+
+	def load(self, raw, relationships):
+		for raw_child in raw.get('children', {}).values():
+			type_ = raw_child.get('type', 'piece')
+			child = self.instantiate_child(type_)
+			child.load(raw_child, relationships)
+			self.children.append(child)
+
+	def save(self):
+		return {}
+
+	def act(self, input_):
+		pass
+
+	def instantiate_child(self, type_):
+		mapping = {
+			'option': Option,
+			'piece': Piece,
+		}
+		return mapping[type_]()
+
+	def subscribe(self, subscriber):
+		self.subscribers.add(subscriber)
+
+	def trigger(self):
+		for subscriber in self.subscribers:
+			subscriber.process(self)
+
+	def __hash__(self):
+		"""Make it usable as dictionary key."""
+		return hash(id(self))
+
+
+class World(Piece):
 	"""Majority of game objects reside here."""
 
 	def __init__(self):
 		"""Define initial properties to be sure they're available later."""
+		super().__init__()
+
 		self.available = {}
-		self.selected = Option()
+		self.selected = Piece()
 		self.cleared = False
 
-	def load(self, json, relationships):
-		for identifier, raw_option in json['available'].items():
+	def load(self, raw, relationships):
+		super().load(raw, relationships)
+
+		for identifier, raw_piece in raw['available'].items():
 			option = Option()
-			option.load(raw_option, relationships)
+			option.load(raw_piece, relationships)
 			self.available[identifier] = option
 
 	def save(self):
@@ -38,7 +87,8 @@ class World:
 			raise KeyError()
 
 		if not self.cleared:
-			self.available = list(self.available.values())
+			self.children = list(self.available.values())
+			self.available = {}
 			self.cleared = True
 
 	def __getattribute__(self, name):
@@ -62,21 +112,20 @@ class World:
 	def _get_for_player(self):
 		return [
 			option
-			for option in self.available
+			for option in self.children
 			if not option.hidden
 		]
 
 
-class Option:
-
+class Option(Piece):
 	def __init__(self):
-		"""Define initial properties to be sure they're available later."""
+		super().__init__()
+
 		self.description = ""
 		self.message = ""
 		self.permanent = False
 		self.hidden = True
 
-		self.subscribers = set()
 
 	def load(self, json, relationships):
 		self.description = json['description']
@@ -92,30 +141,9 @@ class Option:
 			'hidden': self.hidden,
 		}
 
-	def subscribe(self, subscriber):
-		self.subscribers.add(subscriber)
 
-	def trigger(self):
-		for subscriber in self.subscribers:
-			subscriber.process(self)
-
-	def __hash__(self):
-		"""Make it usable as dictionary key."""
-		return hash(id(self))
-
-
-class Event:
-	def __init__(self):
-		"""Define initial properties to be sure they're available later."""
-		self.subscribers = set()
-
-	def subscribe(self, subscriber):
-		self.subscribers.add(subscriber)
-
-	def trigger(self):
-		for subscriber in self.subscribers:
-			subscriber.process(self)
-
-	def __hash__(self):
-		"""Make it usable as dictionary key."""
-		return hash(id(self))
+class Event(Piece):
+	"""
+	Special case, this one is outside a board.
+	Represents a turn or a time tick.
+	"""
