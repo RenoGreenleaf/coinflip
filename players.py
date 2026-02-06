@@ -1,4 +1,5 @@
 # Copyright (C) 2026  Reno Greenleaf
+from protocols import Event, Relationships, Player
 
 class System:
 	"""A player making decisions using system input/output."""
@@ -7,7 +8,7 @@ class System:
 		"""Define initial properties to be sure they're available later."""
 		self.world = world
 
-	def process(self, event):
+	def process(self, event: Event):
 		print(self.world.description)
 		offset = input('> ')
 
@@ -17,7 +18,7 @@ class System:
 		self.world.select(offset)
 		print(self.world.message)
 
-	def load(self, json, relationships):
+	def load(self, raw: dict, relationships: Relationships):
 		"""Implement persistent interface."""
 
 	def save(self):
@@ -34,15 +35,15 @@ class AI:
 		self.connections = {}
 		self.nodes = {}  # inner relationships
 
-	def process(self, event):
+	def process(self, event: Event):
 		for node, input_ in self.connections.get(event, []):
 			node.act(input_)
 
-	def load(self, json, relationships):
-		for identifier, raw_node in json['ai']['nodes'].items():
+	def load(self, raw: dict, relationships: Relationships):
+		for identifier, raw_node in raw['ai']['nodes'].items():
 			self._obtain_node(identifier, relationships, raw_node['type'])
 
-		for connection in json['ai']['connections']:
+		for connection in raw['ai']['connections']:
 			event = self.nodes[connection['trigger']]
 			node = self.nodes[connection['affected']]
 			input_ = connection['input']
@@ -70,11 +71,11 @@ class Option:
 		self.option = option
 		self.event = event
 
-	def act(self, input_):
+	def act(self, input_: int):
 		self.option.hidden = not bool(input_)
 
-	def subscribe(self, subscriber):
-		self.event.subscribe(subscriber)
+	def subscribe(self, player: Player):
+		self.event.subscribe(player)
 
 	def trigger(self):
 		self.event.trigger()
@@ -92,7 +93,7 @@ class Conjunction:
 		self.b = False
 		self.subscribers = set()
 
-	def act(self, input_):
+	def act(self, input_: int):
 		if input_ == 0:
 			self.a = True
 		else:
@@ -101,8 +102,8 @@ class Conjunction:
 		if self.a and self.b:
 			self.trigger()
 
-	def subscribe(self, subscriber):
-		self.subscribers.add(subscriber)
+	def subscribe(self, player: Player):
+		self.subscribers.add(player)
 
 	def trigger(self):
 		for subscriber in self.subscribers:

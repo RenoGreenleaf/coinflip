@@ -1,4 +1,5 @@
 # Copyright (C) 2026  Reno Greenleaf
+from protocols import Relationships, Player
 
 
 class Piece:
@@ -13,7 +14,7 @@ class Piece:
 		self.subscribers = set()
 		self.children = []
 
-	def load(self, raw, relationships):
+	def load(self, raw: dict, relationships: Relationships):
 		for raw_child in raw.get('children', {}).values():
 			type_ = raw_child.get('type', 'piece')
 			child = self.instantiate_child(type_)
@@ -23,18 +24,18 @@ class Piece:
 	def save(self):
 		return {}
 
-	def act(self, input_):
+	def act(self, input_: int):
 		pass
 
-	def instantiate_child(self, type_):
+	def instantiate_child(self, type_: str):
 		mapping = {
 			'option': Option,
 			'piece': Piece,
 		}
 		return mapping[type_]()
 
-	def subscribe(self, subscriber):
-		self.subscribers.add(subscriber)
+	def subscribe(self, player: Player):
+		self.subscribers.add(player)
 
 	def trigger(self):
 		for subscriber in self.subscribers:
@@ -56,7 +57,7 @@ class World(Piece):
 		self.selected = Piece()
 		self.cleared = False
 
-	def load(self, raw, relationships):
+	def load(self, raw: dict, relationships: Relationships):
 		super().load(raw, relationships)
 
 		for identifier, raw_piece in raw['available'].items():
@@ -76,13 +77,13 @@ class World(Piece):
 
 		self.selected.trigger()
 
-	def get(self, key, identifier):
+	def get(self, key: str, identifier: str):
 		if key != 'option' and key != 'event':
 			raise KeyError()
 
 		return self.available.get(identifier, Option())
 
-	def unid(self, key):
+	def unid(self, key: str):
 		if key != 'option' and key != 'event':
 			raise KeyError()
 
@@ -127,11 +128,11 @@ class Option(Piece):
 		self.hidden = True
 
 
-	def load(self, json, relationships):
-		self.description = json['description']
-		self.message = json['message']
-		self.permanent = json['permanent']
-		self.hidden = json['hidden']
+	def load(self, raw: dict, relationships: Relationships):
+		self.description = raw['description']
+		self.message = raw['message']
+		self.permanent = raw['permanent']
+		self.hidden = raw['hidden']
 
 	def save(self):
 		return {
