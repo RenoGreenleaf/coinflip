@@ -58,39 +58,13 @@ class World(Piece):
 	def save(self):
 		return {}
 
-	def select(self, offset):
-		options = self._get_for_player()
-		self.selected = options[int(offset) - 1]
+	def select(self, piece):
+		self.selected = piece
 
 		if not self.selected.permanent:
 			self.selected.hidden = True
 
 		self.selected.trigger()
-
-	def __getattribute__(self, name):
-		if name == 'message':
-			return self.selected.message
-		elif name == 'description':
-			return self._get_description()
-		else:
-			return super().__getattribute__(name)
-
-	def _get_description(self):
-		descriptions = []
-		offset = 0
-
-		for option in self._get_for_player():
-			offset += 1
-			descriptions.append(str(offset) + ". " + option.description)
-
-		return "\n".join(descriptions)
-
-	def _get_for_player(self):
-		return [
-			option
-			for option in self.children
-			if not option.hidden
-		]
 
 
 class Option(Piece):

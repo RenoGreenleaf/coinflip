@@ -10,14 +10,19 @@ class System:
 		self.world = world
 
 	def process(self, event: Event):
-		print(self.world.description)
+		options = list(self._get_options())
+
+		for index, option in enumerate(options):
+			print(f"{index + 1}. {option.description}")
+
 		offset = input('> ')
 
 		if offset == 'exit':
 			exit()
 
-		self.world.select(offset)
-		print(self.world.message)
+		option = options[int(offset) - 1]
+		self.world.select(option)
+		print(option.message)
 
 	def load(self, raw: dict, relationships: dict):
 		"""Implement persistent interface."""
@@ -25,6 +30,21 @@ class System:
 	def save(self):
 		"""Implement persistent interface."""
 		return {}
+
+	def _get_description(self):
+		descriptions = []
+		offset = 0
+
+		for option in self._get_options():
+			offset += 1
+			descriptions.append(str(offset) + ". " + option.description)
+
+		return "\n".join(descriptions)
+
+	def _get_options(self):
+		for option in self.world.children:
+			if not option.hidden:
+				yield option
 
 
 class AI:
