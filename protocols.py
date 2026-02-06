@@ -1,3 +1,4 @@
+# Copyright (C) 2026  Reno Greenleaf
 from typing import Protocol
 
 
@@ -21,20 +22,10 @@ class Event(Protocol):
 		"""Make it usable as dict key."""
 
 
-class Relationships(Protocol):
-	"""Helps to fetch objects specified by IDs (like foreign keys)."""
-
-	def get(self, key: str, identifier: str):
-		"""Obtain already loaded object."""
-
-	def unid(self, key: str):
-		"""Cleanup."""
-
-
 class Persistent(Protocol):
 	"""Can be saved."""
 
-	def load(self, raw: dict, relationships: Relationships):
+	def load(self, raw: dict, relationships: dict):
 		"""Populate self with data from raw."""
 
 	def save(self):

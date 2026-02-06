@@ -5,6 +5,8 @@ from json import load
 import board
 import players
 
+
+relationships: dict = {}
 world = board.World()
 turn = board.Event()
 player1 = players.AI(world)
@@ -15,11 +17,11 @@ turn.subscribe(player2)
 
 with open('coinflip.json', 'r', encoding='utf-8') as world_file:
     json = load(world_file)
-    world.load(json, world)
-    player1.load(json, world)
-    player2.load(json, world)
+    world.load(json, relationships)
+    player1.load(json, relationships)
+    player2.load(json, relationships)
 
-world.unid('option')
+del relationships
 
 while True:
     turn.trigger()

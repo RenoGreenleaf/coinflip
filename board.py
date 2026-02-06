@@ -1,12 +1,12 @@
 # Copyright (C) 2026  Reno Greenleaf
-from protocols import Relationships, Player
+from protocols import Player
 
 
 class Piece:
 	"""
-	Implements all interfaces for any player might need from a piece
+	Implements all interfaces for any player might need from a piece.
 
-	so that various piece types don't need to do it again
+	So that various piece types don't need to do it again
 	and only have to implement what is relevant for them.
 	"""
 
@@ -14,10 +14,11 @@ class Piece:
 		self.subscribers = set()
 		self.children = []
 
-	def load(self, raw: dict, relationships: Relationships):
-		for raw_child in raw.get('children', {}).values():
+	def load(self, raw: dict, relationships: dict):
+		for identifier, raw_child in raw.get('children', {}).items():
 			type_ = raw_child.get('type', 'piece')
 			child = self.instantiate_child(type_)
+			relationships[identifier] = child
 			child.load(raw_child, relationships)
 			self.children.append(child)
 
@@ -52,18 +53,7 @@ class World(Piece):
 	def __init__(self):
 		"""Define initial properties to be sure they're available later."""
 		super().__init__()
-
-		self.available = {}
 		self.selected = Piece()
-		self.cleared = False
-
-	def load(self, raw: dict, relationships: Relationships):
-		super().load(raw, relationships)
-
-		for identifier, raw_piece in raw['available'].items():
-			option = Option()
-			option.load(raw_piece, relationships)
-			self.available[identifier] = option
 
 	def save(self):
 		return {}
@@ -76,21 +66,6 @@ class World(Piece):
 			self.selected.hidden = True
 
 		self.selected.trigger()
-
-	def get(self, key: str, identifier: str):
-		if key != 'option' and key != 'event':
-			raise KeyError()
-
-		return self.available.get(identifier, Option())
-
-	def unid(self, key: str):
-		if key != 'option' and key != 'event':
-			raise KeyError()
-
-		if not self.cleared:
-			self.children = list(self.available.values())
-			self.available = {}
-			self.cleared = True
 
 	def __getattribute__(self, name):
 		if name == 'message':
@@ -128,7 +103,7 @@ class Option(Piece):
 		self.hidden = True
 
 
-	def load(self, raw: dict, relationships: Relationships):
+	def load(self, raw: dict, relationships: dict):
 		self.description = raw['description']
 		self.message = raw['message']
 		self.permanent = raw['permanent']

@@ -1,5 +1,6 @@
 # Copyright (C) 2026  Reno Greenleaf
-from protocols import Event, Relationships, Player
+from protocols import Event, Player
+
 
 class System:
 	"""A player making decisions using system input/output."""
@@ -18,7 +19,7 @@ class System:
 		self.world.select(offset)
 		print(self.world.message)
 
-	def load(self, raw: dict, relationships: Relationships):
+	def load(self, raw: dict, relationships: dict):
 		"""Implement persistent interface."""
 
 	def save(self):
@@ -39,7 +40,7 @@ class AI:
 		for node, input_ in self.connections.get(event, []):
 			node.act(input_)
 
-	def load(self, raw: dict, relationships: Relationships):
+	def load(self, raw: dict, relationships: dict):
 		for identifier, raw_node in raw['ai']['nodes'].items():
 			self._obtain_node(identifier, relationships, raw_node['type'])
 
@@ -56,7 +57,7 @@ class AI:
 
 	def _obtain_node(self, identifier, relationships, type_):
 		if type_ == 'option':
-			option = relationships.get('option', identifier)
+			option = relationships[identifier]
 			self.nodes.setdefault(identifier, Option(option, option))
 		elif type_ == 'conjunction':
 			self.nodes.setdefault(identifier, Conjunction())
