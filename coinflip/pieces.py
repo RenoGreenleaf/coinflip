@@ -1,5 +1,4 @@
-# Copyright (C) 2026  Reno Greenleaf
-from protocols import Player
+from coinflip.protocols import Player
 
 
 class Piece:
@@ -29,6 +28,8 @@ class Piece:
 		pass
 
 	def instantiate_child(self, type_: str):
+		from terminal.pieces import Option  # prevents circular imports
+
 		mapping = {
 			'option': Option,
 			'piece': Piece,
@@ -55,9 +56,6 @@ class World(Piece):
 		super().__init__()
 		self.selected = Piece()
 
-	def save(self):
-		return {}
-
 	def select(self, piece):
 		self.selected = piece
 
@@ -67,33 +65,9 @@ class World(Piece):
 		self.selected.trigger()
 
 
-class Option(Piece):
-	def __init__(self):
-		super().__init__()
-
-		self.description = ""
-		self.message = ""
-		self.permanent = False
-		self.hidden = True
-
-
-	def load(self, raw: dict, relationships: dict):
-		self.description = raw['description']
-		self.message = raw['message']
-		self.permanent = raw['permanent']
-		self.hidden = raw['hidden']
-
-	def save(self):
-		return {
-			'description': self.description,
-			'message': self.message,
-			'permanent': self.permanent,
-			'hidden': self.hidden,
-		}
-
-
 class Event(Piece):
 	"""
 	Special case, this one is outside a board.
+
 	Represents a turn or a time tick.
 	"""

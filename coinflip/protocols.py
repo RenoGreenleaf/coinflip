@@ -30,10 +30,3 @@ class Persistent(Protocol):
 
 	def save(self):
 		"""Create raw data from self."""
-
-
-class Node(Protocol):
-	"""Element of AI player reasoning."""
-
-	def act(self, input_: int):
-		"""Micro decision."""

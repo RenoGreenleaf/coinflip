@@ -2,15 +2,16 @@
 # Copyright (C) 2026  Reno Greenleaf
 """Entry point."""
 from json import load
-import board
-import players
+from coinflip.pieces import World, Event
+from terminal.players import System
+from AI.players import AI
 
 
 relationships: dict = {}
-world = board.World()
-turn = board.Event()
-player1 = players.AI(world)
-player2 = players.System(world)
+world = World()
+turn = Event()
+player1 = AI(world)
+player2 = System(world)
 
 turn.subscribe(player1)
 turn.subscribe(player2)
