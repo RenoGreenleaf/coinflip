@@ -28,7 +28,7 @@ class Piece:
 		pass
 
 	def instantiate_child(self, type_: str):
-		from terminal.pieces import Option  # prevents circular imports
+		from terminal.pieces import Option  # it's here to prevent circular imports
 
 		mapping = {
 			'option': Option,
