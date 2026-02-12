@@ -4,6 +4,11 @@ from coinflip.pieces import Piece
 
 
 class Option(Piece):
+	description: str = ""
+	message: str = ""
+	permanent: bool = False
+	hidden: bool = True
+
 	def __init__(self):
 		super().__init__()
 

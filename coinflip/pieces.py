@@ -1,7 +1,8 @@
+from pydantic import BaseModel
 from coinflip.protocols import Player
 
 
-class Piece:
+class Piece(BaseModel):
 	"""
 	Implements all interfaces for any player might need from a piece.
 
@@ -9,9 +10,13 @@ class Piece:
 	and only have to implement what is relevant for them.
 	"""
 
-	def __init__(self):
-		self.subscribers = set()
-		self.children = []
+	_subscribers: set
+	_children: list
+
+	def __init__(self, **data):
+		super().__init__(**data)
+		self._subscribers = set()
+		self._children = []
 
 	def load(self, raw: dict, relationships: dict):
 		for identifier, raw_child in raw.get('children', {}).items():
@@ -19,7 +24,7 @@ class Piece:
 			child = self.instantiate_child(type_)
 			relationships[identifier] = child
 			child.load(raw_child, relationships)
-			self.children.append(child)
+			self._children.append(child)
 
 	def save(self):
 		return {}
@@ -37,11 +42,15 @@ class Piece:
 		return mapping[type_]()
 
 	def subscribe(self, player: Player):
-		self.subscribers.add(player)
+		self._subscribers.add(player)
 
 	def trigger(self):
-		for subscriber in self.subscribers:
+		for subscriber in self._subscribers:
 			subscriber.process(self)
+
+	@property
+	def children(self):
+		return self._children
 
 	def __hash__(self):
 		"""Make it usable as dictionary key."""
@@ -51,18 +60,20 @@ class Piece:
 class World(Piece):
 	"""Majority of game objects reside here."""
 
-	def __init__(self):
+	_selected: Piece
+
+	def __init__(self, **data):
 		"""Define initial properties to be sure they're available later."""
-		super().__init__()
-		self.selected = Piece()
+		super().__init__(**data)
+		self._selected = Piece()
 
 	def select(self, piece):
-		self.selected = piece
+		self._selected = piece
 
-		if not self.selected.permanent:
-			self.selected.hidden = True
+		if not self._selected.permanent:
+			self._selected.hidden = True
 
-		self.selected.trigger()
+		self._selected.trigger()
 
 
 class Event(Piece):
