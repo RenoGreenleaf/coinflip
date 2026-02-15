@@ -1,4 +1,5 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, TypeAdapter
+from typing import Annotated
 from coinflip.protocols import Player
 
 
@@ -10,20 +11,18 @@ class Piece(BaseModel):
 	and only have to implement what is relevant for them.
 	"""
 
-	_subscribers: set
-	_children: list
-
-	def __init__(self, **data):
-		super().__init__(**data)
-		self._subscribers = set()
-		self._children = []
+	_subscribers: set = set()
+	_children: list = []
 
 	def load(self, raw: dict, relationships: dict):
+		from terminal.pieces import Option  # it's here to prevent circular imports
+		adapter = TypeAdapter(
+			Annotated[Option, Field(discriminator='type')]
+		)
+
 		for identifier, raw_child in raw.get('children', {}).items():
-			type_ = raw_child.get('type', 'piece')
-			child = self.instantiate_child(type_)
+			child = adapter.validate_python(raw_child)
 			relationships[identifier] = child
-			child.load(raw_child, relationships)
 			self._children.append(child)
 
 	def save(self):
@@ -33,11 +32,8 @@ class Piece(BaseModel):
 		pass
 
 	def instantiate_child(self, type_: str):
-		from terminal.pieces import Option  # it's here to prevent circular imports
-
 		mapping = {
 			'option': Option,
-			'piece': Piece,
 		}
 		return mapping[type_]()
 
