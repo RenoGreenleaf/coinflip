@@ -3,8 +3,10 @@
 import json
 import qtpynodeeditor as ne
 from qtpy import QtWidgets as widgets, QtGui as gui
-from editor.option import Option
+from pyqtschema import WidgetBuilder
 from editor import nodes
+from terminal.pieces import Option
+from editor.option import Option as Widget
 
 
 class Window(widgets.QMainWindow):
@@ -58,8 +60,11 @@ class Window(widgets.QMainWindow):
 
 	def add(self):
 		"""Add option. Called via UI."""
-		option = Option()
-		option.build()
+		schema = Option.schema()
+		del schema['properties']['type']
+		builder = WidgetBuilder(schema)
+		widget = Widget()
+		option = builder.create_form(parent=widget)
 		self.options_layout.addWidget(option)
 
 		self.last_id += 1

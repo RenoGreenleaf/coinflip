@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Copyright (C) 2026  Reno Greenleaf
 """Entry point."""
 from qtpy.QtWidgets import QApplication
