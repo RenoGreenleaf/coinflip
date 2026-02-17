@@ -61,7 +61,6 @@ class Window(widgets.QMainWindow):
 	def add(self):
 		"""Add option. Called via UI."""
 		schema = Option.schema()
-		del schema['properties']['type']
 		builder = WidgetBuilder(schema)
 		widget = Widget()
 		option = builder.create_form(parent=widget)
@@ -104,17 +103,16 @@ class Window(widgets.QMainWindow):
 
 	def denormalize(self, raw_world):
 		"""Fill a window from raw data."""
-		for name, raw_option in raw_world['available'].items():
-			option = Option()
-			option.build()
-			option.denormalize(raw_option)
-			option.setObjectName(name)
+		for name, raw_option in raw_world['children'].items():
+			schema = Option.schema()
+			builder = WidgetBuilder(schema)
+			option = builder.create_form(state=raw_option)
 			self.options_layout.addWidget(option)
 
 		view = self.findChild((ne.FlowView,))
 		view.scene.denormalize(raw_world, self)
 
-		ids = map(int, raw_world['available'].keys())
+		ids = map(int, raw_world['children'].keys())
 		self.last_id = max(ids)
 
 	def get(self, key, identifier):
