@@ -11,6 +11,7 @@ class Piece(BaseModel):
 	and only have to implement what is relevant for them.
 	"""
 
+	identifier: int
 	_subscribers: set = set()
 	_children: list = []
 
@@ -20,9 +21,9 @@ class Piece(BaseModel):
 			Annotated[Option, Field(discriminator='type')]
 		)
 
-		for identifier, raw_child in raw.get('children', {}).items():
+		for raw_child in raw.get('children', []):
 			child = adapter.validate_python(raw_child)
-			relationships[identifier] = child
+			relationships[str(child.identifier)] = child
 			self._children.append(child)
 
 	def save(self):
@@ -30,12 +31,6 @@ class Piece(BaseModel):
 
 	def act(self, input_: int):
 		pass
-
-	def instantiate_child(self, type_: str):
-		mapping = {
-			'option': Option,
-		}
-		return mapping[type_]()
 
 	def subscribe(self, player: Player):
 		self._subscribers.add(player)
@@ -57,11 +52,6 @@ class World(Piece):
 	"""Majority of game objects reside here."""
 
 	_selected: Piece
-
-	def __init__(self, **data):
-		"""Define initial properties to be sure they're available later."""
-		super().__init__(**data)
-		self._selected = Piece()
 
 	def select(self, piece):
 		self._selected = piece

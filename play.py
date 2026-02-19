@@ -8,8 +8,8 @@ from AI.players import AI
 
 
 relationships: dict = {}
-world = World()
-turn = Event()
+world = World(identifier=1)
+turn = Event(identifier=0)
 player1 = AI(world)
 player2 = System(world)
 
@@ -18,7 +18,7 @@ turn.subscribe(player2)
 
 with open('coinflip.json', 'r', encoding='utf-8') as world_file:
     json = load(world_file)
-    world.load(json, relationships)
+    world.load(json['board'], relationships)
     player1.load(json, relationships)
     player2.load(json, relationships)
 
