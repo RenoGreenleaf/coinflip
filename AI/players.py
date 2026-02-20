@@ -1,3 +1,4 @@
+# Copyright (C) 2026  Reno Greenleaf
 from coinflip.protocols import Event
 from AI.pieces import Conjunction, Option
 

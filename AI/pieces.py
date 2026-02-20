@@ -1,3 +1,4 @@
+# Copyright (C) 2026  Reno Greenleaf
 from coinflip.protocols import Player
 
 
