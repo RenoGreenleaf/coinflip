@@ -13,8 +13,8 @@ relationships: dict = {}
 with open('coinflip.json', 'r', encoding='utf-8') as world_file:
     json = load(world_file)
 
-    world = World(identifier=0, children=[])
-    world.load(json['board'], relationships)
+    world = World(**json['board'])
+    world.persist(relationships)
     turn = Event(identifier=1000)
     player1 = AI(world)
     player2 = System(world)

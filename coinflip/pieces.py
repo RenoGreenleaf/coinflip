@@ -28,6 +28,9 @@ class Piece(BaseModel):
 		for subscriber in self._subscribers:
 			subscriber.process(self)
 
+	def persist(self, relationships):
+		relationships[str(self.identifier)] = self
+
 	def __hash__(self):
 		"""Make it usable as dictionary key."""
 		return hash(id(self))

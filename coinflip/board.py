@@ -1,6 +1,6 @@
 # Copyright (C) 2026  Reno Greenleaf
-from pydantic import Field, TypeAdapter
-from typing import Annotated
+from pydantic import Field
+from typing import Annotated, Literal
 from coinflip.pieces import Piece
 from terminal.pieces import Option
 
@@ -12,6 +12,7 @@ class World(Piece):
 	"""Majority of game objects reside here."""
 
 	_selected: Piece
+	type: Literal['world']
 	children: list[AnyPiece]
 
 	def select(self, piece):
@@ -22,10 +23,8 @@ class World(Piece):
 
 		self._selected.trigger()
 
-	def load(self, raw: dict, relationships: dict):
-		adapter = TypeAdapter(AnyPiece)
+	def persist(self, relationships):
+		relationships[str(self.identifier)] = self
 
-		for raw_child in raw.get('children', []):
-			child = adapter.validate_python(raw_child)
-			relationships[str(child.identifier)] = child
-			self.children.append(child)
+		for child in self.children:
+			child.persist(relationships)
