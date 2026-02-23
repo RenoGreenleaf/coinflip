@@ -13,7 +13,7 @@ class World(Piece):
 
 	_selected: Piece
 	type: Literal['world']
-	children: list[AnyPiece]
+	children: list[Option]
 
 	def select(self, piece):
 		self._selected = piece

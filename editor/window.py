@@ -6,7 +6,9 @@ from qtpy import QtWidgets as widgets, QtGui as gui
 from pyqtschema import WidgetBuilder
 from editor import nodes
 from terminal.pieces import Option
+from coinflip.board import World
 from editor.option import Option as Widget
+from editor.schema import remove_defs_and_refs
 
 
 class Window(widgets.QMainWindow):
@@ -103,11 +105,11 @@ class Window(widgets.QMainWindow):
 
 	def denormalize(self, raw_world):
 		"""Fill a window from raw data."""
-		for name, raw_option in raw_world['children'].items():
-			schema = Option.schema()
-			builder = WidgetBuilder(schema)
-			option = builder.create_form(state=raw_option)
-			self.options_layout.addWidget(option)
+		raw_board = raw_world['board']
+		schema = World.schema()
+		builder = WidgetBuilder(schema)
+		world = builder.create_form(state=raw_board)
+		self.options_layout.addWidget(world)
 
 		view = self.findChild((ne.FlowView,))
 		view.scene.denormalize(raw_world, self)
