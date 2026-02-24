@@ -2,10 +2,10 @@
 from pydantic import Field
 from typing import Annotated, Literal
 from coinflip.pieces import Piece
-from terminal.pieces import Option
+from terminal.pieces import Conversation
 
 
-AnyPiece = Annotated[Option, Field(discriminator='type')]
+# AnyPiece = Annotated[Option, Field(discriminator='type')]
 
 
 class World(Piece):
@@ -13,7 +13,7 @@ class World(Piece):
 
 	_selected: Piece
 	type: Literal['world']
-	children: list[Option]
+	conversations: list[Conversation]
 
 	def select(self, piece):
 		self._selected = piece
@@ -26,5 +26,5 @@ class World(Piece):
 	def persist(self, relationships):
 		relationships[str(self.identifier)] = self
 
-		for child in self.children:
-			child.persist(relationships)
+		for conversation in self.conversations:
+			conversation.persist(relationships)

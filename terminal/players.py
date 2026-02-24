@@ -42,6 +42,8 @@ class System:
 		return "\n".join(descriptions)
 
 	def _get_options(self):
-		for option in self.world.children:
+		conversation = self.world.conversations[0]
+
+		for option in conversation.options:
 			if not option.hidden:
 				yield option

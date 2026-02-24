@@ -8,7 +8,6 @@ from editor import nodes
 from terminal.pieces import Option
 from coinflip.board import World
 from editor.option import Option as Widget
-from editor.schema import remove_defs_and_refs
 
 
 class Window(widgets.QMainWindow):
