@@ -28,3 +28,10 @@ class World(Piece):
 
 		for conversation in self.conversations:
 			conversation.persist(relationships)
+
+	@property
+	def children(self):
+		return self.conversations
+
+	def __str__(self):
+		return "World"

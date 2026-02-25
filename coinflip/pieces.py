@@ -31,9 +31,16 @@ class Piece(BaseModel):
 	def persist(self, relationships):
 		relationships[str(self.identifier)] = self
 
+	@property
+	def children(self):
+		return []
+
 	def __hash__(self):
 		"""Make it usable as dictionary key."""
 		return hash(id(self))
+
+	def __str__(self):
+		return '<no title>'
 
 
 class Event(Piece):

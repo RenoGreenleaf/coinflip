@@ -8,6 +8,7 @@ from editor import nodes
 from terminal.pieces import Option
 from coinflip.board import World
 from editor.option import Option as Widget
+from editor import protocols
 
 
 class Window(widgets.QMainWindow):
@@ -16,7 +17,7 @@ class Window(widgets.QMainWindow):
 	def __init__(self):
 		"""Define initial properties to be sure they're available later."""
 		self.last_id = 0
-		self.options_layout = widgets.QVBoxLayout()
+		self.tree = widgets.QTreeWidget()
 		super().__init__()
 
 	def build(self):
@@ -24,12 +25,11 @@ class Window(widgets.QMainWindow):
 		self.setFixedHeight(600)
 		self.setFixedWidth(800)
 
-		options = widgets.QWidget()
-		options.setLayout(self.options_layout)
+		self.tree.setHeaderLabels(['Piece'])
 
 		scroller = widgets.QScrollArea()
 		scroller.setWidgetResizable(True)
-		scroller.setWidget(options)
+		scroller.setWidget(self.tree)
 
 		root = widgets.QWidget()
 		root_layout = widgets.QHBoxLayout(root)
@@ -105,16 +105,29 @@ class Window(widgets.QMainWindow):
 	def denormalize(self, raw_world):
 		"""Fill a window from raw data."""
 		raw_board = raw_world['board']
-		schema = World.schema()
-		builder = WidgetBuilder(schema)
-		world = builder.create_form(state=raw_board)
-		self.options_layout.addWidget(world)
+		board = World(**raw_board)
+		root = widgets.QTreeWidgetItem([str(board)])
+		self._insert_nodes(root, board)
+		self.tree.insertTopLevelItem(0, root)
 
-		view = self.findChild((ne.FlowView,))
-		view.scene.denormalize(raw_world, self)
+		# view = self.findChild((ne.FlowView,))
+		# view.scene.denormalize(raw_world, self)
 
-		ids = map(int, raw_world['children'].keys())
-		self.last_id = max(ids)
+		# ids = map(int, raw_world['children'].keys())
+		# self.last_id = max(ids)
+
+	def _insert_nodes(
+		self,
+		branch: widgets.QTreeWidgetItem,
+		parent: protocols.Node
+	):
+		if len(parent.children) == 0:
+			return
+
+		for node in parent.children:
+			item = widgets.QTreeWidgetItem([str(node)])
+			branch.addChild(item)
+			self._insert_nodes(item, node)
 
 	def get(self, key, identifier):
 		"""Retrieve a widget to create a node from it."""
