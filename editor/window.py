@@ -9,7 +9,7 @@ from terminal.pieces import Option
 from coinflip.board import World
 from editor.option import Option as Widget
 from editor import protocols
-from editor.widgets import TreeItem
+from editor.widgets import Branch
 
 
 class Window(widgets.QMainWindow):
@@ -107,8 +107,8 @@ class Window(widgets.QMainWindow):
 		"""Fill a window from raw data."""
 		raw_board = raw_world['board']
 		board = World(**raw_board)
-		root = TreeItem(board)
-		root.branch()
+		root = Branch(board)
+		root.build()
 		self.tree.insertTopLevelItem(0, root)
 
 		# view = self.findChild((ne.FlowView,))

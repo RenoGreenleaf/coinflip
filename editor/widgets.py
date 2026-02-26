@@ -1,18 +1,19 @@
 # Copyright (C) 2026  Reno Greenleaf
 from qtpy.QtWidgets import QTreeWidgetItem
+from qtpy.QtWidgets import QAbstractItemView
 from editor import protocols
 
 
-class TreeItem(QTreeWidgetItem):
+class Branch(QTreeWidgetItem):
 	def __init__(self, piece: protocols.Node):
 		super().__init__([str(piece)])
 		self.piece = piece
 
-	def branch(self):
+	def build(self):
 		if len(self.piece.children) == 0:
 			return
 
 		for node in self.piece.children:
-			item = TreeItem(node)
+			item = Branch(node)
 			self.addChild(item)
-			item.branch()
+			item.build()
