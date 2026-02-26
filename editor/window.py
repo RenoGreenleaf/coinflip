@@ -9,6 +9,7 @@ from terminal.pieces import Option
 from coinflip.board import World
 from editor.option import Option as Widget
 from editor import protocols
+from editor.widgets import TreeItem
 
 
 class Window(widgets.QMainWindow):
@@ -106,8 +107,8 @@ class Window(widgets.QMainWindow):
 		"""Fill a window from raw data."""
 		raw_board = raw_world['board']
 		board = World(**raw_board)
-		root = widgets.QTreeWidgetItem([str(board)])
-		self._insert_nodes(root, board)
+		root = TreeItem(board)
+		root.branch()
 		self.tree.insertTopLevelItem(0, root)
 
 		# view = self.findChild((ne.FlowView,))
@@ -115,19 +116,6 @@ class Window(widgets.QMainWindow):
 
 		# ids = map(int, raw_world['children'].keys())
 		# self.last_id = max(ids)
-
-	def _insert_nodes(
-		self,
-		branch: widgets.QTreeWidgetItem,
-		parent: protocols.Node
-	):
-		if len(parent.children) == 0:
-			return
-
-		for node in parent.children:
-			item = widgets.QTreeWidgetItem([str(node)])
-			branch.addChild(item)
-			self._insert_nodes(item, node)
 
 	def get(self, key, identifier):
 		"""Retrieve a widget to create a node from it."""
