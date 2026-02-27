@@ -16,10 +16,10 @@ class Option:
 	def trigger(self):
 		self.event.trigger()
 
-	def __hash__(self):
+	def __hash__(self) -> int:
 		return hash(self.option)
 
-	def __eq__(self, other):
+	def __eq__(self, other) -> bool:
 		return self.option is other
 
 
@@ -45,5 +45,5 @@ class Conjunction:
 		for subscriber in self.subscribers:
 			subscriber.process(self)
 
-	def __hash__(self):
+	def __hash__(self) -> int:
 		return hash(id(self))

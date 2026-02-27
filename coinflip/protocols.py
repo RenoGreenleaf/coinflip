@@ -5,7 +5,7 @@ from typing import Protocol
 class Player(Protocol):
 	"""Uses a board."""
 
-	def process(self, event):
+	def process(self, event: 'Event'):
 		"""Make a turn."""
 
 
@@ -18,15 +18,13 @@ class Event(Protocol):
 	def trigger(self):
 		"""Let listeners know that the event has occurred."""
 
-	def __hash__(self):
+	def __hash__(self) -> int:
 		"""Make it usable as dict key."""
+		return 0
 
 
 class Persistent(Protocol):
 	"""Can be saved."""
 
-	def load(self, raw: dict, relationships: dict):
-		"""Populate self with data from raw."""
-
-	def save(self):
-		"""Create raw data from self."""
+	def persist(self, relationships: dict):
+		"""Preserve current piece for further references."""

@@ -27,11 +27,11 @@ class System:
 	def load(self, raw: dict, relationships: dict):
 		"""Implement persistent interface."""
 
-	def save(self):
+	def save(self) -> dict:
 		"""Implement persistent interface."""
 		return {}
 
-	def _get_description(self):
+	def _get_description(self) -> str:
 		descriptions = []
 		offset = 0
 

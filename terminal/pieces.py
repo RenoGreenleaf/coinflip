@@ -1,6 +1,7 @@
 # Copyright (C) 2026  Reno Greenleaf
 from coinflip.pieces import Piece
-from typing import Literal
+from typing import Literal, cast
+from editor import protocols
 
 
 class Option(Piece):
@@ -10,7 +11,7 @@ class Option(Piece):
 	permanent: bool = False
 	hidden: bool = True
 
-	def __str__(self):
+	def __str__(self) -> str:
 		return self.description
 
 
@@ -19,15 +20,15 @@ class Conversation(Piece):
 	options: list[Option]
 	subject: str
 
-	def persist(self, relationships):
+	def persist(self, relationships: dict):
 		relationships[str(self.identifier)] = self
 
 		for option in self.options:
 			option.persist(relationships)
 
 	@property
-	def children(self):
-		return self.options
+	def children(self) -> list[protocols.Node]:
+		return cast(list[protocols.Node], self.options)
 
-	def __str__(self):
+	def __str__(self) -> str:
 		return self.subject

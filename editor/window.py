@@ -89,7 +89,7 @@ class Window(widgets.QMainWindow):
 		with open(path, 'r', encoding='utf-8') as world_file:
 			self.denormalize(json.load(world_file))
 
-	def normalize(self):
+	def normalize(self) -> dict:
 		"""Prepare raw data for saving."""
 		options = self.findChildren((Option,))
 		normalized_options = {
@@ -103,7 +103,7 @@ class Window(widgets.QMainWindow):
 			'available': normalized_options,
 		}
 
-	def denormalize(self, raw_world):
+	def denormalize(self, raw_world: dict) -> None:
 		"""Fill a window from raw data."""
 		raw_board = raw_world['board']
 		board = World(**raw_board)
@@ -122,7 +122,7 @@ class Window(widgets.QMainWindow):
 		if key != 'option':
 			raise KeyError()
 
-		return self.findChild((Option,), identifier) or widgets.QWidget()
+		return self.findChild(Option, identifier) or widgets.QWidget()
 
 	def unid(self):
 		"""Implement relationships interface."""

@@ -1,6 +1,7 @@
 # Copyright (C) 2026  Reno Greenleaf
 from pydantic import BaseModel
 from coinflip.protocols import Player
+from editor.protocols import Node
 
 
 class Piece(BaseModel):
@@ -13,33 +14,29 @@ class Piece(BaseModel):
 
 	identifier: int
 	_subscribers: set = set()
-	_children: list = []
 
-	def save(self):
-		return {}
-
-	def act(self, input_: int):
+	def act(self, input_: int) -> None:
 		pass
 
-	def subscribe(self, player: Player):
+	def subscribe(self, player: Player) -> None:
 		self._subscribers.add(player)
 
-	def trigger(self):
+	def trigger(self) -> None:
 		for subscriber in self._subscribers:
 			subscriber.process(self)
 
-	def persist(self, relationships):
+	def persist(self, relationships: dict[str, 'Piece']) -> None:
 		relationships[str(self.identifier)] = self
 
 	@property
-	def children(self):
+	def children(self) -> list[Node]:
 		return []
 
-	def __hash__(self):
+	def __hash__(self) -> int:
 		"""Make it usable as dictionary key."""
 		return hash(id(self))
 
-	def __str__(self):
+	def __str__(self) -> str:
 		return '<no title>'
 
 

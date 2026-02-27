@@ -28,7 +28,7 @@ class AI:
 
 			event.subscribe(self)
 
-	def save(self):
+	def save(self) -> dict:
 		return {}
 
 	def _obtain_node(self, identifier, relationships, type_):

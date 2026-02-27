@@ -1,7 +1,7 @@
 # Copyright (C) 2026  Reno Greenleaf
-from pydantic import Field
-from typing import Annotated, Literal
+from typing import Literal, cast
 from coinflip.pieces import Piece
+from editor.protocols import Node
 from terminal.pieces import Conversation
 
 
@@ -30,8 +30,8 @@ class World(Piece):
 			conversation.persist(relationships)
 
 	@property
-	def children(self):
-		return self.conversations
+	def children(self) -> list[Node]:
+		return cast(list[Node], self.conversations)
 
 	def __str__(self):
 		return "World"
