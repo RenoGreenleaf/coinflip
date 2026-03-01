@@ -12,7 +12,7 @@ class Piece(BaseModel):
 	and only have to implement what is relevant for them.
 	"""
 
-	identifier: int
+	identifier: int = 0
 	_subscribers: set = set()
 
 	def act(self, input_: int) -> None:

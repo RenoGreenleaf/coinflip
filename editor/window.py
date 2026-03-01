@@ -1,6 +1,7 @@
 # Copyright (C) 2026  Reno Greenleaf
 """Root widget."""
 import json
+from typing import cast
 import qtpynodeeditor as ne
 from qtpy import QtWidgets as widgets, QtGui as gui
 from pyqtschema import WidgetBuilder
@@ -8,7 +9,6 @@ from editor import nodes
 from terminal.pieces import Option
 from coinflip.board import World
 from editor.option import Option as Widget
-from editor import protocols
 from editor.widgets import Branch
 
 
@@ -62,14 +62,25 @@ class Window(widgets.QMainWindow):
 
 	def add(self):
 		"""Add option. Called via UI."""
-		schema = Option.schema()
-		builder = WidgetBuilder(schema)
-		widget = Widget()
-		option = builder.create_form(parent=widget)
-		self.options_layout.addWidget(option)
+		selection = cast(Branch, self.tree.currentItem())
 
-		self.last_id += 1
-		option.setObjectName(str(self.last_id))
+		if selection.piece.type == 'option':
+			current_conversation = selection.parent()
+		elif selection.piece.type == 'conversation':
+			current_conversation = selection
+		elif selection.piece.type == 'world':
+			current_conversation = selection.child(0)
+		else:
+			raise Exception("Can't find a conversation to add an option to.")
+
+		if current_conversation is None:
+			raise Exception("There's no root piece.")
+
+		option = Option(description='<no description>')
+		current_conversation = cast(Branch, current_conversation)
+		current_conversation.piece.children.append(option)
+		branch = Branch(option)
+		current_conversation.addChild(branch)
 
 	def save(self):
 		"""Preserve current state to a file."""
@@ -116,13 +127,3 @@ class Window(widgets.QMainWindow):
 
 		# ids = map(int, raw_world['children'].keys())
 		# self.last_id = max(ids)
-
-	def get(self, key, identifier):
-		"""Retrieve a widget to create a node from it."""
-		if key != 'option':
-			raise KeyError()
-
-		return self.findChild(Option, identifier) or widgets.QWidget()
-
-	def unid(self):
-		"""Implement relationships interface."""
