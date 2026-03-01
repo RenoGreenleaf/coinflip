@@ -5,11 +5,14 @@ from editor import protocols
 
 
 class Option(Piece):
-	type: Literal['option'] = 'option'
+	type: Literal['option']
 	description: str = ""
 	message: str = ""
 	permanent: bool = False
 	hidden: bool = True
+
+	def describe(self, value: str):
+		self.description = value
 
 	def __str__(self) -> str:
 		return self.description

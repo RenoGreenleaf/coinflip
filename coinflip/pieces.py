@@ -32,6 +32,9 @@ class Piece(BaseModel):
 	def children(self) -> list[Node]:
 		return []
 
+	def describe(self, value):
+		pass
+
 	def __hash__(self) -> int:
 		"""Make it usable as dictionary key."""
 		return hash(id(self))

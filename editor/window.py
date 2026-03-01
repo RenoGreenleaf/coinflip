@@ -4,11 +4,9 @@ import json
 from typing import cast
 import qtpynodeeditor as ne
 from qtpy import QtWidgets as widgets, QtGui as gui
-from pyqtschema import WidgetBuilder
 from editor import nodes
 from terminal.pieces import Option
 from coinflip.board import World
-from editor.option import Option as Widget
 from editor.widgets import Branch
 
 
@@ -31,6 +29,8 @@ class Window(widgets.QMainWindow):
 		scroller = widgets.QScrollArea()
 		scroller.setWidgetResizable(True)
 		scroller.setWidget(self.tree)
+
+		self.tree.setDragEnabled(True)
 
 		root = widgets.QWidget()
 		root_layout = widgets.QHBoxLayout(root)

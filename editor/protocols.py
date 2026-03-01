@@ -12,6 +12,9 @@ class Node(Protocol):
 		"""For tree representation."""
 		...
 
+	def describe(self, value: str):
+		"""Set value to be used by __str__()."""
+
 	def __str__(self) -> str:
 		"""Show a title."""
 		...

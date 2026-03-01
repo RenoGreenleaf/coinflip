@@ -1,6 +1,7 @@
 # Copyright (C) 2026  Reno Greenleaf
+import typing
 from qtpy.QtWidgets import QTreeWidgetItem
-from qtpy.QtWidgets import QAbstractItemView
+from qtpy.QtCore import Qt
 from editor import protocols
 
 
@@ -10,6 +11,13 @@ class Branch(QTreeWidgetItem):
 		self.piece = piece
 
 	def build(self):
+		self.setFlags(
+			self.flags()
+			| Qt.ItemFlag.ItemIsEditable
+			| Qt.ItemFlag.ItemIsDragEnabled
+			| Qt.ItemFlag.ItemIsDropEnabled
+		)
+
 		if len(self.piece.children) == 0:
 			return
 
@@ -17,3 +25,7 @@ class Branch(QTreeWidgetItem):
 			item = Branch(node)
 			self.addChild(item)
 			item.build()
+
+	def setData(self, column: int, role: int, value: str):
+		self.piece.describe(value)
+		return super().setData(column, role, str(self.piece))
