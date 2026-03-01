@@ -5,6 +5,7 @@ from typing import Literal, Protocol
 class Node(Protocol):
 	"""Board piece in editor."""
 
+	identifier: int
 	type: str
 
 	@property

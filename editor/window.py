@@ -64,6 +64,9 @@ class Window(widgets.QMainWindow):
 		"""Add option. Called via UI."""
 		selection = cast(Branch, self.tree.currentItem())
 
+		if selection is None:
+			selection = self.tree.invisibleRootItem().child(0)
+
 		if selection.piece.type == 'option':
 			current_conversation = selection.parent()
 		elif selection.piece.type == 'conversation':
@@ -76,7 +79,10 @@ class Window(widgets.QMainWindow):
 		if current_conversation is None:
 			raise Exception("There's no root piece.")
 
-		option = Option(description='<no description>')
+		option = Option(
+			description='<no description>',
+			identifier=self._generate_id()
+		)
 		current_conversation = cast(Branch, current_conversation)
 		current_conversation.piece.children.append(option)
 		branch = Branch(option)
@@ -127,3 +133,13 @@ class Window(widgets.QMainWindow):
 
 		# ids = map(int, raw_world['children'].keys())
 		# self.last_id = max(ids)
+
+	def _generate_id(self):
+		iterator = widgets.QTreeWidgetItemIterator(self.tree)
+		current = 0
+
+		while iterator.value():
+			current = max(current, iterator.value().piece.identifier)
+			iterator += 1
+
+		return current + 1

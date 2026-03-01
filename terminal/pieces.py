@@ -5,7 +5,7 @@ from editor import protocols
 
 
 class Option(Piece):
-	type: Literal['option']
+	type: Literal['option'] = 'option'
 	description: str = ""
 	message: str = ""
 	permanent: bool = False
