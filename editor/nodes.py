@@ -1,8 +1,10 @@
 # Copyright (C) 2026  Reno Greenleaf
 """Node editor stuff."""
-from qtpy.QtWidgets import QWidget, QLineEdit, QMessageBox, QPushButton
+from qtpy.QtWidgets import QGraphicsSceneDragDropEvent, QTreeWidget, QWidget, QLineEdit, QMessageBox, QPushButton
 from qtpy.QtCore import QPointF
 import qtpynodeeditor as ne
+
+from editor.widgets import Branch
 
 
 class Boolean(ne.NodeData):
@@ -36,9 +38,9 @@ class Option(ne.NodeDataModel):
 		registry = ne.DataModelRegistry()
 		self.scene = ne.FlowScene(registry=registry)
 
-	def setCaption(self, text):
+	def setCaption(self, item: Branch, column: int):
 		"""Synchronize widgets description with node caption."""
-		self.caption = text
+		self.caption = str(self.widget.piece)
 		self.graphics_object.setFocus()
 		self.graphics_object.clearFocus()
 
@@ -48,14 +50,20 @@ class Option(ne.NodeDataModel):
 	def get_id(self):
 		return self.widget.objectName()
 
-	def bind(self, widget):
+	def bind(self, widget: Branch):
 		self.widget = widget
-		delete = widget.findChild((QPushButton,))
-		description = widget.findChild((QLineEdit,))
-		description.textChanged.connect(self.setCaption)
-		delete.clicked.connect(self.delete)
+		tree = widget.treeWidget()
 
-		self.setCaption(description.text())
+		if tree is None:
+			return
+
+		tree.itemChanged.connect(self.setCaption)
+		# delete = widget.findChild((QPushButton,))
+		# description = widget.findChild((QLineEdit,))
+		# description.textChanged.connect(self.setCaption)
+		# delete.clicked.connect(self.delete)
+
+		self.setCaption(widget, 1)
 
 
 class Conjunction(ne.NodeDataModel):
@@ -92,13 +100,17 @@ class Scene(ne.FlowScene):
 		super().__init__(*args, **kwargs)
 		self.node_created.connect(self._node_created)
 
-	def dragMoveEvent(self, event):
+	def dragMoveEvent(self, event: QGraphicsSceneDragDropEvent|None):
 		"""Accept event. Required for a drag-drop event to work."""
-		event.acceptProposedAction()
+		if event is not None and isinstance(event.source(), QTreeWidget):
+			event.acceptProposedAction()
 
-	def dropEvent(self, event):
+	def dropEvent(self, event: QGraphicsSceneDragDropEvent|None):
 		"""Happens when a widget is dropped on the editor."""
-		widget = event.source()
+		if event is None:
+			return
+
+		widget = event.source().currentItem()
 
 		if widget in self._iterate_over_widgets():
 			QMessageBox.information(widget, " ", "It's dropped already.")

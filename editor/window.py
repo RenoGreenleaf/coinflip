@@ -25,12 +25,11 @@ class Window(widgets.QMainWindow):
 		self.setFixedWidth(800)
 
 		self.tree.setHeaderLabels(['Piece'])
+		self.tree.setDragEnabled(True)
 
 		scroller = widgets.QScrollArea()
 		scroller.setWidgetResizable(True)
 		scroller.setWidget(self.tree)
-
-		self.tree.setDragEnabled(True)
 
 		root = widgets.QWidget()
 		root_layout = widgets.QHBoxLayout(root)
