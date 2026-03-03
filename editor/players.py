@@ -135,9 +135,10 @@ class Scene(ne.FlowScene):
 	def denormalize(self, json, relationships):
 		"""Load."""
 		nodes = {}
+		default_widget = QWidget()
 
 		for identifier in json['ai']['nodes']:
-			widget = relationships.get('option', identifier)
+			widget = relationships.get(identifier, default_widget)
 			raw_node = json['ai']['nodes'][identifier]
 			position = QPointF(raw_node['x'], raw_node['y'])
 			model = self.registry.create(raw_node['type'])

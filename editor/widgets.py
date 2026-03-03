@@ -1,5 +1,5 @@
 # Copyright (C) 2026  Reno Greenleaf
-import typing
+from typing import cast
 from qtpy.QtWidgets import QTreeWidgetItem
 from qtpy.QtCore import Qt
 from editor import protocols
@@ -29,3 +29,10 @@ class Branch(QTreeWidgetItem):
 	def setData(self, column: int, role: int, value: str):
 		self.piece.describe(value)
 		return super().setData(column, role, str(self.piece))
+
+	def persist(self, relationships: dict):
+		relationships[str(self.piece.identifier)] = self
+
+		for offset in range(self.childCount()):
+			branch = cast(Branch, self.child(offset))
+			branch.persist(relationships)

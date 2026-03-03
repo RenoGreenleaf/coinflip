@@ -4,7 +4,7 @@ import json
 from typing import cast
 import qtpynodeeditor as ne
 from qtpy import QtWidgets as widgets, QtGui as gui
-from editor import nodes
+from editor import players
 from terminal.pieces import Option
 from coinflip.board import World
 from editor.widgets import Branch
@@ -35,9 +35,9 @@ class Window(widgets.QMainWindow):
 		root_layout = widgets.QHBoxLayout(root)
 
 		registry = ne.DataModelRegistry()
-		registry.register_model(nodes.Option)
-		registry.register_model(nodes.Conjunction)
-		scene = nodes.Scene(registry=registry)
+		registry.register_model(players.Option)
+		registry.register_model(players.Conjunction)
+		scene = players.Scene(registry=registry)
 		flow = ne.FlowView(scene)
 		flow.setAcceptDrops(True)
 
@@ -96,6 +96,7 @@ class Window(widgets.QMainWindow):
 
 	def load(self):
 		"""Restore state from a file."""
+		relationships = {}
 		path, _ = widgets.QFileDialog.getOpenFileName(self)
 		options = self.findChildren((Option,))
 
@@ -103,7 +104,7 @@ class Window(widgets.QMainWindow):
 			option.deleteLater()
 
 		with open(path, 'r', encoding='utf-8') as world_file:
-			self.denormalize(json.load(world_file))
+			self.denormalize(json.load(world_file), relationships)
 
 	def normalize(self) -> dict:
 		"""Prepare raw data for saving."""
@@ -119,16 +120,17 @@ class Window(widgets.QMainWindow):
 			'available': normalized_options,
 		}
 
-	def denormalize(self, raw_world: dict) -> None:
+	def denormalize(self, raw_world: dict, relationships: dict) -> None:
 		"""Fill a window from raw data."""
 		raw_board = raw_world['board']
 		board = World(**raw_board)
 		root = Branch(board)
 		root.build()
+		root.persist(relationships)
 		self.tree.insertTopLevelItem(0, root)
 
-		# view = self.findChild((ne.FlowView,))
-		# view.scene.denormalize(raw_world, self)
+		view = self.findChild((ne.FlowView,))
+		view.scene.denormalize(raw_world, relationships)
 
 		# ids = map(int, raw_world['children'].keys())
 		# self.last_id = max(ids)
