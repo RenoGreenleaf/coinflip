@@ -48,7 +48,7 @@ class Option(ne.NodeDataModel):
 		self.scene.remove_node(self.node)
 
 	def get_id(self):
-		return self.widget.objectName()
+		return self.widget.piece.identifier
 
 	def bind(self, widget: Branch):
 		self.widget = widget
@@ -157,8 +157,8 @@ class Scene(ne.FlowScene):
 		input_, _ = connection.ports
 
 		return {
-			'trigger': connection.output_node.model.get_id(),
-			'affected': connection.input_node.model.get_id(),
+			'trigger': str(connection.output_node.model.get_id()),
+			'affected': str(connection.input_node.model.get_id()),
 			'input': input_.index,
 		}
 

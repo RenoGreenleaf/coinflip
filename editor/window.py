@@ -2,6 +2,7 @@
 """Root widget."""
 import json
 from typing import cast
+from pydantic import BaseModel
 import qtpynodeeditor as ne
 from qtpy import QtWidgets as widgets, QtGui as gui
 from editor import players
@@ -108,16 +109,12 @@ class Window(widgets.QMainWindow):
 
 	def normalize(self) -> dict:
 		"""Prepare raw data for saving."""
-		options = self.findChildren((Option,))
-		normalized_options = {
-			option.objectName(): option.normalize()
-			for option in options
-		}
+		world: BaseModel = self.tree.invisibleRootItem().child(0).piece
 
 		view = self.findChild((ne.FlowView,))
 		return {
 			'ai': view.scene.normalize(),
-			'available': normalized_options,
+			'board': world.model_dump(),
 		}
 
 	def denormalize(self, raw_world: dict, relationships: dict) -> None:
