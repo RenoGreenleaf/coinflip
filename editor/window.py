@@ -119,6 +119,7 @@ class Window(widgets.QMainWindow):
 
 	def denormalize(self, raw_world: dict, relationships: dict) -> None:
 		"""Fill a window from raw data."""
+		self.tree.clear()
 		raw_board = raw_world['board']
 		board = World(**raw_board)
 		root = Branch(board)

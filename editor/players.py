@@ -136,6 +136,7 @@ class Scene(ne.FlowScene):
 		"""Load."""
 		nodes = {}
 		default_widget = QWidget()
+		self.clear()
 
 		for identifier in json['ai']['nodes']:
 			widget = relationships.get(identifier, default_widget)
