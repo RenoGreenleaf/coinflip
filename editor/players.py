@@ -113,7 +113,7 @@ class Scene(ne.FlowScene):
 		widget = event.source().currentItem()
 
 		if widget in self._iterate_over_widgets():
-			QMessageBox.information(widget, " ", "It's dropped already.")
+			QMessageBox.information(None, " ", "It's dropped already.")
 			return
 
 		node = self.create_node(Option)
