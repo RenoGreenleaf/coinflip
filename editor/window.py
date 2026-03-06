@@ -22,11 +22,12 @@ class Window(widgets.QMainWindow):
 
 	def build(self):
 		"""Prepare base layout. Call it right after instantiation."""
-		self.setFixedHeight(600)
-		self.setFixedWidth(800)
-
 		self.tree.setHeaderLabels(['Piece'])
 		self.tree.setDragEnabled(True)
+		world = World(identifier=1)
+		root = Branch(world)
+		root.build()
+		self.tree.insertTopLevelItem(0, root)
 
 		scroller = widgets.QScrollArea()
 		scroller.setWidgetResizable(True)

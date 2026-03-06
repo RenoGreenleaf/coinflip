@@ -10,6 +10,6 @@ app = QApplication(argv)
 
 window = Window()
 window.build()
-window.show()
+window.showMaximized()
 
 app.exec()
