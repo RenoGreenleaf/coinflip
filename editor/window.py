@@ -6,7 +6,8 @@ from pydantic import BaseModel
 import qtpynodeeditor as ne
 from qtpy import QtWidgets as widgets, QtGui as gui
 from editor import players
-from terminal.pieces import Option
+from editor.protocols import Node
+from terminal.pieces import Conversation, Option
 from coinflip.board import World
 from editor.widgets import Branch
 
@@ -73,7 +74,8 @@ class Window(widgets.QMainWindow):
 		elif selection.piece.type == 'conversation':
 			current_conversation = selection
 		elif selection.piece.type == 'world':
-			current_conversation = selection.child(0)
+			self._insert_conversation()
+			return
 		else:
 			raise Exception("Can't find a conversation to add an option to.")
 
@@ -87,6 +89,7 @@ class Window(widgets.QMainWindow):
 		current_conversation = cast(Branch, current_conversation)
 		current_conversation.piece.children.append(option)
 		branch = Branch(option)
+		branch.build()
 		current_conversation.addChild(branch)
 
 	def save(self):
@@ -131,9 +134,6 @@ class Window(widgets.QMainWindow):
 		view = self.findChild((ne.FlowView,))
 		view.scene.denormalize(raw_world, relationships)
 
-		# ids = map(int, raw_world['children'].keys())
-		# self.last_id = max(ids)
-
 	def _generate_id(self):
 		iterator = widgets.QTreeWidgetItemIterator(self.tree)
 		current = 0
@@ -143,3 +143,13 @@ class Window(widgets.QMainWindow):
 			iterator += 1
 
 		return current + 1
+
+	def _insert_conversation(self):
+		piece: Node = Conversation(
+			subject='<nameless>',
+			identifier=self._generate_id()
+		)
+		branch = Branch(piece)
+		branch.build()
+		root = self.tree.invisibleRootItem().child(0)
+		root.addChild(branch)

@@ -19,9 +19,9 @@ class Option(Piece):
 
 
 class Conversation(Piece):
-	type: Literal['conversation']
-	options: list[Option]
-	subject: str
+	type: Literal['conversation'] = 'conversation'
+	options: list[Option] = []
+	subject: str = ''
 
 	def persist(self, relationships: dict):
 		relationships[str(self.identifier)] = self
