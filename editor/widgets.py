@@ -1,6 +1,5 @@
 # Copyright (C) 2026  Reno Greenleaf
 from typing import cast
-import typing
 from qtpy.QtWidgets import QTreeWidgetItem
 from qtpy.QtCore import Qt
 from editor import protocols
@@ -38,6 +37,10 @@ class Branch(QTreeWidgetItem):
 			branch = cast(Branch, self.child(offset))
 			branch.persist(relationships)
 
-	def addChild(self, child: typing.Optional['QTreeWidgetItem']):
+	def addChild(self, child: 'Branch'):
 		self.piece.children.append(child.piece)
 		return super().addChild(child)
+
+	def removeChild(self, child: 'Branch'):
+		self.piece.children.remove(child.piece)
+		return super().removeChild(child)

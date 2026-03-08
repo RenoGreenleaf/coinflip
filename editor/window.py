@@ -54,11 +54,14 @@ class Window(widgets.QMainWindow):
 
 		add = gui.QAction("Add", self)
 		add.triggered.connect(self.add)
+		delete = gui.QAction("Delete", self)
+		delete.triggered.connect(self.delete)
 		save = gui.QAction("Save", self)
 		save.triggered.connect(self.save)
 		load = gui.QAction("Load", self)
 		load.triggered.connect(self.load)
 		toolbar.addAction(add)
+		toolbar.addAction(delete)
 		toolbar.addAction(save)
 		toolbar.addAction(load)
 
@@ -132,6 +135,12 @@ class Window(widgets.QMainWindow):
 
 		view = self.findChild((ne.FlowView,))
 		view.scene.denormalize(raw_world, relationships)
+
+	def delete(self):
+		root = self.tree.invisibleRootItem()
+		for branch in self.tree.selectedItems():
+			parent = branch.parent() or root
+			parent.removeChild(branch)
 
 	def _generate_id(self):
 		iterator = widgets.QTreeWidgetItemIterator(self.tree)
