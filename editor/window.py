@@ -87,7 +87,6 @@ class Window(widgets.QMainWindow):
 			identifier=self._generate_id()
 		)
 		current_conversation = cast(Branch, current_conversation)
-		current_conversation.piece.children.append(option)
 		branch = Branch(option)
 		branch.build()
 		current_conversation.addChild(branch)
