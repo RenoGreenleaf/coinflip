@@ -9,7 +9,7 @@ from editor import players
 from editor.protocols import Node
 from terminal.pieces import Conversation, Option
 from coinflip.board import World
-from editor.widgets import Branch
+from editor.widgets import Branch, Tree
 
 
 class Window(widgets.QMainWindow):
@@ -18,7 +18,7 @@ class Window(widgets.QMainWindow):
 	def __init__(self):
 		"""Define initial properties to be sure they're available later."""
 		self.last_id = 0
-		self.tree = widgets.QTreeWidget()
+		self.tree = Tree()
 		super().__init__()
 
 	def build(self):

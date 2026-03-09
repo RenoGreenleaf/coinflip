@@ -1,9 +1,8 @@
 # Copyright (C) 2026  Reno Greenleaf
 """Node editor stuff."""
-from qtpy.QtWidgets import QGraphicsSceneDragDropEvent, QTreeWidget, QWidget, QLineEdit, QMessageBox, QPushButton
+from qtpy.QtWidgets import QGraphicsSceneDragDropEvent, QTreeWidget, QTreeWidgetItem, QWidget, QMessageBox
 from qtpy.QtCore import QPointF
 import qtpynodeeditor as ne
-
 from editor.widgets import Branch
 
 
@@ -58,12 +57,17 @@ class Option(ne.NodeDataModel):
 			return
 
 		tree.itemChanged.connect(self.setCaption)
+		tree.removing.connect(self.remove)
 		# delete = widget.findChild((QPushButton,))
 		# description = widget.findChild((QLineEdit,))
 		# description.textChanged.connect(self.setCaption)
 		# delete.clicked.connect(self.delete)
 
 		self.setCaption(widget, 1)
+
+	def remove(self, piece: Branch):
+		if self.widget is piece:
+			self.delete()
 
 
 class Conjunction(ne.NodeDataModel):
@@ -135,7 +139,7 @@ class Scene(ne.FlowScene):
 	def denormalize(self, json, relationships):
 		"""Load."""
 		nodes = {}
-		default_widget = QWidget()
+		default_widget = QTreeWidgetItem()
 		self.clear()
 
 		for identifier in json['ai']['nodes']:
