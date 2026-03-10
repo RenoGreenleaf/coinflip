@@ -37,13 +37,21 @@ class Branch(QTreeWidgetItem):
 			branch = cast(Branch, self.child(offset))
 			branch.persist(relationships)
 
-	def addChild(self, child: 'Branch'):
-		self.piece.children.append(child.piece)
-		return super().addChild(child)
+	def addChild(self, child: QTreeWidgetItem|None):
+		if child is None:
+			return
 
-	def removeChild(self, child: 'Branch'):
-		self.piece.children.remove(child.piece)
-		child.cascade_notification()
+		branch = cast(Branch, child)
+		self.piece.children.append(branch.piece)
+		return super().addChild(branch)
+
+	def removeChild(self, child: QTreeWidgetItem|None):
+		if child is None:
+			return
+
+		branch = cast(Branch, child)
+		self.piece.children.remove(branch.piece)
+		branch.cascade_notification()
 		return super().removeChild(child)
 
 	def cascade_notification(self):

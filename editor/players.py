@@ -1,9 +1,10 @@
 # Copyright (C) 2026  Reno Greenleaf
 """Node editor stuff."""
+from typing import cast
 from qtpy.QtWidgets import QGraphicsSceneDragDropEvent, QTreeWidget, QTreeWidgetItem, QWidget, QMessageBox
 from qtpy.QtCore import QPointF
 import qtpynodeeditor as ne
-from editor.widgets import Branch
+from editor.widgets import Branch, Tree
 
 
 class Boolean(ne.NodeData):
@@ -51,17 +52,13 @@ class Option(ne.NodeDataModel):
 
 	def bind(self, widget: Branch):
 		self.widget = widget
-		tree = widget.treeWidget()
+		tree = cast(Tree, widget.treeWidget())
 
 		if tree is None:
 			return
 
 		tree.itemChanged.connect(self.setCaption)
 		tree.removing.connect(self.remove)
-		# delete = widget.findChild((QPushButton,))
-		# description = widget.findChild((QLineEdit,))
-		# description.textChanged.connect(self.setCaption)
-		# delete.clicked.connect(self.delete)
 
 		self.setCaption(widget, 1)
 
@@ -114,7 +111,7 @@ class Scene(ne.FlowScene):
 		if event is None:
 			return
 
-		widget = event.source().currentItem()
+		widget = cast(Tree, event.source()).currentItem()
 
 		if widget in self._iterate_over_widgets():
 			QMessageBox.information(None, " ", "It's dropped already.")
@@ -122,7 +119,9 @@ class Scene(ne.FlowScene):
 
 		node = self.create_node(Option)
 		node.model.bind(widget)
-		node.graphics_object.setPos(event.scenePos())
+
+		if node.graphics_object is not None:
+			node.graphics_object.setPos(event.scenePos())
 
 	def normalize(self):
 		"""Prepare for saving."""
