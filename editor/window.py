@@ -66,11 +66,15 @@ class Window(widgets.QMainWindow):
 		toolbar.addAction(load)
 
 	def add(self):
-		"""Add option. Called via UI."""
+		"""Add piece. Called via UI."""
 		selection = cast(Branch, self.tree.currentItem())
+		zeroRoot = self.tree.invisibleRootItem()
+
+		if zeroRoot is None:
+			return
 
 		if selection is None:
-			selection = self.tree.invisibleRootItem().child(0)
+			selection = zeroRoot.child(0)
 
 		if selection.piece.type == 'option':
 			current_conversation = selection.parent()
@@ -105,10 +109,6 @@ class Window(widgets.QMainWindow):
 		"""Restore state from a file."""
 		relationships = {}
 		path, _ = widgets.QFileDialog.getOpenFileName(self)
-		options = self.findChildren((Option,))
-
-		for option in options:
-			option.deleteLater()
 
 		with open(path, 'r', encoding='utf-8') as world_file:
 			self.denormalize(json.load(world_file), relationships)
@@ -153,11 +153,23 @@ class Window(widgets.QMainWindow):
 		return current + 1
 
 	def _insert_conversation(self):
+		# get world
+		zeroRoot = self.tree.invisibleRootItem()
+
+		if zeroRoot is None:
+			return
+
+		root = zeroRoot.child(0)
+
+		if root is None:
+			return
+
+		# add conversation
 		piece: Node = Conversation(
 			subject='<nameless>',
 			identifier=self._generate_id()
 		)
 		branch = Branch(piece)
 		branch.build()
-		root = self.tree.invisibleRootItem().child(0)
+
 		root.addChild(branch)

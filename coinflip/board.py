@@ -12,7 +12,7 @@ class World(Piece):
 	"""Majority of game objects reside here."""
 
 	_selected: Piece
-	type: Literal['world'] = 'world'
+	type: str = 'world'
 	conversations: list[Conversation] = []
 
 	def select(self, piece):

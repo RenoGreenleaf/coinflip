@@ -5,7 +5,7 @@ from editor import protocols
 
 
 class Option(Piece):
-	type: Literal['option'] = 'option'
+	type: str = 'option'
 	description: str = ""
 	message: str = ""
 	permanent: bool = False
@@ -19,7 +19,7 @@ class Option(Piece):
 
 
 class Conversation(Piece):
-	type: Literal['conversation'] = 'conversation'
+	type: str = 'conversation'
 	options: list[Option] = []
 	subject: str = ''
 
