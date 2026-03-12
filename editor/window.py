@@ -115,12 +115,22 @@ class Window(widgets.QMainWindow):
 
 	def normalize(self) -> dict:
 		"""Prepare raw data for saving."""
-		world: BaseModel = self.tree.invisibleRootItem().child(0).piece
+		zeroRoot = self.tree.invisibleRootItem()
+
+		if zeroRoot is None:
+			raise Exception("There's no board.")
+
+		root = zeroRoot.child(0)
+
+		if root is None:
+			raise Exception("There's no world.")
+
+		world = cast(Branch, root).piece
 
 		view = self.findChild((ne.FlowView,))
 		return {
 			'ai': view.scene.normalize(),
-			'board': world.model_dump(),
+			'board': cast(BaseModel, world).model_dump(),
 		}
 
 	def denormalize(self, raw_world: dict, relationships: dict) -> None:
@@ -140,6 +150,10 @@ class Window(widgets.QMainWindow):
 		root = self.tree.invisibleRootItem()
 		for branch in self.tree.selectedItems():
 			parent = branch.parent() or root
+
+			if parent is None:
+				continue
+
 			parent.removeChild(branch)
 
 	def _generate_id(self):

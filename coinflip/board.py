@@ -1,17 +1,14 @@
 # Copyright (C) 2026  Reno Greenleaf
-from typing import Literal, cast
+from typing import cast
 from coinflip.pieces import Piece
 from editor.protocols import Node
-from terminal.pieces import Conversation
-
-
-# AnyPiece = Annotated[Option, Field(discriminator='type')]
+from terminal.pieces import Conversation, Option
 
 
 class World(Piece):
 	"""Majority of game objects reside here."""
 
-	_selected: Piece
+	_selected: Option
 	type: str = 'world'
 	conversations: list[Conversation] = []
 
