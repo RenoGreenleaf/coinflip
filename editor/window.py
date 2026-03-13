@@ -5,6 +5,7 @@ from typing import cast
 from pydantic import BaseModel
 import qtpynodeeditor as ne
 from qtpy import QtWidgets as widgets, QtGui as gui
+from coinflip.protocols import Persistent
 from editor import players
 from editor.protocols import Node
 from terminal.pieces import Conversation, Option
@@ -74,7 +75,7 @@ class Window(widgets.QMainWindow):
 			return
 
 		if selection is None:
-			selection = zeroRoot.child(0)
+			selection = cast(Branch, zeroRoot.child(0))
 
 		if selection.piece.type == 'option':
 			current_conversation = selection.parent()
@@ -129,8 +130,8 @@ class Window(widgets.QMainWindow):
 
 		view = self.findChild((ne.FlowView,))
 		return {
-			'ai': view.scene.normalize(),
-			'board': cast(BaseModel, world).model_dump(),
+			'ai': cast(players.Scene, view.scene).normalize(),
+			'board': cast(Persistent, world).model_dump(),
 		}
 
 	def denormalize(self, raw_world: dict, relationships: dict) -> None:
@@ -144,7 +145,7 @@ class Window(widgets.QMainWindow):
 		self.tree.insertTopLevelItem(0, root)
 
 		view = self.findChild((ne.FlowView,))
-		view.scene.denormalize(raw_world, relationships)
+		cast(players.Scene, view.scene).denormalize(raw_world, relationships)
 
 	def delete(self):
 		root = self.tree.invisibleRootItem()

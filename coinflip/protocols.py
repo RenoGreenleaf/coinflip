@@ -28,3 +28,7 @@ class Persistent(Protocol):
 
 	def persist(self, relationships: dict):
 		"""Preserve current piece for further references."""
+
+	def model_dump(self) -> dict:
+		"""Turn self into dictionary for saving as JSON."""
+		...
