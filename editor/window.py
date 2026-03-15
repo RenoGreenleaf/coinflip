@@ -111,6 +111,9 @@ class Window(widgets.QMainWindow):
 		relationships = {}
 		path, _ = widgets.QFileDialog.getOpenFileName(self)
 
+		if path == '':
+			return
+
 		with open(path, 'r', encoding='utf-8') as world_file:
 			self.denormalize(json.load(world_file), relationships)
 
