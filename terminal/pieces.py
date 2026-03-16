@@ -33,5 +33,8 @@ class Conversation(Piece):
 	def children(self) -> list[protocols.Node]:
 		return cast(list[protocols.Node], self.options)
 
+	def describe(self, value: str):
+		self.subject = value
+
 	def __str__(self) -> str:
 		return self.subject

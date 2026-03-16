@@ -32,7 +32,7 @@ class Piece(BaseModel):
 	def children(self) -> list[Node]:
 		return []
 
-	def describe(self, value):
+	def describe(self, value: str):
 		pass
 
 	def __hash__(self) -> int:
