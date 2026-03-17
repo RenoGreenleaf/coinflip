@@ -103,6 +103,9 @@ class Window(widgets.QMainWindow):
 		"""Preserve current state to a file."""
 		path, _ = widgets.QFileDialog.getSaveFileName(self)
 
+		if path == '':
+			return
+
 		with open(path, 'w', encoding='utf-8') as world_file:
 			json.dump(self.normalize(), world_file, indent=4)
 
