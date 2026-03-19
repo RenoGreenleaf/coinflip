@@ -1,5 +1,5 @@
 # Copyright (C) 2026  Reno Greenleaf
-from typing import Literal, Protocol
+from typing import Protocol
 
 
 class Node(Protocol):

@@ -2,12 +2,10 @@
 """Root widget."""
 import json
 from typing import cast
-from pydantic import BaseModel
 import qtpynodeeditor as ne
 from qtpy import QtWidgets as widgets, QtGui as gui
 from coinflip.protocols import Persistent
 from editor import players
-from editor.protocols import Node
 from terminal.pieces import Conversation, Option
 from coinflip.board import World
 from editor.widgets import Branch, Tree
@@ -26,6 +24,11 @@ class Window(widgets.QMainWindow):
 		"""Prepare base layout. Call it right after instantiation."""
 		self.tree.setHeaderLabels(['Piece'])
 		self.tree.setDragEnabled(True)
+		self.tree.setAcceptDrops(True)
+		self.tree.setDropIndicatorShown(True)
+		self.tree.setDragDropMode(
+			widgets.QAbstractItemView.DragDropMode.InternalMove
+		)
 		world = World(identifier=1)
 		root = Branch(world)
 		root.build()
@@ -163,12 +166,12 @@ class Window(widgets.QMainWindow):
 
 			parent.removeChild(branch)
 
-	def _generate_id(self):
+	def _generate_id(self) -> int:
 		iterator = widgets.QTreeWidgetItemIterator(self.tree)
 		current = 0
 
 		while iterator.value():
-			current = max(current, iterator.value().piece.identifier)
+			current = max(current, cast(Branch, iterator.value()).piece.identifier)
 			iterator += 1
 
 		return current + 1
@@ -186,7 +189,7 @@ class Window(widgets.QMainWindow):
 			return
 
 		# add conversation
-		piece: Node = Conversation(
+		piece = Conversation(
 			subject='<nameless>',
 			identifier=self._generate_id()
 		)

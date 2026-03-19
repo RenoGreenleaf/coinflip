@@ -1,9 +1,15 @@
 # Copyright (C) 2026  Reno Greenleaf
 """Node editor stuff."""
 from typing import cast
-from qtpy.QtWidgets import QGraphicsSceneDragDropEvent, QTreeWidget, QTreeWidgetItem, QWidget, QMessageBox
+from qtpy.QtWidgets import (
+	QGraphicsSceneDragDropEvent,
+	QTreeWidget,
+	QTreeWidgetItem,
+	QWidget,
+	QMessageBox
+)
 from qtpy.QtCore import QPointF
-import qtpynodeeditor as ne
+import qtpynodeeditor as ne  # type: ignore[import-untyped]
 from editor.widgets import Branch, Tree
 
 
@@ -101,12 +107,12 @@ class Scene(ne.FlowScene):
 		super().__init__(*args, **kwargs)
 		self.node_created.connect(self._node_created)
 
-	def dragMoveEvent(self, event: QGraphicsSceneDragDropEvent|None):
+	def dragMoveEvent(self, event: QGraphicsSceneDragDropEvent | None):
 		"""Accept event. Required for a drag-drop event to work."""
 		if event is not None and isinstance(event.source(), QTreeWidget):
 			event.acceptProposedAction()
 
-	def dropEvent(self, event: QGraphicsSceneDragDropEvent|None):
+	def dropEvent(self, event: QGraphicsSceneDragDropEvent | None):
 		"""Happens when a widget is dropped on the editor."""
 		if event is None:
 			return
