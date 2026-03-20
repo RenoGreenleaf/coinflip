@@ -2,23 +2,21 @@
 """Making sure widgets are ready to be mapped to JSON data."""
 import tempfile
 import os
-from PyQt6 import QtWidgets as widgets
+from qtpy import QtWidgets as widgets
 from window import Window
-from option import Option
 
 
 def test_ids(qtbot):
 	window = Window()
 	window.build()
-	expected_ids = ["1", "2", "3"]
+	expected_id = 5
 
 	window.add()
 	window.add()
 	window.add()
+	id_ = window._generate_id()
 
-	options = window.findChildren((Option,))
-	ids = [option.objectName() for option in options]
-	assert ids == expected_ids
+	assert id_ == expected_id
 
 
 def test_saving(qtbot, monkeypatch, tmp_path):
