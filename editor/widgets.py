@@ -1,5 +1,6 @@
 # Copyright (C) 2026  Reno Greenleaf
 from typing import cast
+from qtpy import QtGui
 from qtpy.QtWidgets import QTreeWidget, QTreeWidgetItem
 from qtpy.QtCore import Qt, Signal
 from editor import protocols
@@ -66,3 +67,16 @@ class Branch(QTreeWidgetItem):
 
 class Tree(QTreeWidget):
 	removing = Signal(Branch)
+
+	def dropEvent(self, event: QtGui.QDropEvent | None):
+		items = self.selectedItems()
+
+		if items == []:
+			return super().dropEvent(event)
+
+		item = items[0]
+		old_parent = item.parent()
+		super().dropEvent(event)
+		new_parent = item.parent()
+
+		print(item.piece, old_parent.piece, new_parent.piece)
