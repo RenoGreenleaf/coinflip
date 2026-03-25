@@ -78,6 +78,8 @@ class Tree(QTreeWidget):
 		old_parent = item.parent()
 		super().dropEvent(event)
 		new_parent = item.parent()
+		new_index = self.indexFromItem(item).row()
 
 		index = old_parent.piece.children.index(item.piece)
-		old_parent.piece.children.pop(index)
+		piece = old_parent.piece.children.pop(index)
+		new_parent.piece.children.insert(new_index, piece)
