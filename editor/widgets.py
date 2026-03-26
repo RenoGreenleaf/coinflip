@@ -1,7 +1,7 @@
 # Copyright (C) 2026  Reno Greenleaf
 from typing import cast
 from qtpy import QtGui
-from qtpy.QtWidgets import QTreeWidget, QTreeWidgetItem
+from qtpy.QtWidgets import QAbstractItemView, QTreeWidget, QTreeWidgetItem
 from qtpy.QtCore import Qt, Signal
 from editor import protocols
 
@@ -64,20 +64,62 @@ class Branch(QTreeWidgetItem):
 			tree.removing.emit(branch)
 			branch.cascade_notification()
 
+	def depth(self):
+		count = 1
+		parent = self.parent()
+
+		while parent is not None:
+			parent = parent.parent()
+			count += 1
+
+		return count
+
 
 class Tree(QTreeWidget):
 	removing = Signal(Branch)
 
 	def dropEvent(self, event: QtGui.QDropEvent | None):
+		is_near = (
+			QAbstractItemView.DropIndicatorPosition.AboveItem,
+			QAbstractItemView.DropIndicatorPosition.BelowItem
+		)
+
+		if event is None:
+			return
+
 		items = self.selectedItems()
 
 		if items == []:
 			return super().dropEvent(event)
 
-		item = items[0]
-		old_parent = item.parent()
+		item = cast(Branch, items[0])
+		model_index = self.indexAt(event.position().toPoint())
+		position = self.dropIndicatorPosition()
+
+		if not model_index.isValid():
+			return  # no drops to root or empty space
+
+		target_item = self.itemFromIndex(model_index)
+
+		if target_item is None:
+			return
+
+		if position in (QAbstractItemView.DropIndicatorPosition.OnItem,):
+			intended_parent = target_item
+		elif position in is_near:
+			intended_parent = target_item.parent()
+		else:
+			return
+
+		if intended_parent is None:
+			return
+
+		if cast(Branch, intended_parent).depth() + 1 != item.depth():
+			return
+
+		old_parent = cast(Branch, item.parent())
 		super().dropEvent(event)
-		new_parent = item.parent()
+		new_parent = cast(Branch,item.parent())
 		new_index = self.indexFromItem(item).row()
 
 		index = old_parent.piece.children.index(item.piece)
