@@ -1,1 +1,1 @@
-PYTHONPATH=`pwd` pytest -s
+PYTHONPATH=`pwd` pytest -s --cov=. --cov-report=term-missing
