@@ -12,7 +12,7 @@ class World(Piece):
 	type: str = 'world'
 	conversations: list[Conversation] = []
 
-	def select(self, piece):
+	def select(self, piece):  # TODO: remove
 		self._selected = piece
 
 		if not self._selected.permanent:
