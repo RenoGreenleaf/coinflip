@@ -20,7 +20,7 @@ class Event(Protocol):
 
 	def __hash__(self) -> int:
 		"""Make it usable as dict key."""
-		return 0
+		...
 
 
 class Persistent(Protocol):
