@@ -1,5 +1,14 @@
-from coinflip import board
+import copy
+from coinflip import board, pieces
 from terminal import pieces as term_pieces
+
+
+class Subscriber:
+	def __init__(self):
+		self.processed = False
+
+	def process(self, event):
+		self.processed = True
 
 
 def test_world_persistence():
@@ -14,3 +23,37 @@ def test_world_persistence():
 	world.persist(relationships)
 
 	assert relationships == expected
+
+
+def test_ai_node():
+	node = pieces.Piece()
+	untouched = copy.copy(node)
+
+	node.act(0)
+
+	assert node == untouched
+
+
+def test_event():
+	subscriber = Subscriber()
+	event = pieces.Piece()
+	event.subscribe(subscriber)
+
+	event.trigger()
+
+	assert subscriber.processed
+
+
+def test_children():
+	node = pieces.Piece()
+
+	assert node.children == []
+
+
+def test_description():
+	node = pieces.Piece()
+	untouched = copy.copy(node)
+
+	node.describe("A text.")
+
+	assert node == untouched
