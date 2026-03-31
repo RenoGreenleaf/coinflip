@@ -57,3 +57,18 @@ def test_description():
 	node.describe("A text.")
 
 	assert node == untouched
+
+
+def test_hash():
+	event = pieces.Piece()
+	dictionary = {event: None}
+
+	assert event in dictionary
+
+
+def test_stringable():
+	node = pieces.Piece()
+
+	text = str(node)
+
+	assert text == '<no title>'
