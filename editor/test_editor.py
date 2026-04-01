@@ -38,28 +38,19 @@ def test_saving(qtbot, monkeypatch, tmp_path):
 	assert os.path.isfile(path)
 
 
-def test_normalization(qtbot):
-	expected_option = {
-		'description': "Test description.",
-		'message': "Test message.",
-		'permanent': False,
-		'hidden': False
-	}
-	expected_structure = {
-		'available': {
-			'1': expected_option
-		}
-	}
+def test_normalization_has_board(qtbot):
 	window = Window()
 	window.build()
-	window.add()
-	option = window.findChild((Option,))
-	option.findChild((widgets.QLineEdit,)).setText("Test description.")
-	option.findChild((widgets.QTextEdit,)).setText("Test message.")
+	expected_result = {
+		'identifier': 1,
+		'type': 'world',
+		'conversations': []
+	}
 
 	result = window.normalize()
 
-	assert result == expected_structure
+	assert 'board' in result
+	assert expected_result == result['board']
 
 
 def test_denormalization(qtbot):
