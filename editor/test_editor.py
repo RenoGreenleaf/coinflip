@@ -54,29 +54,27 @@ def test_normalization_has_board(qtbot):
 
 
 def test_denormalization(qtbot):
-	normalized_option = {
-		'description': "Test description.",
-		'message': "Test message.",
-		'permanent': True,
-		'hidden': True
+	normalized_conversation = {
+		'identifier': 24,
+        'type': 'conversation',
+        'subject': "Entrance"
 	}
 	normalized_structure = {
-		'available': {
-			'1': normalized_option
+		'ai': {
+			'connections': [],
+			'nodes': {}
+		},
+		'board': {
+			'identifier': 1,
+			'type': 'world',
+			'conversations': [normalized_conversation]
 		}
 	}
 	window = Window()
 	window.build()
 
-	window.denormalize(normalized_structure)
+	window.denormalize(normalized_structure, {})
+	conversation = window.tree.invisibleRootItem().child(0).child(0).piece
 
-	option = window.findChild((Option,))
-	description = option.findChild((widgets.QLineEdit,), 'description').text()
-	message = option.findChild((widgets.QTextEdit,), 'message').toPlainText()
-	permanent = option.findChild((widgets.QCheckBox,), 'permanent').isChecked()
-	hidden = option.findChild((widgets.QCheckBox,), 'hidden').isChecked()
-	assert description == "Test description."
-	assert message == "Test message."
-	assert permanent
-	assert hidden
-	assert option.objectName() == '1'
+	assert conversation.identifier == 24
+	assert str(conversation) == "Entrance"
