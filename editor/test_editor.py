@@ -3,6 +3,9 @@
 import tempfile
 import os
 from qtpy import QtWidgets as widgets
+from coinflip.board import World
+from coinflip.pieces import Piece
+from editor.widgets import Branch
 from window import Window
 
 
@@ -78,3 +81,11 @@ def test_denormalization(qtbot):
 
 	assert conversation.identifier == 24
 	assert str(conversation) == "Entrance"
+
+
+def test_no_child(qtbot):
+	branch = Branch(World())
+
+	result = branch.addChild(None)
+
+	assert result is None
