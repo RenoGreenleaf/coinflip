@@ -3,8 +3,10 @@
 import tempfile
 import os
 from qtpy import QtWidgets as widgets
+from qtpynodeeditor import FlowView
 from coinflip.board import World
 from coinflip.pieces import Piece
+from editor.players import Option
 from editor.widgets import Branch
 from window import Window
 
@@ -89,3 +91,17 @@ def test_no_child(qtbot):
 	result = branch.addChild(None)
 
 	assert result is None
+
+
+def test_option_initialized(qtbot):
+	window = Window()
+	window.build()
+	view = window.findChild((FlowView,))
+	scene = view.scene
+
+	node = scene.create_node(Option)
+	model = node.model
+
+	assert hasattr(model, 'widget')
+	assert hasattr(model, 'node')
+	assert hasattr(model, 'scenee')
