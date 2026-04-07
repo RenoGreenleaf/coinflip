@@ -104,4 +104,4 @@ def test_option_initialized(qtbot):
 
 	assert hasattr(model, 'widget')
 	assert hasattr(model, 'node')
-	assert hasattr(model, 'scenee')
+	assert hasattr(model, 'scene')
