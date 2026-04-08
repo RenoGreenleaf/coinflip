@@ -74,9 +74,6 @@ class Window(widgets.QMainWindow):
 		selection = cast(Branch, self.tree.currentItem())
 		zeroRoot = self.tree.invisibleRootItem()
 
-		if zeroRoot is None:
-			return
-
 		if selection is None:
 			selection = cast(Branch, zeroRoot.child(0))
 

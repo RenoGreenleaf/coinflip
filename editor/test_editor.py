@@ -105,3 +105,14 @@ def test_option_initialized(qtbot):
 	assert hasattr(model, 'widget')
 	assert hasattr(model, 'node')
 	assert hasattr(model, 'scene')
+
+
+def test_add_conversation(qtbot):
+	window = Window()
+	window.build()
+
+	window.add()
+	root = window.tree.invisibleRootItem()
+
+	conversation = root.child(0).child(0)
+	assert conversation.piece.type == 'conversation'
