@@ -116,3 +116,16 @@ def test_add_conversation(qtbot):
 
 	conversation = root.child(0).child(0)
 	assert conversation.piece.type == 'conversation'
+
+
+def test_add_option(qtbot):
+	window = Window()
+	window.build()
+	window._insert_conversation()
+	selection = window.tree.invisibleRootItem().child(0).child(0)
+	window.tree.setCurrentItem(selection)
+
+	window.add()
+	added = window.tree.invisibleRootItem().child(0).child(0).child(0)
+
+	assert added.piece.type == 'option'
