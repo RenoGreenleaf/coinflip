@@ -1,3 +1,4 @@
+# Copyright (C) 2026  Reno Greenleaf
 import copy
 from coinflip import board, pieces
 from terminal import pieces as term_pieces
