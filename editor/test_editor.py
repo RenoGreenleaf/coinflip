@@ -3,12 +3,14 @@
 import tempfile
 import os
 from qtpy import QtWidgets as widgets
+from qtpy.QtCore import Qt
 from qtpynodeeditor import FlowView
 from coinflip.board import World
 from coinflip.pieces import Piece
 from editor.players import Option
 from editor.widgets import Branch
 from window import Window
+from pytestqt.qtbot import QtBot
 
 
 def test_ids(qtbot):
@@ -129,3 +131,25 @@ def test_add_option(qtbot):
 	added = window.tree.invisibleRootItem().child(0).child(0).child(0)
 
 	assert added.piece.type == 'option'
+
+
+def test_rename_conversation(qtbot: QtBot, qapp):
+	window = Window()
+	window.build()
+	window.show()
+	window._insert_conversation()
+	window.tree.expandAll()
+	conversation = window.tree.invisibleRootItem().child(0).child(0)
+	rectangle = window.tree.visualItemRect(conversation)
+	text = "New conversation"
+
+	qtbot.mouseClick(window.tree.viewport(), Qt.LeftButton, pos=rectangle.center())
+	qtbot.mouseDClick(window.tree.viewport(), Qt.LeftButton, pos=rectangle.center())
+	qtbot.wait(10)
+	widget = qapp.focusWidget()
+	qtbot.keyClicks(widget, text)
+	qtbot.wait(10)
+	qtbot.keyClick(widget, Qt.Key_Enter)
+	qtbot.wait(10)
+
+	assert str(conversation.piece) == text
