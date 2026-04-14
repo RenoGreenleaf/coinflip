@@ -154,6 +154,7 @@ class Window(widgets.QMainWindow):
 		cast(players.Scene, view.scene).denormalize(raw_world, relationships)
 
 	def delete(self):
+		"""Remove a selected piece. Called via UI."""
 		root = self.tree.invisibleRootItem()
 		for branch in self.tree.selectedItems():
 			parent = branch.parent() or root
