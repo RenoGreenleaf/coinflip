@@ -7,6 +7,8 @@ from editor import protocols
 
 
 class Branch(QTreeWidgetItem):
+	"""Represents a piece in editor UI."""
+
 	def __init__(self, piece: protocols.Node):
 		super().__init__([str(piece)])
 		self.piece = piece
