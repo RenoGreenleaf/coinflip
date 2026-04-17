@@ -78,6 +78,8 @@ class Branch(QTreeWidgetItem):
 
 
 class Tree(QTreeWidget):
+	"""Makes a tree rearrangeable."""
+
 	removing = Signal(Branch)
 
 	def dropEvent(self, event: QtGui.QDropEvent | None):
